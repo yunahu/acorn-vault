@@ -10,10 +10,12 @@ const GlobalStyle = createGlobalStyle`
 
 	#root {
 		min-height: 100dvh;
+		display: flex;
 	}
 
 	a {
 		text-decoration: none;
+		color: black;
 	}
 `;
 
