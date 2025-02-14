@@ -1,8 +1,8 @@
-import { faChevronDown, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { useEffect, useRef, useState } from "react";
+import { faChevronDown, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { useEffect, useRef, useState } from 'react';
 
 // #region Styles
 
@@ -88,10 +88,10 @@ const StyledLink = styled(Link)`
 
 const User = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const stringifiedUser = localStorage.getItem("user");
+  const stringifiedUser = localStorage.getItem('user');
   const user = stringifiedUser
     ? JSON.parse(stringifiedUser)
-    : { name: "GUEST" };
+    : { name: 'GUEST' };
   const modalRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
 
@@ -110,11 +110,11 @@ const User = () => {
 
   useEffect(() => {
     if (isVisible) {
-      document.addEventListener("mousedown", handleMousedown);
+      document.addEventListener('mousedown', handleMousedown);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleMousedown);
+      document.removeEventListener('mousedown', handleMousedown);
     };
   }, [isVisible]);
 

@@ -1,13 +1,13 @@
-import styled from "styled-components";
-import { Link, useLocation } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styled from 'styled-components';
+import { Link, useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFeather,
   faGear,
   faHouse,
   faVault,
-} from "@fortawesome/free-solid-svg-icons";
-import logo from "src/assets/icons/logo.png";
+} from '@fortawesome/free-solid-svg-icons';
+import logo from 'src/assets/icons/logo.png';
 
 // #region Styles
 
@@ -54,7 +54,7 @@ const Pointbar = styled.div<{ $active: boolean | undefined }>`
   width: 6px;
   height: 60px;
   background-color: ${({ $active, theme }) =>
-    $active ? theme.colors.secondary : "white"};
+    $active ? theme.colors.secondary : 'white'};
   margin-right: 40px;
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
@@ -80,29 +80,29 @@ const Sidebar = () => {
         </Link>
       </LogoContainer>
       <Links>
-        <StyledLink to="/" $active={pathname === "/"}>
-          <Pointbar $active={pathname === "/"} />
+        <StyledLink to="/" $active={pathname === '/'}>
+          <Pointbar $active={pathname === '/'} />
           <Icon>
             <FontAwesomeIcon icon={faHouse} />
           </Icon>
           Dashboard
         </StyledLink>
-        <StyledLink to="/assets" $active={pathname === "/assets"}>
-          <Pointbar $active={pathname === "/assets"} />
+        <StyledLink to="/assets" $active={pathname === '/assets'}>
+          <Pointbar $active={pathname === '/assets'} />
           <Icon>
             <FontAwesomeIcon icon={faVault} />
           </Icon>
           Assets
         </StyledLink>
-        <StyledLink to="/records" $active={pathname === "/records"}>
-          <Pointbar $active={pathname === "/records"} />
+        <StyledLink to="/records" $active={pathname === '/records'}>
+          <Pointbar $active={pathname === '/records'} />
           <Icon>
             <FontAwesomeIcon icon={faFeather} />
           </Icon>
           Records
         </StyledLink>
-        <StyledLink to="/settings" $active={pathname === "/settings"}>
-          <Pointbar $active={pathname === "/settings"} />
+        <StyledLink to="/settings" $active={pathname === '/settings'}>
+          <Pointbar $active={pathname === '/settings'} />
           <Icon>
             <FontAwesomeIcon icon={faGear} />
           </Icon>

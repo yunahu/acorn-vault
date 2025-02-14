@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { useLocation } from "react-router-dom";
-import User from "./components/User/User";
+import styled from 'styled-components';
+import { useLocation } from 'react-router-dom';
+import User from './components/User/User';
 
 // #region Styles
 
@@ -27,7 +27,7 @@ const Navbar = () => {
 
   return (
     <Container>
-      <Title>{path ? capitalized : "Overview"}</Title>
+      <Title>{path ? capitalized : 'Overview'}</Title>
       <User />
     </Container>
   );
