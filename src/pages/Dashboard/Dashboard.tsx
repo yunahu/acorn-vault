@@ -10,17 +10,6 @@ const Container = styled.div`
 // #endregion
 
 const Dashboard = () => {
-  const run = async () => {
-    //TODO: delete, it is for testing the api
-    const msg = await fetch('http://localhost:3000/accounts');
-    if (msg) {
-      const json = await msg.json();
-      console.log(json);
-    }
-  };
-
-  run();
-
   return <Container></Container>;
 };
 
