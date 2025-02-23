@@ -20,14 +20,21 @@ const Title = styled.div`
 
 // #endregion
 
+interface Title {
+  [key: string]: string;
+}
+
+const title: Title = {
+  '/': 'Overview',
+  '/signin': 'Sign in',
+};
+
 const Navbar = () => {
   const { pathname } = useLocation();
-  const path = pathname.substring(1);
-  const capitalized = path.charAt(0).toUpperCase() + path.slice(1);
 
   return (
     <Container>
-      <Title>{path ? capitalized : 'Overview'}</Title>
+      <Title>{title[pathname]}</Title>
       <User />
     </Container>
   );
