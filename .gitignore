@@ -28,3 +28,15 @@ dist-ssr
 !.env.sample
 
 *.tsbuildinfo
+
+# Firebase cache & local state
+.firebase/
+
+# Firebase project configuration (contains project IDs)
+.firebaserc
+
+# Firebase Emulator Suite data
+firebase-debug.log
+database-debug.log
+
+firebase.json

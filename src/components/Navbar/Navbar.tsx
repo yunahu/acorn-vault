@@ -27,6 +27,7 @@ interface Title {
 const title: Title = {
   '/': 'Overview',
   '/signin': 'Sign in',
+  '/signup': 'Sign up',
 };
 
 const Navbar = () => {
