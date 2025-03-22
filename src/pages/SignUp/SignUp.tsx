@@ -1,10 +1,14 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { faEye, faEyeSlash, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { auth } from 'src/services/firebase';
+import { mapUser, useAuth } from 'src/hooks/useAuth';
+import GoogleSignInButton from 'src/components/AuthButtons/GoogleSignInButton/GoogleSignInButton';
+import AnonymousSignInButton from 'src/components/AuthButtons/AnonymousSignInButton/AnonymousSignInButton';
 import dog from 'src/assets/images/dog.webp';
-import google from 'src/assets/icons/google.png';
 
 // #region Styles
 
@@ -76,6 +80,12 @@ const StyledInput = styled.input`
   }
 `;
 
+const ErrorMessage = styled.div`
+  color: red;
+  text-align: center;
+  margin: 5px 0px;
+`;
+
 const PasswordToggle = styled.div`
   width: 70px;
   display: flex;
@@ -104,16 +114,6 @@ const StyledButton = styled.button<{ $bg?: string; $color?: string }>`
   cursor: pointer;
 `;
 
-const StyledIcon = styled.img`
-  width: 24px;
-  height: 24px;
-`;
-
-const StyledFrontAwesomeIcon = styled(FontAwesomeIcon)`
-  width: 24px;
-  height: 24px;
-`;
-
 const Footer = styled.div`
   display: flex;
   justify-content: center;
@@ -138,13 +138,40 @@ const SignUp = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    if (!email || !name || !password || password !== confirmPassword) return;
+
+    try {
+      const res = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      ).then((x) => x.user);
+
+      if (res) {
+        await updateProfile(res, {
+          displayName: name,
+        });
+
+        setUser(mapUser(auth.currentUser));
+        navigate('/');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <Container>
       <Main>
         <Card>
           <Title>Sign up</Title>
-          <StyledForm>
+          <StyledForm onSubmit={handleSubmit}>
             <InputContainer>
               <StyledLabel htmlFor="email">Email address</StyledLabel>
               <StyledInput
@@ -185,7 +212,14 @@ const SignUp = () => {
                 name="password"
                 value={password}
                 placeholder="Choose a password"
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  e.target.value === confirmPassword
+                    ? setErrorMessage('')
+                    : setErrorMessage(
+                        'The password and confirmation password do not match.'
+                      );
+                }}
                 required
               />
             </InputContainer>
@@ -196,14 +230,22 @@ const SignUp = () => {
                 name="confirmPassword"
                 value={confirmPassword}
                 placeholder="Confirm password"
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  password === e.target.value
+                    ? setErrorMessage('')
+                    : setErrorMessage(
+                        'The password and confirmation password do not match.'
+                      );
+                }}
                 required
               />
             </InputContainer>
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
             <StyledButton
               type="submit"
               $bg={
-                email && name && password && confirmPassword
+                email && name && password && password === confirmPassword
                   ? '#2c4c3b'
                   : '#dad8d8'
               }
@@ -212,14 +254,8 @@ const SignUp = () => {
               Sign up
             </StyledButton>
           </StyledForm>
-          <StyledButton>
-            <StyledIcon src={google} />
-            Continue with Google
-          </StyledButton>
-          <StyledButton>
-            <StyledFrontAwesomeIcon icon={faLock} />
-            Sign in anonymously
-          </StyledButton>
+          <GoogleSignInButton />
+          <AnonymousSignInButton />
           <Footer>
             Already have an account?
             <SignUpLink to="/signin">Sign in</SignUpLink>

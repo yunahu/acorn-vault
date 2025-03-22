@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
-import User from './components/User/User';
+import UserDropdown from './components/UserDropdown/UserDropdown';
 
 // #region Styles
 
@@ -36,7 +36,7 @@ const Navbar = () => {
   return (
     <Container>
       <Title>{title[pathname]}</Title>
-      <User />
+      <UserDropdown />
     </Container>
   );
 };

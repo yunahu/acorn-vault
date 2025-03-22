@@ -1,5 +1,6 @@
 import { BrowserRouter } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
+import { AuthProvider } from 'src/hooks/useAuth';
 import theme from 'src/theme/theme';
 import GlobalStyle from 'src/theme/globalStyle';
 import Sidebar from 'src/components/Sidebar/Sidebar';
@@ -15,14 +16,16 @@ const Container = styled.div`
 const App = () => {
   return (
     <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <Sidebar />
-        <Container>
-          <Navbar />
-          <Router />
-        </Container>
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <Sidebar />
+          <Container>
+            <Navbar />
+            <Router />
+          </Container>
+        </ThemeProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 };

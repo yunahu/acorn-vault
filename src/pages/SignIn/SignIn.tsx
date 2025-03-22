@@ -1,10 +1,14 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
-import { faEye, faEyeSlash, faLock } from '@fortawesome/free-solid-svg-icons';
-import forrest from 'src/assets/icons/forrest.jpg';
-import google from 'src/assets/icons/google.png';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from 'src/services/firebase';
+import { useAuth } from 'src/hooks/useAuth';
+import GoogleSignInButton from 'src/components/AuthButtons/GoogleSignInButton/GoogleSignInButton';
+import AnonymousSignInButton from 'src/components/AuthButtons/AnonymousSignInButton/AnonymousSignInButton';
+import forrest from 'src/assets/images/forrest.jpg';
 
 // #region Styles
 
@@ -104,16 +108,6 @@ const StyledButton = styled.button<{ $bg?: string; $color?: string }>`
   cursor: pointer;
 `;
 
-const StyledIcon = styled.img`
-  width: 24px;
-  height: 24px;
-`;
-
-const StyledFrontAwesomeIcon = styled(FontAwesomeIcon)`
-  width: 24px;
-  height: 24px;
-`;
-
 const Footer = styled.div`
   display: flex;
   justify-content: center;
@@ -136,12 +130,20 @@ const SignIn = () => {
   const [isHidden, setIsHidden] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) navigate('/');
+  }, [user]);
 
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    alert(JSON.stringify({ email, password }));
-    setEmail('');
-    setPassword('');
+    try {
+      signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -190,14 +192,8 @@ const SignIn = () => {
               Sign in
             </StyledButton>
           </StyledForm>
-          <StyledButton>
-            <StyledIcon src={google} />
-            Continue with Google
-          </StyledButton>
-          <StyledButton>
-            <StyledFrontAwesomeIcon icon={faLock} />
-            Sign in anonymously
-          </StyledButton>
+          <GoogleSignInButton />
+          <AnonymousSignInButton />
           <Footer>
             Don't have an account?
             <SignUpLink to="/signup">Sign up</SignUpLink>

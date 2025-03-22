@@ -1,8 +1,11 @@
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { faChevronDown, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { signOut } from 'firebase/auth';
 import { useEffect, useRef, useState } from 'react';
+import { auth } from 'src/services/firebase';
+import { useAuth } from 'src/hooks/useAuth';
 
 // #region Styles
 
@@ -86,16 +89,13 @@ const StyledLink = styled(Link)`
 
 // #endregion
 
-const User = () => {
+const UserDropdown = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const stringifiedUser = localStorage.getItem('user');
-  const user = stringifiedUser
-    ? JSON.parse(stringifiedUser)
-    : { name: 'GUEST' };
+  const { user } = useAuth();
   const modalRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
 
-  const toggleModal = () => setIsVisible(!isVisible);
+  const toggleModal = () => setIsVisible((x) => !x);
 
   const handleMousedown = ({ target }: MouseEvent) => {
     if (
@@ -104,18 +104,13 @@ const User = () => {
       !modalRef.current.contains(target) &&
       !userRef.current?.contains(target)
     ) {
-      setIsVisible(!isVisible);
+      setIsVisible((x) => !x);
     }
   };
 
   useEffect(() => {
-    if (isVisible) {
-      document.addEventListener('mousedown', handleMousedown);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleMousedown);
-    };
+    if (isVisible) document.addEventListener('mousedown', handleMousedown);
+    return () => document.removeEventListener('mousedown', handleMousedown);
   }, [isVisible]);
 
   return (
@@ -124,7 +119,7 @@ const User = () => {
         <UserIconContainer>
           <UserIcon icon={faUser} />
         </UserIconContainer>
-        <UserName>{user?.name}</UserName>
+        <UserName>{user?.name ?? 'GUEST'}</UserName>
         <ChevronIcon icon={faChevronDown} />
       </Container>
       {isVisible && (
@@ -134,7 +129,7 @@ const User = () => {
               <UserIcon icon={faUser} />
             </UserIconContainer>
             <div>
-              <ModalUserName>{user?.name}</ModalUserName>
+              <ModalUserName>{user?.name ?? 'GUEST'}</ModalUserName>
               <Email>{user?.email}</Email>
             </div>
           </ModalHeader>
@@ -145,8 +140,14 @@ const User = () => {
             <StyledLink to="/notifications" onClick={toggleModal}>
               Notifications
             </StyledLink>
-            {stringifiedUser ? (
-              <StyledLink to="/signout" onClick={toggleModal}>
+            {user ? (
+              <StyledLink
+                to="/"
+                onClick={() => {
+                  toggleModal();
+                  signOut(auth);
+                }}
+              >
                 Sign Out
               </StyledLink>
             ) : (
@@ -161,4 +162,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default UserDropdown;
