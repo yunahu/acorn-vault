@@ -17,6 +17,19 @@ const GlobalStyle = createGlobalStyle`
 		text-decoration: none;
 		color: black;
 	}
+
+	input {
+		border: 1px solid ${({ theme }) => theme.colors.border};
+
+		&:focus {
+    	outline: 1px solid ${({ theme }) => theme.colors.primary};
+    	box-shadow: 0 0 8px rgba(44, 76, 59, 0.6);
+  	}
+	}
+
+	.ant-table-cell:has(> input) {
+		padding: 0px  !important;
+	}
 `;
 
 export default GlobalStyle;

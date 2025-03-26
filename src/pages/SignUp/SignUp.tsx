@@ -65,15 +65,9 @@ const StyledLabel = styled.label`
 const StyledInput = styled.input`
   width: 480px;
   height: 56px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;
   padding: 0px 15px;
   font-size: 17px;
-
-  &:focus {
-    outline: 1px solid ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 8px rgba(44, 76, 59, 0.6);
-  }
 
   &::placeholder {
     color: #b1b2b0;
@@ -214,11 +208,11 @@ const SignUp = () => {
                 placeholder="Choose a password"
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  e.target.value === confirmPassword
-                    ? setErrorMessage('')
-                    : setErrorMessage(
-                        'The password and confirmation password do not match.'
-                      );
+                  const errMsg =
+                    e.target.value === confirmPassword
+                      ? ''
+                      : 'The password and confirmation password do not match.';
+                  setErrorMessage(errMsg);
                 }}
                 required
               />
@@ -232,11 +226,11 @@ const SignUp = () => {
                 placeholder="Confirm password"
                 onChange={(e) => {
                   setConfirmPassword(e.target.value);
-                  password === e.target.value
-                    ? setErrorMessage('')
-                    : setErrorMessage(
-                        'The password and confirmation password do not match.'
-                      );
+                  const errMsg =
+                    password === e.target.value
+                      ? ''
+                      : 'The password and confirmation password do not match.';
+                  setErrorMessage(errMsg);
                 }}
                 required
               />

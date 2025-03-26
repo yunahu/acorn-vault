@@ -65,7 +65,6 @@ const StyledLabel = styled.label`
 const StyledInput = styled.input`
   width: 480px;
   height: 56px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;
   padding: 0px 15px;
   font-size: 17px;
@@ -135,7 +134,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (user) navigate('/');
-  }, [user]);
+  }, [user, navigate]);
 
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();

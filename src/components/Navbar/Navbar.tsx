@@ -26,6 +26,7 @@ interface Title {
 
 const title: Title = {
   '/': 'Overview',
+  '/accounts': 'Assets & Liabilities',
   '/signin': 'Sign in',
   '/signup': 'Sign up',
 };

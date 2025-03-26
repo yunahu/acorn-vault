@@ -87,12 +87,12 @@ const Sidebar = () => {
           </Icon>
           Dashboard
         </StyledLink>
-        <StyledLink to="/assets" $active={pathname === '/assets'}>
-          <Pointbar $active={pathname === '/assets'} />
+        <StyledLink to="/accounts" $active={pathname === '/accounts'}>
+          <Pointbar $active={pathname === '/accounts'} />
           <Icon>
             <FontAwesomeIcon icon={faVault} />
           </Icon>
-          Assets
+          Accounts
         </StyledLink>
         <StyledLink to="/records" $active={pathname === '/records'}>
           <Pointbar $active={pathname === '/records'} />
