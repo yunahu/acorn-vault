@@ -11,6 +11,7 @@ import { useAuth } from 'src/hooks/useAuth';
 
 const Wrapper = styled.div`
   position: relative;
+  z-index: 1;
 `;
 
 const Container = styled.div`

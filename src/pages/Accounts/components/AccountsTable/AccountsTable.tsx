@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { Table } from 'antd';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import type { TableProps } from 'antd';
-import { useEffect, useState } from 'react';
-import api from 'src/services/axios';
+import { Table } from 'antd';
+import { deleteAccount, getAccounts, updateAccount } from 'src/services/axios';
 import { useCurrencies } from 'src/hooks/useCurrencies';
 import NewAccountModal from './components/NewAccountModal/NewAccountModal';
 
@@ -37,9 +38,10 @@ const BalanceInput = styled.input`
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
   }
 
-  &[type='number'] {
-    -moz-appearance: textfield; /* Firefox */
-  }
+  // TODO:
+  //  &[type='number'] {
+  //    -moz-appearance: textfield; /* Firefox */
+  //  }
 `;
 
 const PaymentMethodButton = styled.button`
@@ -63,12 +65,31 @@ interface Account {
 }
 
 const AccountsTable = () => {
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const { data } = useQuery({ queryKey: ['accounts'], queryFn: getAccounts });
   const [active, setActive] = useState<(string | number | null)[]>([
     null,
     null,
   ]);
   const currencies = useCurrencies();
+  const queryClient = useQueryClient();
+  const deleteAccountMutation = useMutation({
+    mutationFn: deleteAccount,
+    onSettled: async () =>
+      queryClient.invalidateQueries({ queryKey: ['accounts'] }),
+  });
+  const updateAccountMutation = useMutation({
+    mutationFn: ({
+      accountId,
+      column,
+      value,
+    }: {
+      accountId: number;
+      column: string;
+      value: string;
+    }) => updateAccount(accountId, column, value),
+    onSettled: async () =>
+      queryClient.invalidateQueries({ queryKey: ['accounts'] }),
+  });
 
   const columns: TableProps<Account>['columns'] = [
     {
@@ -84,7 +105,8 @@ const AccountsTable = () => {
             onBlur={() => setActive([null, null])}
             onKeyDown={(evt) => {
               if (evt.key === 'Enter') {
-                api.patch(`accounts/${account.id}`, {
+                updateAccountMutation.mutate({
+                  accountId: account.id,
                   column: 'name',
                   value: evt.currentTarget.value,
                 });
@@ -130,7 +152,8 @@ const AccountsTable = () => {
             onBlur={() => setActive([null, null])}
             onKeyDown={(evt) => {
               if (evt.key === 'Enter') {
-                api.patch(`accounts/${account.id}`, {
+                updateAccountMutation.mutate({
+                  accountId: account.id,
                   column: 'balance',
                   value: evt.currentTarget.value,
                 });
@@ -155,14 +178,15 @@ const AccountsTable = () => {
     },
     {
       title: 'Primary payment method',
-      dataIndex: 'paymentMethod',
-      key: 'paymentMethod',
+      dataIndex: 'is_primary_payment_method',
+      key: 'is_primary_payment_method',
       render: (_, account) => (
         <PaymentMethodButton
           onClick={() =>
-            api.patch(`accounts/${account.id}`, {
+            updateAccountMutation.mutate({
+              accountId: account.id,
               column: 'is_primary_payment_method',
-              value: !account.is_primary_payment_method,
+              value: (!account.is_primary_payment_method).toString(),
             })
           }
         >
@@ -175,25 +199,16 @@ const AccountsTable = () => {
       dataIndex: 'action',
       key: 'action',
       render: (_, account) => (
-        <DeleteButton onClick={() => api.delete(`/accounts/${account.id}`)}>
+        <DeleteButton onClick={() => deleteAccountMutation.mutate(account.id)}>
           Delete
         </DeleteButton>
       ),
     },
   ];
 
-  useEffect(() => {
-    const run = async () => {
-      const data = await api.get('/accounts').then((x) => x.data);
-      setAccounts(data ?? []);
-    };
-
-    run();
-  }, []);
-
   return (
     <Table<Account>
-      dataSource={accounts}
+      dataSource={data}
       columns={columns}
       rowKey="id"
       footer={() => <NewAccountModal />}

@@ -17,4 +17,32 @@ api.interceptors.request.use(
   }
 );
 
+export const getAccounts = async () => api.get('/accounts').then((x) => x.data);
+
+export const createAccount = async (
+  name: string,
+  currencyId: number,
+  balance: string,
+  isPrimaryPaymentMethod: boolean
+) =>
+  api.post('/accounts', {
+    name,
+    currency_id: currencyId,
+    balance,
+    is_primary_payment_method: isPrimaryPaymentMethod,
+  });
+
+export const updateAccount = async (
+  accountId: number,
+  column: string,
+  value: string
+) =>
+  api.patch(`accounts/${accountId}`, {
+    column,
+    value,
+  });
+
+export const deleteAccount = async (accountId: number) =>
+  api.delete(`/accounts/${accountId}`);
+
 export default api;

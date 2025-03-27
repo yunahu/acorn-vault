@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Modal } from 'antd';
 import { useCurrencies } from 'src/hooks/useCurrencies';
-import api from 'src/services/axios';
+import { createAccount } from 'src/services/axios';
 
 // #region Styles
 
@@ -37,75 +38,55 @@ const BalanceInput = styled.input`
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
   }
 
-  &[type='number'] {
-    -moz-appearance: textfield; /* Firefox */
-  }
+  // TODO:
+  //  &[type='number'] {
+  //    -moz-appearance: textfield; /* Firefox */
+  //  }
 `;
 
 // #endregion
 
-interface FormData {
-  name: string;
-  currency_id: number;
-  balance: number;
-  isPrimaryPaymentMethod: string;
-}
-
 const NewAccountModal = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [formData, setFormData] = useState<FormData>({} as FormData);
+  const [name, setName] = useState<string>('New account');
+  const [currencyId, setCurrencyId] = useState<number>(1);
+  const [balance, setBalance] = useState<string>('0');
+  const [isPrimaryPaymentMethod, setIsPrimaryPaymentMethod] =
+    useState<boolean>(true);
   const currencies = useCurrencies();
-
-  const handleChange = (
-    evt: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
-  ) => {
-    const { name, value } = evt.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const showModal = () => {
-    setOpen(true);
-  };
-
-  const handleOk = async () => {
-    setLoading(true);
-
-    const { name, currency_id, balance, isPrimaryPaymentMethod } = formData;
-
-    await api.post('/accounts', {
-      name,
-      currency_id,
-      balance,
-      is_primary_payment_method:
-        isPrimaryPaymentMethod === 'yes' ? true : false,
-    });
-
-    setLoading(false);
-    setOpen(false);
-  };
+  const queryClient = useQueryClient();
+  const createAccountMutation = useMutation({
+    mutationFn: () =>
+      createAccount(name, currencyId, balance, isPrimaryPaymentMethod),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      setOpen(false);
+      setName('New account');
+      setCurrencyId(1);
+      setBalance('0');
+      setIsPrimaryPaymentMethod(true);
+    },
+    mutationKey: ['createAccount'],
+  });
 
   const handleCancel = () => {
+    setName('New account');
+    setCurrencyId(1);
+    setBalance('0');
+    setIsPrimaryPaymentMethod(true);
     setOpen(false);
-    setLoading(false);
   };
 
-  useEffect(() => {
-    setFormData({
-      name: 'New account',
-      currency_id: 1,
-      balance: 0,
-      isPrimaryPaymentMethod: 'yes',
-    });
-  }, [open]);
+  const handleOk = () => {
+    createAccountMutation.mutate();
+  };
 
   return (
     <div>
-      <StyledButton onClick={showModal}>+ New account</StyledButton>
+      <StyledButton onClick={() => setOpen(true)}>+ New account</StyledButton>
       <Modal
-        title="Add a new account"
+        title="Create a new account"
         open={open}
-        onOk={handleOk}
         onCancel={handleCancel}
         footer={[
           <Button key="back" onClick={handleCancel}>
@@ -114,28 +95,28 @@ const NewAccountModal = () => {
           <Button
             key="submit"
             type="primary"
-            loading={loading}
+            loading={createAccountMutation.isPending}
             onClick={handleOk}
           >
             Create
           </Button>,
         ]}
       >
-        <StyledForm onSubmit={handleOk}>
+        <StyledForm>
           <label htmlFor="name">Name</label>
           <input
             type="text"
-            name="name"
             id="name"
-            value={formData.name}
-            onChange={handleChange}
+            name="name"
+            value={name}
+            onChange={(evt) => setName(evt.target.value)}
           />
-          <label htmlFor="currency_id">Currency</label>
+          <label htmlFor="currencyId">Currency</label>
           <select
-            name="currency_id"
-            id="currency_id"
-            value={formData.currency_id}
-            onChange={handleChange}
+            id="currencyId"
+            name="currencyId"
+            value={currencyId}
+            onChange={(evt) => setCurrencyId(parseInt(evt.target.value))}
           >
             {currencies.map((currency) => (
               <option key={currency.id} value={currency.id}>
@@ -146,24 +127,26 @@ const NewAccountModal = () => {
           <label htmlFor="balance">Balance</label>
           <BalanceInput
             type="number"
-            name="balance"
             id="balance"
-            value={formData.balance}
-            onChange={handleChange}
+            name="balance"
+            value={balance}
+            onChange={(evt) => setBalance(evt.target.value)}
           />
-          <label htmlFor="primaryPaymentMethod">
+          <label htmlFor="isPrimaryPaymentMethod">
             Is this a primary payment method?
           </label>
           <select
-            name="isPrimaryPaymentMethod"
             id="isPrimaryPaymentMethod"
-            value={formData.isPrimaryPaymentMethod}
-            onChange={handleChange}
+            name="isPrimaryPaymentMethod"
+            value={isPrimaryPaymentMethod ? 'true' : 'false'}
+            onChange={(evt) =>
+              setIsPrimaryPaymentMethod(evt.target.value === 'true')
+            }
           >
-            <option key="yes" value="yes">
+            <option key="true" value="true">
               Yes
             </option>
-            <option key="no" value="no">
+            <option key="false" value="false">
               No
             </option>
           </select>
