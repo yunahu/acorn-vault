@@ -1,28 +1,11 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Modal } from 'antd';
 import { useCurrencies } from 'src/hooks/useCurrencies';
-import { createAccount } from 'src/services/axios';
+import { useAccountQueryMutations } from 'src/hooks/useAccountQueryMutations';
+import BasicButton from 'src/components/BasicButton/BasicButton';
 
 // #region Styles
-
-const StyledButton = styled.button`
-  padding: 10px;
-  background-color: white;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: ${({ theme }) => theme.colors.darkGray};
-  border: solid 1px ${({ theme }) => theme.colors.darkGray};
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.secondary};
-    border: solid 1px ${({ theme }) => theme.colors.secondary};
-  }
-`;
 
 const StyledForm = styled.form`
   display: flex;
@@ -38,7 +21,6 @@ const BalanceInput = styled.input`
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
   }
 
-  // TODO:
   //  &[type='number'] {
   //    -moz-appearance: textfield; /* Firefox */
   //  }
@@ -54,36 +36,40 @@ const NewAccountModal = () => {
   const [isPrimaryPaymentMethod, setIsPrimaryPaymentMethod] =
     useState<boolean>(true);
   const currencies = useCurrencies();
-  const queryClient = useQueryClient();
-  const createAccountMutation = useMutation({
-    mutationFn: () =>
-      createAccount(name, currencyId, balance, isPrimaryPaymentMethod),
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['accounts'] });
-      setOpen(false);
-      setName('New account');
-      setCurrencyId(1);
-      setBalance('0');
-      setIsPrimaryPaymentMethod(true);
-    },
-    mutationKey: ['createAccount'],
-  });
+  const { createAccountMutation } = useAccountQueryMutations();
 
-  const handleCancel = () => {
+  const resetForm = () => {
     setName('New account');
     setCurrencyId(1);
     setBalance('0');
     setIsPrimaryPaymentMethod(true);
+  };
+
+  const handleCancel = () => {
     setOpen(false);
+    resetForm();
   };
 
   const handleOk = () => {
-    createAccountMutation.mutate();
+    createAccountMutation.mutate(
+      {
+        name,
+        currency_id: currencyId,
+        balance: parseFloat(balance),
+        is_primary_payment_method: isPrimaryPaymentMethod,
+      },
+      {
+        onSettled: () => {
+          setOpen(false);
+          resetForm();
+        },
+      }
+    );
   };
 
   return (
     <div>
-      <StyledButton onClick={() => setOpen(true)}>+ New account</StyledButton>
+      <BasicButton onClick={() => setOpen(true)}>+ New account</BasicButton>
       <Modal
         title="Create a new account"
         open={open}

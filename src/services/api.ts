@@ -17,12 +17,25 @@ api.interceptors.request.use(
   }
 );
 
+export interface Account {
+  id: number;
+  name: string;
+  currency_id: number;
+  balance: number;
+  is_primary_payment_method: boolean;
+}
+
+export type AccountEditableKey =
+  | 'name'
+  | 'balance'
+  | 'is_primary_payment_method';
+
 export const getAccounts = async () => api.get('/accounts').then((x) => x.data);
 
 export const createAccount = async (
   name: string,
   currencyId: number,
-  balance: string,
+  balance: number,
   isPrimaryPaymentMethod: boolean
 ) =>
   api.post('/accounts', {
@@ -34,9 +47,9 @@ export const createAccount = async (
 
 export const updateAccount = async (
   accountId: number,
-  column: string,
-  value: string
-) =>
+  column: AccountEditableKey,
+  value: Account[AccountEditableKey]
+): Promise<Account> =>
   api.patch(`accounts/${accountId}`, {
     column,
     value,

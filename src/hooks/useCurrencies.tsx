@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import api from 'src/services/axios';
+import api from 'src/services/api';
 
 interface Currency {
   id: number;

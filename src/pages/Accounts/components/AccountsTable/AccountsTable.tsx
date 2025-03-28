@@ -1,197 +1,95 @@
 import styled from 'styled-components';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
 import type { TableProps } from 'antd';
 import { Table } from 'antd';
-import { deleteAccount, getAccounts, updateAccount } from 'src/services/axios';
 import { useCurrencies } from 'src/hooks/useCurrencies';
+import { useAccountQueryMutations } from 'src/hooks/useAccountQueryMutations';
 import NewAccountModal from './components/NewAccountModal/NewAccountModal';
+import EditableInput from 'src/components/EditableInput/EditableInput';
+import { Account } from 'src/services/api';
 
 // #region Styles
 
-const StyledInput = styled.input`
-  padding: 10px 15px;
-  width: 99%;
-  height: 56px;
-  border-radius: 1px;
-`;
-
-const DeleteButton = styled.button`
+const StyledButton = styled.button`
   border: none;
   background-color: inherit;
 
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const BalanceInput = styled.input`
-  padding: 10px 15px;
-  width: 99%;
-  height: 56px;
-  border-radius: 1px;
-
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
-    -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-  }
-
-  // TODO:
-  //  &[type='number'] {
-  //    -moz-appearance: textfield; /* Firefox */
-  //  }
-`;
-
-const PaymentMethodButton = styled.button`
-  border: none;
-  background-color: inherit;
-  padding: 5px 15px;
-
-  &:hover {
-    cursor: pointer;
+  &:focus-visible {
+    outline: 2px solid green;
+    outline-offset: 2px;
   }
 `;
 
 // #endregion
 
-interface Account {
-  id: number;
-  name: string;
-  currency_id: number;
-  balance: number;
-  is_primary_payment_method: boolean;
-}
-
 const AccountsTable = () => {
-  const { data } = useQuery({ queryKey: ['accounts'], queryFn: getAccounts });
-  const [active, setActive] = useState<(string | number | null)[]>([
-    null,
-    null,
-  ]);
   const currencies = useCurrencies();
-  const queryClient = useQueryClient();
-  const deleteAccountMutation = useMutation({
-    mutationFn: deleteAccount,
-    onSettled: async () =>
-      queryClient.invalidateQueries({ queryKey: ['accounts'] }),
-  });
-  const updateAccountMutation = useMutation({
-    mutationFn: ({
-      accountId,
-      column,
-      value,
-    }: {
-      accountId: number;
-      column: string;
-      value: string;
-    }) => updateAccount(accountId, column, value),
-    onSettled: async () =>
-      queryClient.invalidateQueries({ queryKey: ['accounts'] }),
-  });
+  const { accountQuery, updateAccountMutation, deleteAccountMutation } =
+    useAccountQueryMutations();
 
   const columns: TableProps<Account>['columns'] = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (_, account) => {
-        return active[0] === account.id && active[1] === 'name' ? (
-          <StyledInput
-            type="text"
-            autoFocus
-            defaultValue={account.name}
-            onBlur={() => setActive([null, null])}
-            onKeyDown={(evt) => {
-              if (evt.key === 'Enter') {
-                updateAccountMutation.mutate({
-                  accountId: account.id,
-                  column: 'name',
-                  value: evt.currentTarget.value,
-                });
-                setActive([null, null]);
-              } else if (evt.key === 'Escape') {
-                setActive([null, null]);
-              }
-            }}
-          />
-        ) : (
-          <div
-            onClick={() => {
-              setActive([account.id, 'name']);
-            }}
-          >
-            {account.name}
-          </div>
-        );
-      },
+      render: (_, account) => (
+        <EditableInput
+          type="text"
+          initialValue={account.name}
+          onOk={(value: string) => {
+            updateAccountMutation.mutate({
+              accountId: account.id,
+              column: 'name',
+              value,
+            });
+          }}
+        />
+      ),
     },
     {
       title: 'Currency',
       dataIndex: 'currency_id',
       key: 'currency_id',
-      render: (_, account) => {
-        return (
-          <div>
-            {currencies.find((x) => x.id === account.currency_id)?.code}
-          </div>
-        );
-      },
+      render: (_, account) => (
+        <div>{currencies.find((x) => x.id === account.currency_id)?.code}</div>
+      ),
     },
     {
       title: 'Balance',
       dataIndex: 'balance',
       key: 'balance',
-      render: (_, account) => {
-        return active[0] === account.id && active[1] === 'balance' ? (
-          <BalanceInput
-            type="number"
-            autoFocus
-            defaultValue={account.balance}
-            onBlur={() => setActive([null, null])}
-            onKeyDown={(evt) => {
-              if (evt.key === 'Enter') {
-                updateAccountMutation.mutate({
-                  accountId: account.id,
-                  column: 'balance',
-                  value: evt.currentTarget.value,
-                });
-                setActive([null, null]);
-              } else if (evt.key === 'Escape') {
-                setActive([null, null]);
-              }
-            }}
-          />
-        ) : (
-          <div
-            onClick={() => {
-              setActive([account.id, 'balance']);
-            }}
-          >
-            {currencies.find((x) => x.id === account.currency_id)?.symbol +
-              ' ' +
-              account.balance}
-          </div>
-        );
-      },
+      render: (_, account) => (
+        <EditableInput
+          type="number"
+          prefix={
+            currencies.find((x) => x.id === account.currency_id)?.symbol + ' '
+          }
+          initialValue={account.balance}
+          onOk={(value) => {
+            updateAccountMutation.mutate({
+              accountId: account.id,
+              column: 'balance',
+              value: parseFloat(value),
+            });
+          }}
+        />
+      ),
     },
     {
       title: 'Primary payment method',
       dataIndex: 'is_primary_payment_method',
       key: 'is_primary_payment_method',
       render: (_, account) => (
-        <PaymentMethodButton
+        <StyledButton
           onClick={() =>
             updateAccountMutation.mutate({
               accountId: account.id,
               column: 'is_primary_payment_method',
-              value: (!account.is_primary_payment_method).toString(),
+              value: !account.is_primary_payment_method,
             })
           }
         >
           {account.is_primary_payment_method ? 'Yes' : 'No'}
-        </PaymentMethodButton>
+        </StyledButton>
       ),
     },
     {
@@ -199,16 +97,16 @@ const AccountsTable = () => {
       dataIndex: 'action',
       key: 'action',
       render: (_, account) => (
-        <DeleteButton onClick={() => deleteAccountMutation.mutate(account.id)}>
+        <StyledButton onClick={() => deleteAccountMutation.mutate(account.id)}>
           Delete
-        </DeleteButton>
+        </StyledButton>
       ),
     },
   ];
 
   return (
     <Table<Account>
-      dataSource={data}
+      dataSource={accountQuery.data}
       columns={columns}
       rowKey="id"
       footer={() => <NewAccountModal />}
