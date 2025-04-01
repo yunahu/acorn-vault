@@ -54,9 +54,9 @@ const NewAccountModal = () => {
     createAccountMutation.mutate(
       {
         name,
-        currency_id: currencyId,
+        currencyId,
         balance: parseFloat(balance),
-        is_primary_payment_method: isPrimaryPaymentMethod,
+        isPrimaryPaymentMethod,
       },
       {
         onSettled: () => {

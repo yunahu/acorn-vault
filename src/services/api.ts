@@ -40,9 +40,9 @@ export const createAccount = async (
 ) =>
   api.post('/accounts', {
     name,
-    currency_id: currencyId,
+    currencyId,
     balance,
-    is_primary_payment_method: isPrimaryPaymentMethod,
+    isPrimaryPaymentMethod,
   });
 
 export const updateAccount = async (

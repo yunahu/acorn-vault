@@ -26,23 +26,29 @@ export const useAccountQueryMutations = () => {
     mutationFn: (variables: {
       id?: number;
       name: string;
-      currency_id: number;
+      currencyId: number;
       balance: number;
-      is_primary_payment_method: boolean;
+      isPrimaryPaymentMethod: boolean;
     }) =>
       createAccount(
         variables.name,
-        variables.currency_id,
+        variables.currencyId,
         variables.balance,
-        variables.is_primary_payment_method
+        variables.isPrimaryPaymentMethod
       ),
-    onMutate: async (newAccount) => {
-      newAccount.id = -1;
+    onMutate: async (variables) => {
+      variables.id = -1;
       await queryClient.cancelQueries({ queryKey: ['accounts'] });
       const previousAccounts = queryClient.getQueryData(['accounts']);
       queryClient.setQueryData(['accounts'], (old: Account[]) => [
         ...old,
-        newAccount,
+        {
+          id: -1,
+          name: variables.name,
+          currency_id: variables.currencyId,
+          balance: variables.balance,
+          is_primary_payment_method: variables.isPrimaryPaymentMethod,
+        },
       ]);
       return { previousAccounts };
     },
