@@ -1,46 +1,34 @@
-import styled from 'styled-components';
 import type { TableProps } from 'antd';
-import { Table } from 'antd';
 import { useCurrencies } from 'src/hooks/useCurrencies';
 import { useAccountQueryMutations } from 'src/hooks/useAccountQueryMutations';
+import EditableInput from 'src/components/editables/EditableInput/EditableInput';
 import NewAccountModal from './components/NewAccountModal/NewAccountModal';
-import EditableInput from 'src/components/EditableInput/EditableInput';
-import { Account } from 'src/services/api';
-
-// #region Styles
-
-const StyledButton = styled.button`
-  border: none;
-  background-color: inherit;
-
-  &:focus-visible {
-    outline: 2px solid green;
-    outline-offset: 2px;
-  }
-`;
-
-// #endregion
+import StyledTable from 'src/components/Table/Table';
+import TextButton from 'src/components/buttons/TextButton/TextButton';
 
 const AccountsTable = () => {
   const currencies = useCurrencies();
   const { accountQuery, updateAccountMutation, deleteAccountMutation } =
     useAccountQueryMutations();
 
-  const columns: TableProps<Account>['columns'] = [
+  const columns: TableProps['columns'] = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+      className: 'editable',
       render: (_, account) => (
         <EditableInput
           type="text"
           initialValue={account.name}
-          onOk={(value: string) => {
-            updateAccountMutation.mutate({
-              accountId: account.id,
-              column: 'name',
-              value,
-            });
+          onOk={(newName: string) => {
+            if (newName !== account.name) {
+              updateAccountMutation.mutate({
+                id: account.id,
+                column: 'name',
+                value: newName,
+              });
+            }
           }}
         />
       ),
@@ -48,6 +36,7 @@ const AccountsTable = () => {
     {
       title: 'Currency',
       dataIndex: 'currency_id',
+      align: 'right',
       key: 'currency_id',
       render: (_, account) => (
         <div>{currencies.find((x) => x.id === account.currency_id)?.code}</div>
@@ -57,19 +46,23 @@ const AccountsTable = () => {
       title: 'Balance',
       dataIndex: 'balance',
       key: 'balance',
+      className: 'editable',
+      align: 'right',
       render: (_, account) => (
         <EditableInput
           type="number"
           prefix={
             currencies.find((x) => x.id === account.currency_id)?.symbol + ' '
           }
-          initialValue={account.balance}
-          onOk={(value) => {
-            updateAccountMutation.mutate({
-              accountId: account.id,
-              column: 'balance',
-              value: parseFloat(value),
-            });
+          initialValue={account.balance.toString()}
+          onOk={(newBalance) => {
+            if (parseFloat(newBalance) !== account.balance) {
+              updateAccountMutation.mutate({
+                id: account.id,
+                column: 'balance',
+                value: parseFloat(newBalance),
+              });
+            }
           }}
         />
       ),
@@ -79,17 +72,17 @@ const AccountsTable = () => {
       dataIndex: 'is_primary_payment_method',
       key: 'is_primary_payment_method',
       render: (_, account) => (
-        <StyledButton
+        <TextButton
           onClick={() =>
             updateAccountMutation.mutate({
-              accountId: account.id,
+              id: account.id,
               column: 'is_primary_payment_method',
               value: !account.is_primary_payment_method,
             })
           }
         >
           {account.is_primary_payment_method ? 'Yes' : 'No'}
-        </StyledButton>
+        </TextButton>
       ),
     },
     {
@@ -97,15 +90,15 @@ const AccountsTable = () => {
       dataIndex: 'action',
       key: 'action',
       render: (_, account) => (
-        <StyledButton onClick={() => deleteAccountMutation.mutate(account.id)}>
+        <TextButton onClick={() => deleteAccountMutation.mutate(account.id)}>
           Delete
-        </StyledButton>
+        </TextButton>
       ),
     },
   ];
 
   return (
-    <Table<Account>
+    <StyledTable
       dataSource={accountQuery.data}
       columns={columns}
       rowKey="id"

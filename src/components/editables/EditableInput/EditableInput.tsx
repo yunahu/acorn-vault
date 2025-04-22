@@ -6,7 +6,6 @@ import { InputHTMLAttributes, useState } from 'react';
 const StyledInput = styled.input`
   padding: 10px 15px;
   width: 99%;
-  height: 56px;
   border-radius: 1px;
 
   &::-webkit-outer-spin-button,
@@ -25,7 +24,7 @@ const StyledInput = styled.input`
 
 interface EditableInputProps extends InputHTMLAttributes<HTMLInputElement> {
   type: 'text' | 'number';
-  initialValue: string | number;
+  initialValue: string;
   onOk: (value: string) => void;
   prefix?: string;
 }
@@ -33,7 +32,7 @@ interface EditableInputProps extends InputHTMLAttributes<HTMLInputElement> {
 const EditableInput = (props: EditableInputProps) => {
   const [active, setActive] = useState<boolean>(false);
   const { type, initialValue, onOk } = props;
-  const [value, setValue] = useState<string>(initialValue.toString());
+  const [value, setValue] = useState<string>(initialValue);
 
   return active ? (
     <StyledInput
@@ -41,13 +40,16 @@ const EditableInput = (props: EditableInputProps) => {
       autoFocus
       defaultValue={initialValue}
       onChange={(evt) => setValue(evt.currentTarget.value)}
-      onBlur={() => setActive(false)}
+      onBlur={() => {
+        setValue(initialValue);
+        setActive(false);
+      }}
       onKeyDown={(evt) => {
         if (evt.key === 'Enter') {
           onOk(value);
           setActive(false);
         } else if (evt.key === 'Escape') {
-          setValue(initialValue.toString());
+          setValue(initialValue);
           setActive(false);
         }
       }}

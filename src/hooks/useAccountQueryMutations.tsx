@@ -1,15 +1,15 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import {
   Account,
-  getAccounts,
+  AccountEditableKey,
   createAccount,
+  getAccounts,
   updateAccount,
   deleteAccount,
-  AccountEditableKey,
 } from 'src/services/api';
 
 interface UpdateParams {
-  accountId: number;
+  id: number;
   column: AccountEditableKey;
   value: Account[AccountEditableKey];
 }
@@ -17,14 +17,8 @@ interface UpdateParams {
 export const useAccountQueryMutations = () => {
   const queryClient = useQueryClient();
 
-  const accountQuery = useQuery({
-    queryKey: ['accounts'],
-    queryFn: getAccounts,
-  });
-
   const createAccountMutation = useMutation({
     mutationFn: (variables: {
-      id?: number;
       name: string;
       currencyId: number;
       balance: number;
@@ -37,7 +31,6 @@ export const useAccountQueryMutations = () => {
         variables.isPrimaryPaymentMethod
       ),
     onMutate: async (variables) => {
-      variables.id = -1;
       await queryClient.cancelQueries({ queryKey: ['accounts'] });
       const previousAccounts = queryClient.getQueryData(['accounts']);
       queryClient.setQueryData(['accounts'], (old: Account[]) => [
@@ -59,15 +52,20 @@ export const useAccountQueryMutations = () => {
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['accounts'] }),
   });
 
+  const accountQuery = useQuery({
+    queryKey: ['accounts'],
+    queryFn: getAccounts,
+  });
+
   const updateAccountMutation = useMutation({
-    mutationFn: ({ accountId, column, value }: UpdateParams) =>
-      updateAccount(accountId, column, value),
-    onMutate: async ({ accountId, column, value }: UpdateParams) => {
+    mutationFn: ({ id, column, value }: UpdateParams) =>
+      updateAccount(id, column, value),
+    onMutate: async ({ id, column, value }: UpdateParams) => {
       await queryClient.cancelQueries({ queryKey: ['accounts'] });
       const previousAccounts = queryClient.getQueryData(['accounts']);
       queryClient.setQueryData(['accounts'], (old: Account[]) => {
         const clone = structuredClone(old);
-        const found = clone.find((x) => x.id === accountId);
+        const found = clone.find((x) => x.id === id);
         if (found) (found[column] as Account[typeof column]) = value;
         return clone;
       });
@@ -77,7 +75,6 @@ export const useAccountQueryMutations = () => {
       console.error('Error: ', err);
       queryClient.setQueryData(['accounts'], context?.previousAccounts);
     },
-
     onSettled: async () =>
       queryClient.invalidateQueries({ queryKey: ['accounts'] }),
   });
@@ -100,8 +97,8 @@ export const useAccountQueryMutations = () => {
   });
 
   return {
-    accountQuery,
     createAccountMutation,
+    accountQuery,
     updateAccountMutation,
     deleteAccountMutation,
   };

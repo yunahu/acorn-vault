@@ -6,6 +6,7 @@ const theme = {
     darkGray: '#666666',
     background: '#f2f2f2',
     border: '#e8ecde',
+    brightGreen: '#03951e',
   },
 };
 

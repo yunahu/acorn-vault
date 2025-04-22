@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button, Modal } from 'antd';
 import { useCurrencies } from 'src/hooks/useCurrencies';
 import { useAccountQueryMutations } from 'src/hooks/useAccountQueryMutations';
-import BasicButton from 'src/components/BasicButton/BasicButton';
+import BasicButton from 'src/components/buttons/BasicButton/BasicButton';
 
 // #region Styles
 
@@ -95,6 +95,7 @@ const NewAccountModal = () => {
             id="name"
             name="name"
             value={name}
+            placeholder="Cash USD"
             onChange={(evt) => setName(evt.target.value)}
           />
           <label htmlFor="currencyId">Currency</label>

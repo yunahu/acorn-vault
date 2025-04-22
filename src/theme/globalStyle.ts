@@ -23,12 +23,8 @@ const GlobalStyle = createGlobalStyle`
 
 		&:focus {
     	outline: 1px solid ${({ theme }) => theme.colors.primary};
-    	box-shadow: 0 0 8px rgba(44, 76, 59, 0.6);
+    	box-shadow: 0 0 8px #2c4c3b;
   	}
-	}
-
-	.ant-table-cell:has(> input) {
-		padding: 0px  !important;
 	}
 `;
 
