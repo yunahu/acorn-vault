@@ -17,7 +17,7 @@ interface RecordsTableProps {
 }
 
 const RecordsTable = ({ range }: RecordsTableProps) => {
-  const currencies = useCurrencies();
+  const { getCode, getSymbol } = useCurrencies();
   const {
     createRecordMutation,
     recordQuery,
@@ -126,9 +126,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
             (x) => x.id === record.account_id
           );
           if (account) {
-            code =
-              currencies.find((x) => x.id === account.currency_id)?.code ??
-              noCode;
+            code = getCode(account.currency_id) ?? noCode;
           }
         }
         return <div>{code}</div>;
@@ -147,9 +145,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
             (x) => x.id === record.account_id
           );
           if (account) {
-            prefix =
-              currencies.find((x) => x.id === account.currency_id)?.symbol +
-              ' ';
+            prefix = getSymbol(account.currency_id) + ' ';
           }
         }
         return (

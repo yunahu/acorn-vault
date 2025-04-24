@@ -7,7 +7,7 @@ import StyledTable from 'src/components/Table/Table';
 import TextButton from 'src/components/buttons/TextButton/TextButton';
 
 const AccountsTable = () => {
-  const currencies = useCurrencies();
+  const { getCode, getSymbol } = useCurrencies();
   const { accountQuery, updateAccountMutation, deleteAccountMutation } =
     useAccountQueryMutations();
 
@@ -38,9 +38,7 @@ const AccountsTable = () => {
       dataIndex: 'currency_id',
       align: 'right',
       key: 'currency_id',
-      render: (_, account) => (
-        <div>{currencies.find((x) => x.id === account.currency_id)?.code}</div>
-      ),
+      render: (_, account) => <div>{getCode(account.currency_id)}</div>,
     },
     {
       title: 'Balance',
@@ -51,9 +49,7 @@ const AccountsTable = () => {
       render: (_, account) => (
         <EditableInput
           type="number"
-          prefix={
-            currencies.find((x) => x.id === account.currency_id)?.symbol + ' '
-          }
+          prefix={getSymbol(account.currency_id) + ' '}
           initialValue={account.balance.toString()}
           onOk={(newBalance) => {
             if (parseFloat(newBalance) !== account.balance) {

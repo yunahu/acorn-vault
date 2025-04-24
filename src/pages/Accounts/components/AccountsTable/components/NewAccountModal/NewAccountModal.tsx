@@ -35,7 +35,7 @@ const NewAccountModal = () => {
   const [balance, setBalance] = useState<string>('0');
   const [isPrimaryPaymentMethod, setIsPrimaryPaymentMethod] =
     useState<boolean>(true);
-  const currencies = useCurrencies();
+  const { currencies } = useCurrencies();
   const { createAccountMutation } = useAccountQueryMutations();
 
   const resetForm = () => {
