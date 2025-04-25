@@ -8,7 +8,6 @@ const StyledButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   color: ${({ theme }) => theme.colors.darkGray};
   border: solid 1px ${({ theme }) => theme.colors.darkGray};
 

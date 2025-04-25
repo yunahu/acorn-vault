@@ -26,6 +26,10 @@ const GlobalStyle = createGlobalStyle`
     	box-shadow: 0 0 8px #2c4c3b;
   	}
 	}
+
+	button {
+		cursor: pointer;
+	}
 `;
 
 export default GlobalStyle;

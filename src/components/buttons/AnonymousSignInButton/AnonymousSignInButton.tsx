@@ -20,7 +20,6 @@ const StyledButton = styled.button<{ $bg?: string; $color?: string }>`
   justify-content: center;
   gap: 8px;
   color: ${({ $color }) => $color ?? 'black'};
-  cursor: pointer;
 `;
 
 const StyledFrontAwesomeIcon = styled(FontAwesomeIcon)`
