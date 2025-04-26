@@ -1,5 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { InputHTMLAttributes, useState } from 'react';
+import { formatNumber } from 'src/utils/helpers';
 
 // #region Styles
 
@@ -20,10 +21,21 @@ const StyledInput = styled.input`
   //  }
 `;
 
+const StyledDiv = styled.div<{ $contrast?: boolean }>`
+  ${(props) =>
+    props.$contrast !== undefined &&
+    css`
+      color: ${props.$contrast
+        ? props.theme.colors.negative
+        : props.theme.colors.positive};
+    `}
+`;
+
 // #endregion
 
 interface EditableInputProps extends InputHTMLAttributes<HTMLInputElement> {
   type: 'text' | 'number';
+  isColorCoded?: boolean;
   initialValue: string;
   onOk: (value: string) => void;
   prefix?: string;
@@ -31,7 +43,7 @@ interface EditableInputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const EditableInput = (props: EditableInputProps) => {
   const [active, setActive] = useState<boolean>(false);
-  const { type, initialValue, onOk } = props;
+  const { type, initialValue, onOk, isColorCoded } = props;
   const [value, setValue] = useState<string>(initialValue);
 
   return active ? (
@@ -55,14 +67,15 @@ const EditableInput = (props: EditableInputProps) => {
       }}
     />
   ) : (
-    <div
+    <StyledDiv
+      $contrast={isColorCoded ? parseFloat(value) < 0 : undefined}
       onClick={() => {
         setActive(true);
       }}
     >
       {props?.prefix}
-      {type === 'number' ? parseFloat(value).toFixed(2) : value}
-    </div>
+      {type === 'number' ? formatNumber(value) : value}
+    </StyledDiv>
   );
 };
 

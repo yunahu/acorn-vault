@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import NetWorthCard from 'src/components/cards/NetWorthCard/NetWorthCard';
 import AccountsTable from './components/AccountsTable/AccountsTable';
 
 // #region Styles
@@ -6,7 +7,13 @@ import AccountsTable from './components/AccountsTable/AccountsTable';
 const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
   flex: 1;
-  padding: 100px;
+`;
+
+const Main = styled.div`
+  padding: 5%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 // #endregion
@@ -14,7 +21,10 @@ const Container = styled.div`
 const Accounts = () => {
   return (
     <Container>
-      <AccountsTable />
+      <Main>
+        <NetWorthCard />
+        <AccountsTable />
+      </Main>
     </Container>
   );
 };

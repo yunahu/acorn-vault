@@ -9,7 +9,7 @@ import RecordsTable from './components/RecordsTable/RecordsTable';
 const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
   flex: 1;
-  padding: 100px;
+  padding: 5%;
   display: flex;
   flex-direction: column;
   gap: 30px;

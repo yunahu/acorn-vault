@@ -1,13 +1,14 @@
+import 'styled-components';
+import colors from './colors';
+
+export type Theme = typeof theme;
+
 const theme = {
-  colors: {
-    primary: '#2c4c3b',
-    secondary: '#4a7652',
-    gray: '#b1b1b1',
-    darkGray: '#666666',
-    background: '#f2f2f2',
-    border: '#e8ecde',
-    brightGreen: '#03951e',
-  },
+  colors,
 };
+
+declare module 'styled-components' {
+  export interface DefaultTheme extends Theme {}
+}
 
 export default theme;

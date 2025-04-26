@@ -151,6 +151,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
         return (
           <EditableInput
             type="number"
+            isColorCoded
             prefix={prefix}
             initialValue={record.amount.toString()}
             onOk={(newAmount) => {
@@ -179,6 +180,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
 
   return (
     <Table
+      loading={recordQuery.isLoading}
       dataSource={recordQuery.data}
       columns={columns}
       rowKey="id"

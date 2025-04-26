@@ -136,7 +136,7 @@ const UserDropdown = () => {
             </div>
           </ModalHeader>
           <ModalBody>
-            <StyledLink to="/profile" onClick={toggleModal}>
+            <StyledLink to="/settings" onClick={toggleModal}>
               My profile
             </StyledLink>
             <StyledLink to="/notifications" onClick={toggleModal}>

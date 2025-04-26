@@ -4,7 +4,7 @@ import { ComponentProps } from 'react';
 const StyledButton = styled.button`
   border: none;
   background-color: inherit;
-  color: ${({ theme }) => theme.colors.brightGreen};
+  color: ${({ theme }) => theme.colors.blue};
 
   &:focus-visible {
     outline: 2px solid green;

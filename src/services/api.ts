@@ -18,6 +18,8 @@ api.interceptors.request.use(
   }
 );
 
+// --- Types ---
+
 export interface Account {
   id: number;
   name: string;
@@ -45,7 +47,20 @@ export type RecordEditableKey =
   | 'account_id'
   | 'amount';
 
-export const createAccount = async (
+export interface Settings {
+  primary_currency: number;
+}
+
+export type SettingsEditableKey = 'primary_currency';
+
+export interface NetWorth {
+  currency_id: number;
+  amount: number;
+}
+
+// --- Accounts ---
+
+export const createAccount = (
   name: string,
   currencyId: number,
   balance: number,
@@ -58,10 +73,10 @@ export const createAccount = async (
     isPrimaryPaymentMethod,
   });
 
-export const getAccounts = async (): Promise<Account[]> =>
+export const getAccounts = (): Promise<Account[]> =>
   api.get('/accounts').then((x) => x.data);
 
-export const updateAccount = async (
+export const updateAccount = (
   id: number,
   column: AccountEditableKey,
   value: Account[AccountEditableKey]
@@ -71,10 +86,11 @@ export const updateAccount = async (
     value,
   });
 
-export const deleteAccount = async (id: number) =>
-  api.delete(`/accounts/${id}`);
+export const deleteAccount = (id: number) => api.delete(`/accounts/${id}`);
 
-export const createRecord = async (
+// --- Records ---
+
+export const createRecord = (
   date: dayjs.Dayjs,
   description: string,
   accountId: null | number,
@@ -115,7 +131,7 @@ export const getRecords = async (
   return mapped;
 };
 
-export const updateRecord = async (
+export const updateRecord = (
   id: number,
   column: RecordEditableKey,
   value: Record[RecordEditableKey]
@@ -125,6 +141,24 @@ export const updateRecord = async (
     value,
   });
 
-export const deleteRecord = async (id: number) => api.delete(`/records/${id}`);
+export const deleteRecord = (id: number) => api.delete(`/records/${id}`);
+
+// --- Settings ---
+
+export const getSettings = () => api.get(`/settings`).then((x) => x.data);
+
+export const updateSettings = (
+  column: SettingsEditableKey,
+  value: Settings[SettingsEditableKey]
+): Promise<Settings> =>
+  api.patch('/settings', {
+    column,
+    value,
+  });
+
+// --- Statistics ---
+
+export const getNetWorth = () =>
+  api.get('/statistics/netWorth').then((x) => x.data);
 
 export default api;

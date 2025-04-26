@@ -49,6 +49,7 @@ const AccountsTable = () => {
       render: (_, account) => (
         <EditableInput
           type="number"
+          isColorCoded
           prefix={getSymbol(account.currency_id) + ' '}
           initialValue={account.balance.toString()}
           onOk={(newBalance) => {
@@ -95,6 +96,7 @@ const AccountsTable = () => {
 
   return (
     <StyledTable
+      loading={accountQuery.isLoading}
       dataSource={accountQuery.data}
       columns={columns}
       rowKey="id"
