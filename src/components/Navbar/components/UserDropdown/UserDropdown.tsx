@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signOut } from 'firebase/auth';
 import { useEffect, useRef, useState } from 'react';
 import { auth } from 'src/services/firebase';
-import { useAuth } from 'src/hooks/useAuth';
+import useAuth from 'src/hooks/useAuth';
 
 // #region Styles
 

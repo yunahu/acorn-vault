@@ -1,6 +1,6 @@
 import type { TableProps } from 'antd';
 import { useCurrencies } from 'src/hooks/useCurrencies';
-import { useAccountQueryMutations } from 'src/hooks/useAccountQueryMutations';
+import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
 import EditableInput from 'src/components/editables/EditableInput/EditableInput';
 import NewAccountModal from './components/NewAccountModal/NewAccountModal';
 import StyledTable from 'src/components/Table/Table';

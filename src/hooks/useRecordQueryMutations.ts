@@ -16,7 +16,7 @@ interface UpdateParams {
   value: Record[RecordEditableKey];
 }
 
-export const useRecordQueryMutations = (range: Range) => {
+const useRecordQueryMutations = (range: Range) => {
   const queryClient = useQueryClient();
 
   const createRecordMutation = useMutation({

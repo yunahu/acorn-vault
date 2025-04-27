@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { auth } from 'src/services/firebase';
-import { mapUser, useAuth } from 'src/hooks/useAuth';
+import useAuth, { mapUser } from 'src/hooks/useAuth';
 import GoogleSignInButton from 'src/components/buttons/GoogleSignInButton/GoogleSignInButton';
 import AnonymousSignInButton from 'src/components/buttons/AnonymousSignInButton/AnonymousSignInButton';
 import dog from 'src/assets/images/dog.webp';

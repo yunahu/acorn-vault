@@ -161,4 +161,7 @@ export const updateSettings = (
 export const getNetWorth = () =>
   api.get('/statistics/netWorth').then((x) => x.data);
 
+export const getNetWorthByCurrency = () =>
+  api.get('/statistics/netWorthByCurrency').then((x) => x.data);
+
 export default api;

@@ -4,13 +4,13 @@ import Spin from 'src/components/Spin/Spin';
 
 // #region Styles
 
-const Container = styled.div<{ loading?: boolean }>`
+const Container = styled.div<{ $loading?: boolean }>`
   min-width: 170px;
   min-height: 95px;
   width: fit-content;
   border-radius: 8px;
   border: solid 0.5px ${({ theme }) => theme.colors.border};
-  background-color: ${({ loading }) => (loading ? '#fefefe' : 'white')};
+  background-color: ${({ $loading }) => ($loading ? '#fefefe' : 'white')};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,13 +30,13 @@ const Wrapper = styled.div`
 
 interface CardProps extends PropsWithChildren {
   title?: string;
-  loading?: boolean;
+  $loading?: boolean;
 }
 
-const Card = ({ children, title, loading }: CardProps) => {
+const Card = ({ children, title, $loading, ...props }: CardProps) => {
   return (
-    <Container loading={loading}>
-      {loading ? (
+    <Container {...props} $loading={$loading}>
+      {$loading ? (
         <Spin />
       ) : (
         <Wrapper>

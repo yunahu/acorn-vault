@@ -10,7 +10,7 @@ import { formatNumber } from 'src/utils/helpers';
 const Body = styled.div`
   font-size: 20px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: end;
   gap: 13px;
 `;
@@ -33,10 +33,9 @@ const NetWorthCard = () => {
     queryKey: ['netWorth'],
     queryFn: getNetWorth,
   });
-  netWorthQuery.isLoading;
 
   return (
-    <Card title="Total Net Worth" loading={netWorthQuery.isLoading}>
+    <Card title="Total Net Worth" $loading={netWorthQuery.isLoading}>
       <Body>
         <Currency>
           {netWorthQuery.data && getCode(netWorthQuery.data.currency_id)}

@@ -3,7 +3,7 @@ import { signInAnonymously, updateProfile } from 'firebase/auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { auth } from 'src/services/firebase';
-import { mapUser, useAuth } from 'src/hooks/useAuth';
+import useAuth, { mapUser } from 'src/hooks/useAuth';
 
 // #region Styles
 

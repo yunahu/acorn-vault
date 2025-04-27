@@ -5,7 +5,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from 'src/services/firebase';
-import { useAuth } from 'src/hooks/useAuth';
+import useAuth from 'src/hooks/useAuth';
 import GoogleSignInButton from 'src/components/buttons/GoogleSignInButton/GoogleSignInButton';
 import AnonymousSignInButton from 'src/components/buttons/AnonymousSignInButton/AnonymousSignInButton';
 import forrest from 'src/assets/images/forrest.jpg';

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import NetWorthCard from 'src/components/cards/NetWorthCard/NetWorthCard';
 import AccountsTable from './components/AccountsTable/AccountsTable';
+import NetWorthByCurrencyCard from 'src/components/cards/NetWorthByCurrencyCard/NetWorthByCurrencyCard';
 
 // #region Styles
 
@@ -24,6 +25,7 @@ const Accounts = () => {
       <Main>
         <NetWorthCard />
         <AccountsTable />
+        <NetWorthByCurrencyCard />
       </Main>
     </Container>
   );

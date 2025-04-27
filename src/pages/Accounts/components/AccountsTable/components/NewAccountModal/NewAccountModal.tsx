@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { Button, Modal } from 'antd';
 import { useCurrencies } from 'src/hooks/useCurrencies';
-import { useAccountQueryMutations } from 'src/hooks/useAccountQueryMutations';
+import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
 import BasicButton from 'src/components/buttons/BasicButton/BasicButton';
 
 // #region Styles

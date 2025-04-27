@@ -14,7 +14,7 @@ interface UpdateParams {
   value: Account[AccountEditableKey];
 }
 
-export const useAccountQueryMutations = () => {
+const useAccountQueryMutations = () => {
   const queryClient = useQueryClient();
 
   const createAccountMutation = useMutation({
