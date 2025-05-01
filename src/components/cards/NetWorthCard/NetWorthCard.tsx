@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { useQuery } from '@tanstack/react-query';
-import { getNetWorth } from 'src/services/api';
 import { useCurrencies } from 'src/hooks/useCurrencies';
+import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
+import { getNetWorth, NetWorth } from 'src/services/api';
 import Card from 'src/components/cards/Card/Card';
 import { formatNumber } from 'src/utils/helpers';
 
@@ -29,22 +30,19 @@ const Amount = styled.div<{ $negative?: boolean }>`
 
 const NetWorthCard = () => {
   const { getSymbol, getCode } = useCurrencies();
-  const netWorthQuery = useQuery({
-    queryKey: ['netWorth'],
+  const { accountQuery } = useAccountQueryMutations();
+  const query = useQuery<NetWorth>({
+    queryKey: ['netWorth', accountQuery.data],
     queryFn: getNetWorth,
   });
 
   return (
-    <Card title="Total Net Worth" $loading={netWorthQuery.isLoading}>
+    <Card title="Total Net Worth" $loading={query.isLoading}>
       <Body>
-        <Currency>
-          {netWorthQuery.data && getCode(netWorthQuery.data.currency_id)}
-        </Currency>
-        <Amount
-          $negative={netWorthQuery.data && netWorthQuery.data?.amount < 0}
-        >
-          {netWorthQuery.data && getSymbol(netWorthQuery.data.currency_id)}{' '}
-          {netWorthQuery.data && formatNumber(netWorthQuery.data.amount)}
+        <Currency>{query.data && getCode(query.data.currency_id)}</Currency>
+        <Amount $negative={query.data && query.data?.amount < 0}>
+          {query.data && getSymbol(query.data.currency_id)}{' '}
+          {query.data && formatNumber(query.data.amount)}
         </Amount>
       </Body>
     </Card>

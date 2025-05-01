@@ -23,8 +23,8 @@ const Accounts = () => {
   return (
     <Container>
       <Main>
-        <NetWorthCard />
         <AccountsTable />
+        <NetWorthCard />
         <NetWorthByCurrencyCard />
       </Main>
     </Container>

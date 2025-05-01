@@ -48,7 +48,12 @@ const items: TabsProps['items'] = [
 const Settings = () => {
   return (
     <Container>
-      <Tabs tabBarStyle={{ margin: 0 }} type="card" items={items} />
+      <Tabs
+        tabBarStyle={{ margin: 0 }}
+        type="card"
+        items={items}
+        destroyInactiveTabPane
+      />
     </Container>
   );
 };

@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from 'src/services/firebase';
@@ -33,10 +34,12 @@ export const mapUser = (user: FirebaseUser | null): User | null => {
 
 export const AuthProvider = (props: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(mapUser(auth.currentUser));
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(mapUser(user));
+      queryClient.removeQueries();
     });
 
     return unsubscribe;

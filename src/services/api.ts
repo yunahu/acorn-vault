@@ -58,6 +58,16 @@ export interface NetWorth {
   amount: number;
 }
 
+export interface NetWorthByCurrency {
+  primary_currency: number;
+  rows: {
+    currency_id: number;
+    amount: number;
+    amount_in_PC: number;
+    percentage: number;
+  }[];
+}
+
 // --- Accounts ---
 
 export const createAccount = (
@@ -155,6 +165,8 @@ export const updateSettings = (
     column,
     value,
   });
+
+export const deleteUserAccount = () => api.delete('/settings/user');
 
 // --- Statistics ---
 
