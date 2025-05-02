@@ -132,7 +132,7 @@ const SignIn = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) navigate('/');
+    if (user) navigate('/', { replace: true });
   }, [user, navigate]);
 
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {

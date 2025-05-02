@@ -152,7 +152,7 @@ const SignUp = () => {
         });
 
         setUser(mapUser(auth.currentUser));
-        navigate('/');
+        navigate('/', { replace: true });
       }
     } catch (err) {
       console.error(err);
