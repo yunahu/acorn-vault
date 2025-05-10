@@ -4,6 +4,7 @@ import { Spin as AntSpin } from 'antd';
 import { deleteUser, getAuth, updateProfile } from 'firebase/auth';
 import { KeyboardEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useAuth from 'src/hooks/useAuth';
 import BasicButton from 'src/components/buttons/BasicButton/BasicButton';
 import { deleteUserAccount } from 'src/services/api';
 
@@ -30,24 +31,37 @@ const StyledLabel = styled.label`
 // #endregion
 
 const Profile = () => {
+  const [loading, setLoading] = useState(false);
+  const { user, setUser } = useAuth();
   const auth = getAuth();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
 
-  const handleUpdate = (evt: KeyboardEvent<HTMLInputElement>) => {
-    if (auth.currentUser) {
-      if (
-        evt.currentTarget.value &&
-        evt.currentTarget.value !== auth.currentUser.displayName
-      ) {
-        updateProfile(auth.currentUser, {
-          displayName: evt.currentTarget.value,
-        }).catch((err) => {
-          console.error(err);
-        });
-      }
+  const handleUpdate = async (evt: KeyboardEvent<HTMLInputElement>) => {
+    setLoading(true);
+    const newName = evt.currentTarget.value;
+    const clone = structuredClone(user);
+
+    if (
+      !auth.currentUser ||
+      !newName ||
+      newName === auth.currentUser.displayName
+    ) {
+      setLoading(false);
+      return;
     }
-    evt.currentTarget.blur();
+
+    try {
+      evt.currentTarget.blur();
+      setUser((prev) => (prev ? { ...prev, name: newName } : null));
+      await updateProfile(auth.currentUser, {
+        displayName: newName,
+      });
+    } catch (err) {
+      console.error(err);
+      setUser(clone ?? null);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const deleteAccount = async () => {
@@ -69,7 +83,7 @@ const Profile = () => {
       <ItemContainer>
         <StyledLabel>User name</StyledLabel>
         <Input
-          disabled={!auth.currentUser}
+          disabled={!auth.currentUser || loading}
           defaultValue={auth.currentUser?.displayName ?? 'New user name'}
           onPressEnter={handleUpdate}
         />
