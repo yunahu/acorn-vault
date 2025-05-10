@@ -25,8 +25,7 @@ const AccountsTable = () => {
             if (newName !== account.name) {
               updateAccountMutation.mutate({
                 id: account.id,
-                column: 'name',
-                value: newName,
+                body: { name: newName },
               });
             }
           }}
@@ -56,8 +55,7 @@ const AccountsTable = () => {
             if (parseFloat(newBalance) !== account.balance) {
               updateAccountMutation.mutate({
                 id: account.id,
-                column: 'balance',
-                value: parseFloat(newBalance),
+                body: { balance: parseFloat(newBalance) },
               });
             }
           }}
@@ -73,8 +71,9 @@ const AccountsTable = () => {
           onClick={() =>
             updateAccountMutation.mutate({
               id: account.id,
-              column: 'is_primary_payment_method',
-              value: !account.is_primary_payment_method,
+              body: {
+                is_primary_payment_method: !account.is_primary_payment_method,
+              },
             })
           }
         >

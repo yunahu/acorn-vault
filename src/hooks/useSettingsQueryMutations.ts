@@ -1,15 +1,5 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import {
-  getSettings,
-  Settings,
-  SettingsEditableKey,
-  updateSettings,
-} from 'src/services/api';
-
-interface UpdateParams {
-  column: SettingsEditableKey;
-  value: Settings[SettingsEditableKey];
-}
+import { Settings, getSettings, updateSettings } from 'src/services/api';
 
 export const useSettingsQueryMutations = () => {
   const queryClient = useQueryClient();
@@ -20,13 +10,14 @@ export const useSettingsQueryMutations = () => {
   });
 
   const updateSettingsMutation = useMutation({
-    mutationFn: ({ column, value }: UpdateParams) =>
-      updateSettings(column, value),
-    onMutate: async ({ column, value }: UpdateParams) => {
+    mutationFn: (body: Partial<Settings>) => updateSettings(body),
+    onMutate: async (body: Partial<Settings>) => {
       await queryClient.cancelQueries({ queryKey: ['settings'] });
       const previousSettings = queryClient.getQueryData(['settings']);
       queryClient.setQueryData(['settings'], (old: Settings) => {
-        old[column] = value;
+        Object.entries(body).forEach(([key, value]) => {
+          (old[key as keyof typeof body] as typeof value) = value;
+        });
         return old;
       });
       return { previousSettings };

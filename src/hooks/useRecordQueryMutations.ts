@@ -2,7 +2,6 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import {
   Record,
-  RecordEditableKey,
   createRecord,
   getRecords,
   updateRecord,
@@ -12,8 +11,7 @@ import { Range } from 'src/pages/Records/Records';
 
 interface UpdateParams {
   id: number;
-  column: RecordEditableKey;
-  value: Record[RecordEditableKey];
+  body: Partial<Record>;
 }
 
 const useRecordQueryMutations = (range: Range) => {
@@ -71,9 +69,8 @@ const useRecordQueryMutations = (range: Range) => {
   });
 
   const updateRecordMutation = useMutation({
-    mutationFn: ({ id, column, value }: UpdateParams) =>
-      updateRecord(id, column, value),
-    onMutate: async ({ id, column, value }: UpdateParams) => {
+    mutationFn: ({ id, body }: UpdateParams) => updateRecord(id, body),
+    onMutate: async ({ id, body }: UpdateParams) => {
       await queryClient.cancelQueries({ queryKey: ['records', range] });
       const previousRecords = queryClient.getQueryData(['records', range]);
       queryClient.setQueryData(['records', range], (old: Record[]) => {
@@ -82,7 +79,11 @@ const useRecordQueryMutations = (range: Range) => {
           date: dayjs.utc(x.date),
         }));
         const found = clone.find((x) => x.id === id);
-        if (found) (found[column] as Record[typeof column]) = value;
+        Object.entries(body).forEach(([key, value]) => {
+          if (found) {
+            (found[key as keyof typeof body] as typeof value) = value;
+          }
+        });
         return clone;
       });
       return { previousRecords };

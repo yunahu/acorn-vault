@@ -1,7 +1,6 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import {
   Account,
-  AccountEditableKey,
   createAccount,
   getAccounts,
   updateAccount,
@@ -10,8 +9,7 @@ import {
 
 interface UpdateParams {
   id: number;
-  column: AccountEditableKey;
-  value: Account[AccountEditableKey];
+  body: Partial<Account>;
 }
 
 const useAccountQueryMutations = () => {
@@ -58,15 +56,18 @@ const useAccountQueryMutations = () => {
   });
 
   const updateAccountMutation = useMutation({
-    mutationFn: ({ id, column, value }: UpdateParams) =>
-      updateAccount(id, column, value),
-    onMutate: async ({ id, column, value }: UpdateParams) => {
+    mutationFn: ({ id, body }: UpdateParams) => updateAccount(id, body),
+    onMutate: async ({ id, body }: UpdateParams) => {
       await queryClient.cancelQueries({ queryKey: ['accounts'] });
       const previousAccounts = queryClient.getQueryData(['accounts']);
       queryClient.setQueryData(['accounts'], (old: Account[]) => {
         const clone = structuredClone(old);
         const found = clone.find((x) => x.id === id);
-        if (found) (found[column] as Account[typeof column]) = value;
+        Object.entries(body).forEach(([key, value]) => {
+          if (found) {
+            (found[key as keyof typeof body] as typeof value) = value;
+          }
+        });
         return clone;
       });
       return { previousAccounts };

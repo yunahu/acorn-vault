@@ -48,8 +48,7 @@ const SelectPrimaryCurrency = () => {
           onChange={(newCurrencyId) => {
             if (newCurrencyId !== settingsQuery.data?.primary_currency)
               updateSettingsMutation.mutate({
-                column: 'primary_currency',
-                value: newCurrencyId,
+                primary_currency: newCurrencyId,
               });
           }}
         />

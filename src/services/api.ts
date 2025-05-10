@@ -28,11 +28,6 @@ export interface Account {
   is_primary_payment_method: boolean;
 }
 
-export type AccountEditableKey =
-  | 'name'
-  | 'balance'
-  | 'is_primary_payment_method';
-
 export interface Record {
   id: number;
   date: Dayjs;
@@ -41,17 +36,9 @@ export interface Record {
   amount: number;
 }
 
-export type RecordEditableKey =
-  | 'date'
-  | 'description'
-  | 'account_id'
-  | 'amount';
-
 export interface Settings {
   primary_currency: number;
 }
-
-export type SettingsEditableKey = 'primary_currency';
 
 export interface NetWorth {
   currency_id: number;
@@ -86,15 +73,8 @@ export const createAccount = (
 export const getAccounts = (): Promise<Account[]> =>
   api.get('/accounts').then((x) => x.data);
 
-export const updateAccount = (
-  id: number,
-  column: AccountEditableKey,
-  value: Account[AccountEditableKey]
-): Promise<Account> =>
-  api.patch(`accounts/${id}`, {
-    column,
-    value,
-  });
+export const updateAccount = (id: number, body: Partial<Account>) =>
+  api.patch(`accounts/${id}`, body);
 
 export const deleteAccount = (id: number) => api.delete(`/accounts/${id}`);
 
@@ -141,15 +121,8 @@ export const getRecords = async (
   return mapped;
 };
 
-export const updateRecord = (
-  id: number,
-  column: RecordEditableKey,
-  value: Record[RecordEditableKey]
-) =>
-  api.patch(`records/${id}`, {
-    column,
-    value,
-  });
+export const updateRecord = (id: number, body: Partial<Record>) =>
+  api.patch(`records/${id}`, body);
 
 export const deleteRecord = (id: number) => api.delete(`/records/${id}`);
 
@@ -157,14 +130,8 @@ export const deleteRecord = (id: number) => api.delete(`/records/${id}`);
 
 export const getSettings = () => api.get(`/settings`).then((x) => x.data);
 
-export const updateSettings = (
-  column: SettingsEditableKey,
-  value: Settings[SettingsEditableKey]
-): Promise<Settings> =>
-  api.patch('/settings', {
-    column,
-    value,
-  });
+export const updateSettings = (body: Partial<Settings>) =>
+  api.patch('/settings', body);
 
 export const deleteUserAccount = () => api.delete('/settings/user');
 

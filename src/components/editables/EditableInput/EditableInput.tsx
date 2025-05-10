@@ -22,6 +22,7 @@ const StyledInput = styled.input`
 `;
 
 const StyledDiv = styled.div<{ $contrast?: boolean }>`
+  min-height: 22px;
   ${(props) =>
     props.$contrast !== undefined &&
     css`

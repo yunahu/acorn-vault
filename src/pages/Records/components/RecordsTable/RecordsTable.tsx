@@ -51,8 +51,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
             const day = newDate.format('YYYY-MM-DD');
             updateRecordMutation.mutate({
               id: record.id,
-              column: 'date',
-              value: dayjs.utc(day),
+              body: { date: dayjs.utc(day) },
             });
           }}
         />
@@ -71,8 +70,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
             if (newDescription !== record.description)
               updateRecordMutation.mutate({
                 id: record.id,
-                column: 'description',
-                value: newDescription,
+                body: { description: newDescription },
               });
           }}
         />
@@ -105,8 +103,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
               if (newAccountId !== record.account_id)
                 updateRecordMutation.mutate({
                   id: record.id,
-                  column: 'account_id',
-                  value: newAccountId,
+                  body: { account_id: newAccountId },
                 });
             }}
           />
@@ -158,8 +155,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
               if (parseFloat(newAmount) !== record.amount)
                 updateRecordMutation.mutate({
                   id: record.id,
-                  column: 'amount',
-                  value: parseFloat(newAmount),
+                  body: { amount: parseFloat(newAmount) },
                 });
             }}
           />
