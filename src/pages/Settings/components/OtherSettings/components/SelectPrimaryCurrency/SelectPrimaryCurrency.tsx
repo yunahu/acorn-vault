@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Select } from 'antd';
 import { useCurrencies } from 'src/hooks/useCurrencies';
@@ -21,6 +21,7 @@ const StyledLabel = styled.label`
 // #endregion
 
 const SelectPrimaryCurrency = () => {
+  const [loading, setLoading] = useState(false);
   const { currencies } = useCurrencies();
   const { settingsQuery, updateSettingsMutation } = useSettingsQueryMutations();
 
@@ -40,16 +41,25 @@ const SelectPrimaryCurrency = () => {
         <Spin $left />
       ) : (
         <Select
-          loading={settingsQuery.isLoading}
+          disabled={settingsQuery.isLoading || loading}
+          loading={settingsQuery.isLoading || loading}
           id="primary_currency"
           placeholder="Select primary currency"
           options={currenciesOptions}
           defaultValue={settingsQuery.data?.primary_currency}
           onChange={(newCurrencyId) => {
+            setLoading(true);
             if (newCurrencyId !== settingsQuery.data?.primary_currency)
-              updateSettingsMutation.mutate({
-                primary_currency: newCurrencyId,
-              });
+              updateSettingsMutation.mutate(
+                {
+                  primary_currency: newCurrencyId,
+                },
+                {
+                  onSettled: () => {
+                    setLoading(false);
+                  },
+                }
+              );
           }}
         />
       )}
