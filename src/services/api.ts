@@ -55,6 +55,17 @@ export interface NetWorthByCurrency {
   }[];
 }
 
+export interface RecordStats {
+  primary_currency: number;
+  currencyUnassigned: number;
+  rows: {
+    currency_id: number;
+    amount: number;
+    amount_in_PC: number;
+    percentage: number;
+  }[];
+}
+
 // --- Accounts ---
 
 export const createAccount = (
@@ -142,5 +153,19 @@ export const getNetWorth = () =>
 
 export const getNetWorthByCurrency = () =>
   api.get('/statistics/netWorthByCurrency').then((x) => x.data);
+
+export const getRecordStats = (
+  from: string | null | undefined,
+  to: string | null | undefined
+): Promise<RecordStats> =>
+  api
+    .get(
+      `/statistics/recordStats
+			${from || to ? '?' : ''}
+			${from ? 'from=' + from : ''}
+			${from && to ? '&' : ''}
+			${to ? 'to=' + to : ''}`
+    )
+    .then((x) => x.data);
 
 export default api;

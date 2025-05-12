@@ -17,7 +17,7 @@ const Container = styled.div<{ $loading?: boolean }>`
 `;
 
 const Title = styled.div`
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
   margin-bottom: 15px;
 `;

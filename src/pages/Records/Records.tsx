@@ -3,6 +3,7 @@ import { useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import RangePicker from './components/RangePicker/RangePicker';
 import RecordsTable from './components/RecordsTable/RecordsTable';
+import RecordStatsCard from 'src/components/cards/RecordStatsCard/RecordStatsCard';
 
 // #region Styles
 
@@ -32,6 +33,7 @@ const Records = () => {
     <Container>
       <RangePicker range={range} setRange={setRange} />
       <RecordsTable range={range} />
+      <RecordStatsCard range={range} />
     </Container>
   );
 };

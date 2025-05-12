@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import NetWorthCard from 'src/components/cards/NetWorthCard/NetWorthCard';
 import NetWorthByCurrencyCard from 'src/components/cards/NetWorthByCurrencyCard/NetWorthByCurrencyCard';
+import RecordStatsCard from 'src/components/cards/RecordStatsCard/RecordStatsCard';
 
 // #region Styles
 
@@ -20,6 +21,7 @@ const Dashboard = () => {
     <Container>
       <NetWorthCard />
       <NetWorthByCurrencyCard />
+      <RecordStatsCard />
     </Container>
   );
 };

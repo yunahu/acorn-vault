@@ -103,7 +103,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
               if (newAccountId !== record.account_id)
                 updateRecordMutation.mutate({
                   id: record.id,
-                  body: { account_id: newAccountId },
+                  body: { account_id: newAccountId ?? null },
                 });
             }}
           />
