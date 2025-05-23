@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { Input } from 'antd';
 import { Spin as AntSpin } from 'antd';
 import { deleteUser, getAuth, updateProfile } from 'firebase/auth';
@@ -7,28 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import useAuth from 'src/hooks/useAuth';
 import BasicButton from 'src/components/buttons/BasicButton/BasicButton';
 import { deleteUserAccount } from 'src/services/api';
-
-// #region Styles
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  padding: 50px;
-`;
-
-const ItemContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 300px;
-`;
-
-const StyledLabel = styled.label`
-  height: 27px;
-`;
-
-// #endregion
+import {
+  TabContainer,
+  ItemContainer,
+  ItemLabel,
+} from 'src/components/layouts/TabLayouts/TabLayouts';
 
 const Profile = () => {
   const [loading, setLoading] = useState(false);
@@ -78,10 +60,10 @@ const Profile = () => {
   };
 
   return (
-    <Container>
+    <TabContainer>
       {loading && <AntSpin fullscreen></AntSpin>}
       <ItemContainer>
-        <StyledLabel>User name</StyledLabel>
+        <ItemLabel>User name</ItemLabel>
         <Input
           disabled={!auth.currentUser || loading}
           defaultValue={auth.currentUser?.displayName ?? 'New user name'}
@@ -91,7 +73,7 @@ const Profile = () => {
       <ItemContainer>
         <BasicButton onClick={deleteAccount}>Delete account</BasicButton>
       </ItemContainer>
-    </Container>
+    </TabContainer>
   );
 };
 

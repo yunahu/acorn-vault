@@ -4,16 +4,13 @@ import Spin from 'src/components/Spin/Spin';
 
 // #region Styles
 
-const Container = styled.div<{ $loading?: boolean }>`
-  min-width: 170px;
-  min-height: 95px;
-  width: fit-content;
-  border-radius: 8px;
+const Container = styled.div<CardProps>`
   border: solid 0.5px ${({ theme }) => theme.colors.border};
   background-color: ${({ $loading }) => ($loading ? '#fefefe' : 'white')};
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border-radius: ${({ $round }) => ($round ? '25px' : '8px')};
+  ${({ $fullWidth }) =>
+    !$fullWidth && 'min-width: 170px; min-height: 95px; width: fit-content;'}
+  ${({ $fullHeight }) => !$fullHeight && 'height: fit-content;'}
 `;
 
 const Title = styled.div`
@@ -22,8 +19,14 @@ const Title = styled.div`
   margin-bottom: 15px;
 `;
 
-const Wrapper = styled.div`
-  padding: 20px;
+const Main = styled.div<{
+  $gap?: string;
+  $fullWidth?: boolean;
+}>`
+  display: flex;
+  flex-direction: column;
+  padding: ${({ $fullWidth }) => ($fullWidth ? '40px' : '20px')};
+  gap: ${({ $gap, $fullWidth }) => ($gap ? $gap : $fullWidth ? '25px' : '0px')};
 `;
 
 // #endregion
@@ -31,18 +34,23 @@ const Wrapper = styled.div`
 interface CardProps extends PropsWithChildren {
   title?: string;
   $loading?: boolean;
+  $gap?: string;
+  $round?: boolean;
+  $fullWidth?: boolean;
+  $fullHeight?: boolean;
 }
 
-const Card = ({ children, title, $loading, ...props }: CardProps) => {
+const Card = (props: CardProps) => {
+  const { children, title, $loading } = props;
   return (
-    <Container {...props} $loading={$loading}>
+    <Container {...props}>
       {$loading ? (
         <Spin />
       ) : (
-        <Wrapper>
+        <Main {...props}>
           {title && <Title>{title}</Title>}
           {children}
-        </Wrapper>
+        </Main>
       )}
     </Container>
   );

@@ -1,24 +1,12 @@
 import { useMemo, useState } from 'react';
-import styled from 'styled-components';
 import { Select } from 'antd';
 import { useCurrencies } from 'src/hooks/useCurrencies';
 import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
+import {
+  ItemContainer,
+  ItemLabel,
+} from 'src/components/layouts/TabLayouts/TabLayouts';
 import Spin from 'src/components/Spin/Spin';
-
-// #region Styles
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 300px;
-`;
-
-const StyledLabel = styled.label`
-  height: 27px;
-`;
-
-// #endregion
 
 const SelectPrimaryCurrency = () => {
   const [loading, setLoading] = useState(false);
@@ -35,8 +23,8 @@ const SelectPrimaryCurrency = () => {
   );
 
   return (
-    <Container>
-      <StyledLabel htmlFor="primary_currency">Primary Currency </StyledLabel>
+    <ItemContainer>
+      <ItemLabel htmlFor="primary_currency">Primary Currency </ItemLabel>
       {settingsQuery.isLoading ? (
         <Spin $left />
       ) : (
@@ -63,7 +51,7 @@ const SelectPrimaryCurrency = () => {
           }}
         />
       )}
-    </Container>
+    </ItemContainer>
   );
 };
 

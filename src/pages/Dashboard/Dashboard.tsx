@@ -1,28 +1,15 @@
-import styled from 'styled-components';
 import NetWorthCard from 'src/components/cards/NetWorthCard/NetWorthCard';
 import NetWorthByCurrencyCard from 'src/components/cards/NetWorthByCurrencyCard/NetWorthByCurrencyCard';
 import RecordStatsCard from 'src/components/cards/RecordStatsCard/RecordStatsCard';
-
-// #region Styles
-
-const Container = styled.div`
-  background-color: ${({ theme }) => theme.colors.background};
-  flex: 1;
-  padding: 5%;
-  display: flex;
-  gap: 20px;
-  flex-direction: column;
-`;
-
-// #endregion
+import PageWrapper from 'src/components/layouts/PageWrapper/PageWrapper';
 
 const Dashboard = () => {
   return (
-    <Container>
+    <PageWrapper>
       <NetWorthCard />
       <NetWorthByCurrencyCard />
       <RecordStatsCard />
-    </Container>
+    </PageWrapper>
   );
 };
 

@@ -1,22 +1,9 @@
-import styled from 'styled-components';
 import { useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
+import PageWrapper from 'src/components/layouts/PageWrapper/PageWrapper';
 import RangePicker from './components/RangePicker/RangePicker';
 import RecordsTable from './components/RecordsTable/RecordsTable';
 import RecordStatsCard from 'src/components/cards/RecordStatsCard/RecordStatsCard';
-
-// #region Styles
-
-const Container = styled.div`
-  background-color: ${({ theme }) => theme.colors.background};
-  flex: 1;
-  padding: 5%;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-`;
-
-// #endregion
 
 export interface Range {
   start: Dayjs | null;
@@ -30,11 +17,11 @@ const Records = () => {
   });
 
   return (
-    <Container>
+    <PageWrapper>
       <RangePicker range={range} setRange={setRange} />
       <RecordsTable range={range} />
       <RecordStatsCard range={range} />
-    </Container>
+    </PageWrapper>
   );
 };
 

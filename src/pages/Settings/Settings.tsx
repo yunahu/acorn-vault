@@ -2,17 +2,9 @@ import styled from 'styled-components';
 import { Tabs, TabsProps } from 'antd';
 import Profile from './components/Profile/Profile';
 import OtherSettings from './components/OtherSettings/OtherSettings';
+import PageWrapper from 'src/components/layouts/PageWrapper/PageWrapper';
 
 // #region Styles
-
-const Container = styled.div`
-  background-color: ${({ theme }) => theme.colors.background};
-  flex: 1;
-  padding: 5%;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-`;
 
 const Wrapper = styled.div`
   margin-left: 1px;
@@ -47,14 +39,14 @@ const items: TabsProps['items'] = [
 
 const Settings = () => {
   return (
-    <Container>
+    <PageWrapper>
       <Tabs
         tabBarStyle={{ margin: 0 }}
         type="card"
         items={items}
         destroyInactiveTabPane
       />
-    </Container>
+    </PageWrapper>
   );
 };
 

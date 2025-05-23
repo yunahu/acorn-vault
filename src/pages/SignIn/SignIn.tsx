@@ -6,39 +6,13 @@ import { useEffect, useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from 'src/services/firebase';
 import useAuth from 'src/hooks/useAuth';
+import AuthCardLayout from 'src/components/layouts/AuthCardLayout/AuthCardLayout';
+import forrest from 'src/assets/images/forrest.jpg';
+import RoundButton from 'src/components/buttons/RoundButton/RoundButton';
 import GoogleSignInButton from 'src/components/buttons/GoogleSignInButton/GoogleSignInButton';
 import AnonymousSignInButton from 'src/components/buttons/AnonymousSignInButton/AnonymousSignInButton';
-import forrest from 'src/assets/images/forrest.jpg';
 
 // #region Styles
-
-const Container = styled.div`
-  background-color: ${({ theme }) => theme.colors.background};
-  display: flex;
-  flex: 1;
-`;
-
-const Main = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-`;
-
-const Card = styled.div`
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 24px;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-  gap: 25px;
-`;
-
-const Title = styled.div`
-  text-align: center;
-  font-size: 40px;
-`;
 
 const StyledForm = styled.form`
   display: flex;
@@ -91,21 +65,6 @@ const ForgotPasswordLink = styled(Link)`
   text-decoration: underline;
 `;
 
-const StyledButton = styled.button<{ $bg?: string; $color?: string }>`
-  width: 100%;
-  height: 56px;
-  font-size: 20px;
-  background-color: ${({ $bg }) => $bg ?? 'white'};
-  border: ${(props) =>
-    props.$bg ? 'none' : `solid 1px ${props.theme.colors.secondary}`};
-  border-radius: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: ${({ $color }) => $color ?? 'black'};
-`;
-
 const Footer = styled.div`
   display: flex;
   justify-content: center;
@@ -114,12 +73,6 @@ const Footer = styled.div`
 
 const SignUpLink = styled(Link)`
   text-decoration: underline;
-`;
-
-const SidePhoto = styled.div`
-  background-image: url(${forrest});
-  background-size: cover;
-  width: 40%;
 `;
 
 // #endregion
@@ -145,61 +98,55 @@ const SignIn = () => {
   };
 
   return (
-    <Container>
-      <Main>
-        <Card>
-          <Title>Sign in</Title>
-          <StyledForm onSubmit={handleSubmit}>
-            <InputContainer>
-              <StyledLabel htmlFor="email">Email address</StyledLabel>
-              <StyledInput
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                maxLength={320}
-                required
-              />
-            </InputContainer>
-            <InputContainer>
-              <InputHeader>
-                <StyledLabel htmlFor="password">Password</StyledLabel>
-                <PasswordToggle onClick={() => setIsHidden((x) => !x)}>
-                  <FontAwesomeIcon icon={isHidden ? faEye : faEyeSlash} />
-                  {isHidden ? 'Show' : 'Hide'}
-                </PasswordToggle>
-              </InputHeader>
-              <StyledInput
-                type={isHidden ? 'password' : 'text'}
-                id="password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </InputContainer>
-            <ForgotPasswordLink to="/reset-password">
-              Forgot password?
-            </ForgotPasswordLink>
-            <StyledButton
-              type="submit"
-              $bg={email && password ? '#2c4c3b' : '#dad8d8'}
-              $color="white"
-            >
-              Sign in
-            </StyledButton>
-          </StyledForm>
-          <GoogleSignInButton />
-          <AnonymousSignInButton />
-          <Footer>
-            Don't have an account?
-            <SignUpLink to="/signup">Sign up</SignUpLink>
-          </Footer>
-        </Card>
-      </Main>
-      <SidePhoto />
-    </Container>
+    <AuthCardLayout title="Sign in" image={forrest}>
+      <StyledForm onSubmit={handleSubmit}>
+        <InputContainer>
+          <StyledLabel htmlFor="email">Email address</StyledLabel>
+          <StyledInput
+            type="email"
+            id="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            maxLength={320}
+            required
+          />
+        </InputContainer>
+        <InputContainer>
+          <InputHeader>
+            <StyledLabel htmlFor="password">Password</StyledLabel>
+            <PasswordToggle onClick={() => setIsHidden((x) => !x)}>
+              <FontAwesomeIcon icon={isHidden ? faEye : faEyeSlash} />
+              {isHidden ? 'Show' : 'Hide'}
+            </PasswordToggle>
+          </InputHeader>
+          <StyledInput
+            type={isHidden ? 'password' : 'text'}
+            id="password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </InputContainer>
+        <ForgotPasswordLink to="/reset-password">
+          Forgot password?
+        </ForgotPasswordLink>
+        <RoundButton
+          type="submit"
+          $bg={email && password ? '#2c4c3b' : '#dad8d8'}
+          $color="white"
+        >
+          Sign in
+        </RoundButton>
+      </StyledForm>
+      <GoogleSignInButton />
+      <AnonymousSignInButton />
+      <Footer>
+        Don't have an account?
+        <SignUpLink to="/signup">Sign up</SignUpLink>
+      </Footer>
+    </AuthCardLayout>
   );
 };
 

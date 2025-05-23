@@ -1,19 +1,11 @@
-import styled from 'styled-components';
+import { TabContainer } from 'src/components/layouts/TabLayouts/TabLayouts';
 import SelectPrimaryCurrency from './components/SelectPrimaryCurrency/SelectPrimaryCurrency';
-
-// #region Styles
-
-const Container = styled.div`
-  padding: 50px;
-`;
-
-// #endregion
 
 const OtherSettings = () => {
   return (
-    <Container>
+    <TabContainer>
       <SelectPrimaryCurrency />
-    </Container>
+    </TabContainer>
   );
 };
 
