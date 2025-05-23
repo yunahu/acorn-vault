@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConfigProvider } from 'antd';
 import { AuthProvider } from 'src/hooks/useAuth';
 import { CurrenciesProvider } from 'src/hooks/useCurrencies';
+import { WagmiProvider } from 'src/services/wagmi';
 import theme from 'src/theme/theme';
 import antTheme from 'src/theme/antTheme';
 import GlobalStyle from 'src/theme/globalStyle';
@@ -31,12 +32,14 @@ const App = () => {
           <CurrenciesProvider>
             <ThemeProvider theme={theme}>
               <ConfigProvider theme={antTheme}>
-                <GlobalStyle />
-                <Sidebar />
-                <Container>
-                  <Navbar />
-                  <Router />
-                </Container>
+                <WagmiProvider>
+                  <GlobalStyle />
+                  <Sidebar />
+                  <Container>
+                    <Navbar />
+                    <Router />
+                  </Container>
+                </WagmiProvider>
               </ConfigProvider>
             </ThemeProvider>
           </CurrenciesProvider>

@@ -14,15 +14,18 @@
 		"@fortawesome/free-solid-svg-icons": "^6.7.2",
 		"@fortawesome/react-fontawesome": "^0.2.2",
 		"@nivo/pie": "^0.90.0",
-		"@tanstack/react-query": "^5.69.0",
+		"@tanstack/react-query": "^5.76.1",
 		"antd": "^5.24.4",
 		"axios": "^1.8.4",
+		"bignumber.js": "^9.3.0",
 		"dayjs": "^1.11.13",
 		"firebase": "^11.3.1",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
 		"react-router-dom": "^7.1.0",
-		"styled-components": "^6.1.13"
+		"styled-components": "^6.1.13",
+		"viem": "^2.29.3",
+		"wagmi": "^2.15.3"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.17.0",

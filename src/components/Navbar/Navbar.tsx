@@ -28,6 +28,7 @@ const title: Title = {
   '/': 'Overview',
   '/accounts': 'Assets & Liabilities',
   '/records': 'Records',
+  '/cryptocurrency': 'Crypto Assets',
   '/settings': 'Settings',
   '/signin': 'Sign in',
   '/signup': 'Sign up',

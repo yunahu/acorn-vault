@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faCoins,
   faFeather,
   faGear,
   faHouse,
@@ -100,6 +101,16 @@ const Sidebar = () => {
             <FontAwesomeIcon icon={faFeather} />
           </Icon>
           Records
+        </StyledLink>
+        <StyledLink
+          to="/cryptocurrency"
+          $active={pathname === '/cryptocurrency'}
+        >
+          <Pointbar $active={pathname === '/cryptocurrency'} />
+          <Icon>
+            <FontAwesomeIcon icon={faCoins} />
+          </Icon>
+          Crypto
         </StyledLink>
         <StyledLink to="/settings" $active={pathname === '/settings'}>
           <Pointbar $active={pathname === '/settings'} />
