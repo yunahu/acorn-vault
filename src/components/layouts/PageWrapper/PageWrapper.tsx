@@ -10,6 +10,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 25px;
+  min-width: fit-content;
 `;
 
 // #endregion

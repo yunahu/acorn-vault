@@ -15,7 +15,7 @@ const StyledPageWrapper = styled(PageWrapper)`
 
 // #endregion
 
-const CryptoCurrency = () => {
+const Crypto = () => {
   const { isConnected } = useAccount();
 
   return isConnected ? (
@@ -28,4 +28,4 @@ const CryptoCurrency = () => {
   );
 };
 
-export default CryptoCurrency;
+export default Crypto;

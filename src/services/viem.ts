@@ -1,25 +1,21 @@
-import { getContract, createPublicClient, http, erc20Abi } from 'viem';
-import { mainnet } from 'viem/chains';
 import BigNumber from 'bignumber.js';
-import coins, { Coin, RPC, WalletAddress } from 'src/data/coins';
+import { mainnet } from 'viem/chains';
+import { getContract, createPublicClient, http, erc20Abi, Address } from 'viem';
+import { Coin } from 'src/services/api';
 
-export interface CoinWithBalance {
-  coin: Coin;
-  balance: BigNumber;
-}
+const RPC = 'https://eth.llamarpc.com';
 
 const publicClient = createPublicClient({
   chain: mainnet,
   transport: http(RPC),
 });
 
-export const getBalance = async (walletAddress: WalletAddress, coin: Coin) => {
-  const decimals = coin.decimals;
+export const getCoinBalance = async (address: Address, coin: Coin) => {
   let result;
 
   if (!coin.address) {
     result = await publicClient.getBalance({
-      address: walletAddress,
+      address,
     });
   } else {
     const contract = getContract({
@@ -28,19 +24,22 @@ export const getBalance = async (walletAddress: WalletAddress, coin: Coin) => {
       client: publicClient,
     });
 
-    result = await contract.read.balanceOf([walletAddress]);
+    result = await contract.read.balanceOf([address]);
   }
 
-  return new BigNumber(result).multipliedBy(`1e-${decimals}`);
+  return new BigNumber(result).multipliedBy(`1e-${coin.decimals}`);
 };
 
-export const getCoinsWithBalance = async (walletAddress: WalletAddress) =>
-  Promise.all(
+export const getCoinsWithBalance = async (coins: Coin[], address?: Address) => {
+  if (!address || !coins) return;
+
+  return Promise.all(
     coins.map(async (coin) => {
-      const balance = await getBalance(walletAddress, coin);
+      const amount = await getCoinBalance(address, coin);
       return {
         coin,
-        balance,
+        amount,
       };
     })
   );
+};

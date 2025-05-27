@@ -8,8 +8,8 @@ import cryptoWallet from 'src/assets/images/cryptoWallet.jpg';
 
 const StyledCard = styled(Card)`
   align-items: center;
-  padding: 20px;
-  gap: 30px;
+  gap: 35px;
+  min-width: fit-content;
 `;
 
 const ItemContainer = styled.div`
@@ -28,7 +28,6 @@ const Address = styled.div`
 const StyledImg = styled.img`
   width: 300px;
   border-radius: 8px;
-  margin-bottom: 25px;
 `;
 
 // #endregion

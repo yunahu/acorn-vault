@@ -1,3 +1,4 @@
+import { Address } from 'viem';
 import axios from 'axios';
 import dayjs, { Dayjs } from 'dayjs';
 import { auth } from 'src/services/firebase';
@@ -26,6 +27,25 @@ export interface Account {
   currency_id: number;
   balance: number;
   is_primary_payment_method: boolean;
+}
+
+export interface Coin {
+  id: number;
+  name: string;
+  symbol: string;
+  decimals: number;
+  address?: Address;
+  coingecko_api_id: string;
+}
+
+export interface CoinPrices {
+  currency: {
+    code: string;
+    symbol: string;
+  };
+  prices: {
+    [coingecko_api_id: string]: number;
+  };
 }
 
 export interface Record {
@@ -58,6 +78,7 @@ export interface NetWorthByCurrency {
 export interface RecordStats {
   primary_currency: number;
   currencyUnassigned: number;
+  assignedSum: number;
   rows: {
     currency_id: number;
     amount: number;
@@ -136,6 +157,14 @@ export const updateRecord = (id: number, body: Partial<Record>) =>
   api.patch(`records/${id}`, body);
 
 export const deleteRecord = (id: number) => api.delete(`/records/${id}`);
+
+// --- Crypto ---
+
+export const getCoins = (): Promise<Coin[]> =>
+  api.get('/crypto').then((x) => x.data);
+
+export const getCoinPrices = (): Promise<CoinPrices> =>
+  api.get('/crypto/prices').then((x) => x.data);
 
 // --- Settings ---
 

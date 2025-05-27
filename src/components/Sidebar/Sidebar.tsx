@@ -41,7 +41,7 @@ const StyledLink = styled(Link)<{ $active: boolean | undefined }>`
   width: 100%;
   height: 65px;
   color: ${({ $active, theme }) =>
-    $active ? theme.colors.secondary : theme.colors.gray};
+    $active ? theme.colors.secondary : theme.colors.lightGray};
   display: flex;
   align-items: center;
   font-size: 22px;
