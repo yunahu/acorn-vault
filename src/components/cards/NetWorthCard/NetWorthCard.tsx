@@ -37,7 +37,7 @@ const NetWorthCard = () => {
   });
 
   return (
-    <Card title="Total Net Worth" $loading={query.isLoading}>
+    <Card title="Total Net Worth" $isLoading={query.isLoading}>
       <Body>
         <Currency>{query.data && getCode(query.data.currency_id)}</Currency>
         <Amount $negative={query.data && query.data?.amount < 0}>

@@ -25,47 +25,45 @@ const processData = (data: CoinStats) => {
 };
 
 const CryptoCard = () => {
-  const { statsQuery } = useCrypto();
-  const coinStats = statsQuery.data;
+  const {
+    statsQuery: { data, isLoading },
+  } = useCrypto();
 
-  const chartData = useMemo(
-    () => (statsQuery.data ? processData(statsQuery.data) : []),
-    [statsQuery.data]
-  );
+  const chartData = useMemo(() => (data ? processData(data) : []), [data]);
 
   return (
-    <Card title="Crypto Assets" $loading={statsQuery.isLoading}>
-      <Body>
-        {chartData.length > 0 && (
-          <ChartContainer>
-            <ResponsivePie
-              data={chartData}
-              sortByValue
-              arcLabel={(d) => `${d.label} (${d.value}%)`}
-              enableArcLinkLabels={false}
-            />
-          </ChartContainer>
-        )}
-        <List>
-          {coinStats &&
-            coinStats.rows.map(({ coin, amount, amountInPC, percentage }) => (
+    <Card title="Crypto Assets" $isLoading={isLoading}>
+      {data && (
+        <Body>
+          {chartData.length > 0 && (
+            <ChartContainer>
+              <ResponsivePie
+                data={chartData}
+                sortByValue
+                arcLabel={(d) => `${d.label} (${d.value}%)`}
+                enableArcLinkLabels={false}
+              />
+            </ChartContainer>
+          )}
+          <List>
+            {data.rows.map(({ coin, amount, amountInPC, percentage }) => (
               <RowContainer key={coin.id}>
                 <AmountContainer>
                   {coin.symbol}
                   <Amount $negative={amountInPC.toNumber() < 0}>
-                    {coinStats.primaryCurrency.symbol} {amount.toFixed()}
+                    {data.primaryCurrency.symbol} {amount.toFixed()}
                   </Amount>
                 </AmountContainer>
                 <Conversion>
                   ({formatNumber(percentage.toFixed())}% -{' '}
-                  {coinStats.primaryCurrency.code}{' '}
-                  {coinStats.primaryCurrency.symbol}{' '}
+                  {data.primaryCurrency.code} {data.primaryCurrency.symbol}{' '}
                   {formatNumber(amountInPC.toFixed())})
                 </Conversion>
               </RowContainer>
             ))}
-        </List>
-      </Body>
+          </List>
+        </Body>
+      )}
     </Card>
   );
 };

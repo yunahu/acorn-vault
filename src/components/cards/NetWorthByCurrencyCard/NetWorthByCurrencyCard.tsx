@@ -1,114 +1,80 @@
-import styled from 'styled-components';
-import { useQuery } from '@tanstack/react-query';
 import { ResponsivePie } from '@nivo/pie';
-import { getNetWorthByCurrency, NetWorthByCurrency } from 'src/services/api';
-import { useCurrencies } from 'src/hooks/useCurrencies';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
+import {
+  Amount,
+  AmountContainer,
+  Body,
+  ChartContainer,
+  Conversion,
+  List,
+  RowContainer,
+} from 'src/components/cards/StatsCardLayouts/StatsCardLayouts';
 import Card from 'src/components/cards/Card/Card';
 import { formatNumber } from 'src/utils/helpers';
+import { getNetWorthByCurrency, NetWorthByCurrency } from 'src/services/api';
+import { useCurrencies } from 'src/hooks/useCurrencies';
 import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
-
-// #region Styles
-
-const Body = styled.div`
-  display: flex;
-  gap: 20px;
-`;
-
-const ChartContainer = styled.div`
-  width: 200px;
-  height: 200px;
-`;
-
-const List = styled.div`
-  display: flex;
-  gap: 25px;
-  flex-direction: column;
-`;
-
-const ItemContainer = styled.div`
-  display: flex;
-  gap: 5px;
-  flex-direction: column;
-`;
-
-const AmountContainer = styled.div`
-  font-size: 20px;
-  display: flex;
-  align-items: end;
-  gap: 15px;
-`;
-
-const Amount = styled.div<{ $negative?: boolean }>`
-  color: ${({ theme, $negative }) =>
-    $negative ? theme.colors.negative : theme.colors.positive};
-`;
-
-const Conversion = styled.div`
-  color: #615d5d;
-  display: flex;
-  font-size: 14px;
-`;
-
-// #endregion
 
 const processData = (
   data: NetWorthByCurrency,
   getCode: (id: number) => string | undefined
-) => {
-  const result = data.rows.map((row) => {
-    return {
-      id: getCode(row.currency_id),
-      label: getCode(row.currency_id),
-      value: formatNumber(row.percentage),
-    };
-  });
-
-  return result ?? [];
-};
+) =>
+  data.rows.map((row) => ({
+    id: getCode(row.currency_id),
+    label: getCode(row.currency_id),
+    value: formatNumber(row.percentage),
+  })) ?? [];
 
 const NetWorthByCurrencyCard = () => {
-  const { getSymbol, getCode } = useCurrencies();
   const { accountQuery } = useAccountQueryMutations();
-  const query = useQuery<NetWorthByCurrency>({
+  const { getCode, getSymbol } = useCurrencies();
+  const { data, isLoading } = useQuery<NetWorthByCurrency>({
     queryKey: ['netWorthByCurrency', accountQuery.data],
     queryFn: getNetWorthByCurrency,
   });
 
-  const data = query.data ? processData(query.data, getCode) : [];
+  const chartData = useMemo(
+    () => (data ? processData(data, getCode) : []),
+    [data]
+  );
 
   return (
-    <Card title="Net Worth By Currency" $loading={query.isLoading}>
-      <Body>
-        {query.data?.rows && query.data?.rows.length > 0 && (
-          <ChartContainer>
-            <ResponsivePie
-              data={data}
-              sortByValue
-              arcLabel={(d) => `${d.label} (${d.value}%)`}
-              enableArcLinkLabels={false}
-            />
-          </ChartContainer>
-        )}
-        <List>
-          {query.data &&
-            query.data.rows.map((row) => (
-              <ItemContainer key={row.currency_id}>
-                <AmountContainer>
-                  {getCode(row.currency_id)}
-                  <Amount $negative={row.amount < 0}>
-                    {getSymbol(row.currency_id)} {formatNumber(row.amount)}
-                  </Amount>
-                </AmountContainer>
-                <Conversion>
-                  ({formatNumber(row.percentage)}% -{' '}
-                  {getCode(query.data.primary_currency)}{' '}
-                  {getSymbol(query.data.primary_currency)}{' '}
-                  {formatNumber(row.amount_in_PC)})
-                </Conversion>
-              </ItemContainer>
-            ))}
-        </List>
-      </Body>
+    <Card title="Net Worth By Currency" $isLoading={isLoading}>
+      {data && (
+        <Body>
+          {chartData.length > 0 && (
+            <ChartContainer>
+              <ResponsivePie
+                data={chartData}
+                sortByValue
+                arcLabel={(d) => `${d.label} (${d.value}%)`}
+                enableArcLinkLabels={false}
+              />
+            </ChartContainer>
+          )}
+          <List>
+            {data.rows.map(
+              ({ currency_id, amount, amount_in_PC, percentage }) => (
+                <RowContainer key={currency_id}>
+                  <AmountContainer>
+                    {getCode(currency_id)}
+                    <Amount $negative={amount < 0}>
+                      {getSymbol(currency_id)} {formatNumber(amount)}
+                    </Amount>
+                  </AmountContainer>
+                  <Conversion>
+                    ({formatNumber(percentage)}% -{' '}
+                    {getCode(data.primary_currency)}{' '}
+                    {getSymbol(data.primary_currency)}{' '}
+                    {formatNumber(amount_in_PC)})
+                  </Conversion>
+                </RowContainer>
+              )
+            )}
+          </List>
+        </Body>
+      )}
     </Card>
   );
 };

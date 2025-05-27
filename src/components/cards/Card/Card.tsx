@@ -6,7 +6,7 @@ import Spin from 'src/components/Spin/Spin';
 
 const Container = styled.div<CardProps>`
   border: solid 0.5px ${({ theme }) => theme.colors.border};
-  background-color: ${({ $loading }) => ($loading ? '#fefefe' : 'white')};
+  background-color: ${({ $isLoading }) => ($isLoading ? '#fefefe' : 'white')};
   border-radius: ${({ $round }) => ($round ? '25px' : '8px')};
   ${({ $fullWidth }) =>
     !$fullWidth && 'min-width: 170px; min-height: 95px; width: fit-content;'}
@@ -33,7 +33,7 @@ const Main = styled.div<{
 
 interface CardProps extends PropsWithChildren {
   title?: string;
-  $loading?: boolean;
+  $isLoading?: boolean;
   $gap?: string;
   $round?: boolean;
   $fullWidth?: boolean;
@@ -41,10 +41,10 @@ interface CardProps extends PropsWithChildren {
 }
 
 const Card = (props: CardProps) => {
-  const { children, title, $loading } = props;
+  const { children, title, $isLoading } = props;
   return (
     <Container {...props}>
-      {$loading ? (
+      {$isLoading ? (
         <Spin />
       ) : (
         <Main {...props}>

@@ -1,64 +1,23 @@
-import styled from 'styled-components';
 import { useQuery } from '@tanstack/react-query';
 import { ResponsivePie } from '@nivo/pie';
+import { useMemo } from 'react';
+import {
+  Amount,
+  AmountContainer,
+  Body,
+  Conversion,
+  RowContainer,
+  List,
+  ChartContainer,
+  Unassigned,
+  Total,
+} from 'src/components/cards/StatsCardLayouts/StatsCardLayouts';
 import { getRecordStats, RecordStats } from 'src/services/api';
 import { useCurrencies } from 'src/hooks/useCurrencies';
 import Card from 'src/components/cards/Card/Card';
 import { formatNumber } from 'src/utils/helpers';
 import { Range } from 'src/pages/Records/Records';
 import useRecordQueryMutations from 'src/hooks/useRecordQueryMutations';
-
-// #region Styles
-
-const Body = styled.div`
-  display: flex;
-  gap: 20px;
-`;
-
-const ChartContainer = styled.div`
-  width: 200px;
-  height: 200px;
-`;
-
-const List = styled.div`
-  display: flex;
-  gap: 25px;
-  flex-direction: column;
-`;
-
-const ItemContainer = styled.div`
-  display: flex;
-  gap: 5px;
-  flex-direction: column;
-`;
-
-const AmountContainer = styled.div`
-  font-size: 20px;
-  display: flex;
-  align-items: end;
-  gap: 15px;
-`;
-
-const Unassigned = styled.div`
-  color: #888888;
-  font-size: 18px;
-  display: flex;
-  align-items: end;
-  gap: 18px;
-`;
-
-const Amount = styled.div<{ $negative?: boolean }>`
-  color: ${({ theme, $negative }) =>
-    $negative ? theme.colors.negative : theme.colors.positive};
-`;
-
-const Conversion = styled.div`
-  color: #615d5d;
-  display: flex;
-  font-size: 14px;
-`;
-
-// #endregion
 
 interface RecordsStatsProps {
   range?: Range;
@@ -67,27 +26,22 @@ interface RecordsStatsProps {
 const processData = (
   data: RecordStats,
   getCode: (id: number) => string | undefined
-) => {
-  const result = data.rows.map((row) => {
-    return {
-      id: getCode(row.currency_id),
-      label: getCode(row.currency_id),
-      value: formatNumber(row.percentage),
-    };
-  });
-
-  return result ?? [];
-};
+) =>
+  data.rows.map((row) => ({
+    id: getCode(row.currency_id),
+    label: getCode(row.currency_id),
+    value: formatNumber(row.percentage),
+  })) ?? [];
 
 const RecordStatsCard = ({ range }: RecordsStatsProps) => {
-  const { getSymbol, getCode } = useCurrencies();
+  const { getCode, getSymbol } = useCurrencies();
   const { recordQuery } = useRecordQueryMutations(
     range ?? {
       start: null,
       end: null,
     }
   );
-  const query = useQuery<RecordStats>({
+  const { data, isLoading } = useQuery<RecordStats>({
     queryKey: ['recordStats', recordQuery.data],
     queryFn: async () => {
       const from = range?.start?.format('YYYY-MM-DD');
@@ -96,49 +50,65 @@ const RecordStatsCard = ({ range }: RecordsStatsProps) => {
     },
   });
 
-  const data = query.data ? processData(query.data, getCode) : [];
+  const chartData = useMemo(
+    () => (data ? processData(data, getCode) : []),
+    [data]
+  );
 
   return (
-    <Card title="Records" $loading={query.isLoading}>
-      <Body>
-        {query.data?.rows && query.data?.rows.length > 0 && (
-          <ChartContainer>
-            <ResponsivePie
-              data={data}
-              sortByValue
-              arcLabel={(d) => `${d.label} (${d.value}%)`}
-              enableArcLinkLabels={false}
-            />
-          </ChartContainer>
-        )}
-        <List>
-          {query.data &&
-            query.data.rows.map((row) => (
-              <ItemContainer key={row.currency_id}>
+    <Card title="Records" $isLoading={isLoading}>
+      {data && (
+        <Body>
+          {chartData.length > 0 && (
+            <ChartContainer>
+              <ResponsivePie
+                data={chartData}
+                sortByValue
+                arcLabel={(d) => `${d.label} (${d.value}%)`}
+                enableArcLinkLabels={false}
+              />
+            </ChartContainer>
+          )}
+          <List>
+            {data.rows.map(
+              ({ currency_id, amount, amount_in_PC, percentage }) => (
+                <RowContainer key={currency_id}>
+                  <AmountContainer>
+                    {getCode(currency_id)}
+                    <Amount $negative={amount < 0}>
+                      {getSymbol(currency_id)} {formatNumber(amount)}
+                    </Amount>
+                  </AmountContainer>
+                  <Conversion>
+                    ({formatNumber(percentage)}% -{' '}
+                    {getCode(data.primary_currency)}{' '}
+                    {getSymbol(data.primary_currency)}{' '}
+                    {formatNumber(amount_in_PC)})
+                  </Conversion>
+                </RowContainer>
+              )
+            )}
+            {data.rows.length > 0 && (
+              <div>
+                <Total>TOTAL: </Total>
                 <AmountContainer>
-                  {getCode(row.currency_id)}
-                  <Amount $negative={row.amount < 0}>
-                    {getSymbol(row.currency_id)} {formatNumber(row.amount)}
+                  {getCode(data.primary_currency)}
+                  <Amount $negative={data.assignedSum < 0}>
+                    {getSymbol(data.primary_currency)}{' '}
+                    {formatNumber(data.assignedSum)}
                   </Amount>
                 </AmountContainer>
-                <Conversion>
-                  ({formatNumber(row.percentage)}% -{' '}
-                  {getCode(query.data.primary_currency)}{' '}
-                  {getSymbol(query.data.primary_currency)}{' '}
-                  {formatNumber(row.amount_in_PC)})
-                </Conversion>
-              </ItemContainer>
-            ))}
-          {query.data && Boolean(query.data?.currencyUnassigned) && (
-            <div>
+              </div>
+            )}
+            {data.currencyUnassigned !== 0 && (
               <Unassigned>
                 Unassinged Amount
-                <div>{formatNumber(query.data?.currencyUnassigned)}</div>
+                <div>{formatNumber(data.currencyUnassigned)}</div>
               </Unassigned>
-            </div>
-          )}
-        </List>
-      </Body>
+            )}
+          </List>
+        </Body>
+      )}
     </Card>
   );
 };

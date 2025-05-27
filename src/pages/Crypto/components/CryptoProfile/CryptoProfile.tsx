@@ -40,7 +40,7 @@ const CryptoProfile = () => {
   if (status === 'error') console.error(error.message);
 
   return (
-    <StyledCard $loading={status === 'pending'}>
+    <StyledCard $isLoading={status === 'pending'}>
       <StyledImg src={cryptoWallet} />
       {Boolean(data) && (
         <ItemContainer>
