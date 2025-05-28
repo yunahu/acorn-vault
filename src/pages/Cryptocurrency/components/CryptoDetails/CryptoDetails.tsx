@@ -4,6 +4,7 @@ import Table from 'src/components/Table/Table';
 import useCrypto from 'src/hooks/useCrypto';
 import { formatNumber } from 'src/utils/helpers';
 import CryptoCard from './components/CryptoCard/CryptoCard';
+import CoinGeckoAttritution from './components/CoinGeckoAttritution/CoinGeckoAttritution';
 
 // #region Styles
 
@@ -22,6 +23,11 @@ const TotalContainer = styled.div`
 
 const Total = styled.span`
   font-weight: bold;
+`;
+
+const Section = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 // #endregion
@@ -81,7 +87,10 @@ const CryptoDetails = () => {
           </TotalContainer>
         )}
       />
-      <CryptoCard />
+      <Section>
+        <CryptoCard />
+        <CoinGeckoAttritution />
+      </Section>
     </Container>
   );
 };

@@ -3,7 +3,7 @@ import useAuth from 'src/hooks/useAuth';
 import Accounts from 'src/pages/Accounts/Accounts';
 import Dashboard from 'src/pages/Dashboard/Dashboard';
 import Records from 'src/pages/Records/Records';
-import Crypto from 'src/pages/Crypto/Crypto';
+import Cryptocurrency from 'src/pages/Cryptocurrency/Cryptocurrency';
 import Settings from 'src/pages/Settings/Settings';
 import SignIn from 'src/pages/SignIn/SignIn';
 import SignUp from 'src/pages/SignUp/SignUp';
@@ -20,7 +20,7 @@ const Router = () => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/accounts" element={<Accounts />} />
         <Route path="/records" element={<Records />} />
-        <Route path="/cryptocurrency" element={<Crypto />} />
+        <Route path="/cryptocurrency" element={<Cryptocurrency />} />
         <Route path="/settings" element={<Settings />} />
       </Route>
       <Route path="/signin" element={<SignIn />} />
