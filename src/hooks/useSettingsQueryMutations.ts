@@ -7,6 +7,7 @@ export const useSettingsQueryMutations = () => {
   const settingsQuery = useQuery<Settings>({
     queryKey: ['settings'],
     queryFn: getSettings,
+    staleTime: Infinity,
   });
 
   const updateSettingsMutation = useMutation({

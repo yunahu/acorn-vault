@@ -66,6 +66,7 @@ const useRecordQueryMutations = (range: Range) => {
       const to = range?.end?.format('YYYY-MM-DD');
       return getRecords(from, to);
     },
+    staleTime: Infinity,
   });
 
   const updateRecordMutation = useMutation({

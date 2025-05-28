@@ -18,6 +18,7 @@ import Card from 'src/components/cards/Card/Card';
 import { formatNumber } from 'src/utils/helpers';
 import { Range } from 'src/pages/Records/Records';
 import useRecordQueryMutations from 'src/hooks/useRecordQueryMutations';
+import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
 
 interface RecordsStatsProps {
   range?: Range;
@@ -41,13 +42,15 @@ const RecordStatsCard = ({ range }: RecordsStatsProps) => {
       end: null,
     }
   );
+  const { settingsQuery } = useSettingsQueryMutations();
   const { data, isLoading } = useQuery<RecordStats>({
-    queryKey: ['recordStats', recordQuery.data],
+    queryKey: ['recordStats', recordQuery.data, settingsQuery.data],
     queryFn: async () => {
       const from = range?.start?.format('YYYY-MM-DD');
       const to = range?.end?.format('YYYY-MM-DD');
       return getRecordStats(from, to);
     },
+    staleTime: Infinity,
   });
 
   const chartData = useMemo(

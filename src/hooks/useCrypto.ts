@@ -3,6 +3,7 @@ import { useAccount } from 'wagmi';
 import { useQuery } from '@tanstack/react-query';
 import { Coin, getCoinPrices, getCoins } from 'src/services/api';
 import { getCoinsWithBalance } from 'src/services/viem';
+import useSettingsQueryMutations from './useSettingsQueryMutations';
 
 export interface CoinStats {
   primaryCurrency: {
@@ -20,19 +21,23 @@ export interface CoinStats {
 
 const useCrypto = () => {
   const { address } = useAccount();
+  const { settingsQuery } = useSettingsQueryMutations();
 
   const coinQuery = useQuery({
-    queryKey: ['coins', address],
+    queryKey: ['coins'],
     queryFn: getCoins,
+    staleTime: Infinity,
   });
 
   const priceQuery = useQuery({
-    queryKey: ['prices', address],
+    queryKey: ['prices', settingsQuery.data],
     queryFn: getCoinPrices,
+    staleTime: 60000,
   });
 
   const statsQuery = useQuery({
     queryKey: ['cryptoStats', coinQuery.data, priceQuery.data],
+    staleTime: 60000,
     queryFn: async () => {
       if (!coinQuery.data || !priceQuery.data) return;
 

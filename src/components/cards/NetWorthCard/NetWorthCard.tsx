@@ -5,6 +5,7 @@ import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
 import { getNetWorth, NetWorth } from 'src/services/api';
 import Card from 'src/components/cards/Card/Card';
 import { formatNumber } from 'src/utils/helpers';
+import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
 
 // #region Styles
 
@@ -31,9 +32,11 @@ const Amount = styled.div<{ $negative?: boolean }>`
 const NetWorthCard = () => {
   const { getSymbol, getCode } = useCurrencies();
   const { accountQuery } = useAccountQueryMutations();
+  const { settingsQuery } = useSettingsQueryMutations();
   const query = useQuery<NetWorth>({
-    queryKey: ['netWorth', accountQuery.data],
+    queryKey: ['netWorth', accountQuery.data, settingsQuery.data],
     queryFn: getNetWorth,
+    staleTime: Infinity,
   });
 
   return (

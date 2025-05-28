@@ -15,6 +15,7 @@ import { formatNumber } from 'src/utils/helpers';
 import { getNetWorthByCurrency, NetWorthByCurrency } from 'src/services/api';
 import { useCurrencies } from 'src/hooks/useCurrencies';
 import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
+import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
 
 const processData = (
   data: NetWorthByCurrency,
@@ -29,9 +30,11 @@ const processData = (
 const NetWorthByCurrencyCard = () => {
   const { accountQuery } = useAccountQueryMutations();
   const { getCode, getSymbol } = useCurrencies();
+  const { settingsQuery } = useSettingsQueryMutations();
   const { data, isLoading } = useQuery<NetWorthByCurrency>({
-    queryKey: ['netWorthByCurrency', accountQuery.data],
+    queryKey: ['netWorthByCurrency', accountQuery.data, settingsQuery.data],
     queryFn: getNetWorthByCurrency,
+    staleTime: Infinity,
   });
 
   const chartData = useMemo(

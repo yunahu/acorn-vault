@@ -53,6 +53,7 @@ const useAccountQueryMutations = () => {
   const accountQuery = useQuery({
     queryKey: ['accounts'],
     queryFn: getAccounts,
+    staleTime: Infinity,
   });
 
   const updateAccountMutation = useMutation({
