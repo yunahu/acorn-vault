@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import styled, { ThemeProvider } from 'styled-components';
+import { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConfigProvider } from 'antd';
@@ -25,6 +26,8 @@ const Container = styled.div`
 const queryClient = new QueryClient();
 
 const App = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
@@ -34,9 +37,12 @@ const App = () => {
               <ConfigProvider theme={antTheme}>
                 <WagmiProvider>
                   <GlobalStyle />
-                  <Sidebar />
+                  <Sidebar
+                    isOpen={isSidebarOpen}
+                    setIsOpen={setIsSidebarOpen}
+                  />
                   <Container>
-                    <Navbar />
+                    <Navbar setIsSidebarOpen={setIsSidebarOpen} />
                     <Router />
                   </Container>
                 </WagmiProvider>
