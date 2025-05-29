@@ -4,7 +4,6 @@ import Table from 'src/components/Table/Table';
 import useCrypto from 'src/hooks/useCrypto';
 import { formatNumber } from 'src/utils/helpers';
 import CryptoCard from './components/CryptoCard/CryptoCard';
-import CoinGeckoAttritution from './components/CoinGeckoAttritution/CoinGeckoAttritution';
 
 // #region Styles
 
@@ -89,7 +88,6 @@ const CryptoDetails = () => {
       />
       <Section>
         <CryptoCard />
-        <CoinGeckoAttritution />
       </Section>
     </Container>
   );

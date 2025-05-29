@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { ComponentProps } from 'react';
+import styled from 'styled-components';
 
 // #region Styles
 
@@ -14,7 +14,7 @@ const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 300px;
+  max-width: 300px;
 `;
 
 const StyledLabel = styled.label`
@@ -23,14 +23,14 @@ const StyledLabel = styled.label`
 
 // #endregion
 
-export const TabContainer = ({ children }: ComponentProps<'div'>) => (
-  <TabWrapper>{children}</TabWrapper>
+export const TabContainer = (props: ComponentProps<'div'>) => (
+  <TabWrapper {...props} />
 );
 
-export const ItemContainer = ({ children }: ComponentProps<'div'>) => (
-  <ItemWrapper>{children}</ItemWrapper>
+export const ItemContainer = (props: ComponentProps<'div'>) => (
+  <ItemWrapper {...props} />
 );
 
-export const ItemLabel = ({ children }: ComponentProps<'label'>) => (
-  <StyledLabel>{children}</StyledLabel>
+export const ItemLabel = (props: ComponentProps<'label'>) => (
+  <StyledLabel {...props} />
 );

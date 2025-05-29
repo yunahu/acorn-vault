@@ -7,7 +7,7 @@ const StyledLink = styled(Link)`
 `;
 
 const StyledImg = styled.img`
-  width: 350px;
+  width: 260px;
   border: solid 0.5px ${({ theme }) => theme.colors.border};
   border-radius: 8px;
 `;

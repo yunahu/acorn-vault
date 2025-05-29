@@ -11,6 +11,9 @@ const Container = styled.div<CardProps>`
   ${({ $fullWidth }) =>
     !$fullWidth && 'min-width: 170px; min-height: 95px; width: fit-content;'}
   ${({ $fullHeight }) => !$fullHeight && 'height: fit-content;'}
+	${({ $isLoading }) =>
+    $isLoading &&
+    'display: flex; justify-content: center; align-items: center;'}
 `;
 
 const Title = styled.div`
@@ -27,11 +30,16 @@ const Main = styled.div<{
   flex-direction: column;
   padding: ${({ $fullWidth }) => ($fullWidth ? '40px' : '20px')};
   gap: ${({ $gap, $fullWidth }) => ($gap ? $gap : $fullWidth ? '25px' : '0px')};
+
+  @media only screen and (max-width: 900px) {
+    padding: 20px;
+    gap: 15px;
+  }
 `;
 
 // #endregion
 
-interface CardProps extends PropsWithChildren {
+export interface CardProps extends PropsWithChildren {
   title?: string;
   $isLoading?: boolean;
   $gap?: string;

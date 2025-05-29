@@ -2,7 +2,11 @@ import styled from 'styled-components';
 
 export const Body = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 25px;
+
+  @media only screen and (max-width: 555px) {
+    flex-direction: column;
+  }
 `;
 
 export const ChartContainer = styled.div`

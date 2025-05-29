@@ -19,6 +19,10 @@ const Container = styled.div`
   align-items: center;
   gap: 25px;
   cursor: pointer;
+
+  @media only screen and (max-width: ${({ theme }) => theme.sizes.breakpoint}) {
+    gap: 10px;
+  }
 `;
 
 const UserIconContainer = styled.div`
@@ -38,6 +42,10 @@ const UserIcon = styled(FontAwesomeIcon)`
 
 const UserName = styled.div`
   color: ${({ theme }) => theme.colors.primary};
+
+  @media only screen and (max-width: ${({ theme }) => theme.sizes.breakpoint}) {
+    display: none;
+  }
 `;
 
 const ChevronIcon = styled(FontAwesomeIcon)`
@@ -138,9 +146,6 @@ const UserDropdown = () => {
           <ModalBody>
             <StyledLink to="/settings" onClick={toggleModal}>
               My profile
-            </StyledLink>
-            <StyledLink to="/notifications" onClick={toggleModal}>
-              Notifications
             </StyledLink>
             {user ? (
               <StyledLink

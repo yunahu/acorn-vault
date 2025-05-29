@@ -63,7 +63,8 @@ const useCrypto = () => {
       });
 
       rows.forEach((coin) => {
-        coin['percentage'] = coin.amountInPC.dividedBy(sum).multipliedBy(100);
+        if (!coin.amountInPC.isEqualTo(0))
+          coin['percentage'] = coin.amountInPC.dividedBy(sum).multipliedBy(100);
       });
 
       const result: CoinStats = {

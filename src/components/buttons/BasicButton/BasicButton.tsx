@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { ComponentProps } from 'react';
+import styled from 'styled-components';
 
 const StyledButton = styled.button`
   padding: 10px;
@@ -18,7 +18,7 @@ const StyledButton = styled.button`
 
   &:focus-visible {
     outline: 1px solid ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 8px rgba(44, 76, 59, 0.6);
+    box-shadow: 0 0 8px #2c4c3b99;
   }
 `;
 
