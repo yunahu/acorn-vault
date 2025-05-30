@@ -59,7 +59,11 @@ const RecordStatsCard = ({ range }: RecordsStatsProps) => {
   );
 
   return (
-    <Card title="Records" $isLoading={isLoading}>
+    <Card
+      title="Records"
+      $isLoading={isLoading}
+      isNoData={data?.rows.length === 0}
+    >
       {data && (
         <Body>
           {chartData.length > 0 && (

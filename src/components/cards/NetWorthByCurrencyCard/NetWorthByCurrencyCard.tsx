@@ -43,7 +43,11 @@ const NetWorthByCurrencyCard = () => {
   );
 
   return (
-    <Card title="Net Worth By Currency" $isLoading={isLoading}>
+    <Card
+      title="Net Worth By Currency"
+      $isLoading={isLoading}
+      isNoData={data?.rows.length === 0}
+    >
       {data && (
         <Body>
           {chartData.length > 0 && (

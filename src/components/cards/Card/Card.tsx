@@ -1,14 +1,15 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 import Spin from 'src/components/Spin/Spin';
+import NoData from './components/NoData/NoData';
 
 export interface CardProps extends PropsWithChildren {
-  title?: string;
-  $isLoading?: boolean;
-  $gap?: string;
-  $round?: boolean;
   $fullWidth?: boolean;
-  $fullHeight?: boolean;
+  $gap?: string;
+  $isLoading?: boolean;
+  $round?: boolean;
+  isNoData?: boolean;
+  title?: string;
 }
 
 // #region Styles
@@ -19,8 +20,7 @@ const Container = styled.div<CardProps>`
   border-radius: ${({ $round }) => ($round ? '25px' : '8px')};
   ${({ $fullWidth }) =>
     !$fullWidth && 'min-width: 170px; min-height: 95px; width: fit-content;'}
-  ${({ $fullHeight }) => !$fullHeight && 'height: fit-content;'}
-	${({ $isLoading }) =>
+  ${({ $isLoading }) =>
     $isLoading &&
     'display: flex; justify-content: center; align-items: center;'}
 `;
@@ -31,14 +31,11 @@ const Title = styled.div`
   margin-bottom: 15px;
 `;
 
-const Main = styled.div<{
-  $gap?: string;
-  $fullWidth?: boolean;
-}>`
+const Main = styled.div<{ $fullWidth?: boolean }>`
   display: flex;
   flex-direction: column;
+  gap: ${({ $fullWidth }) => ($fullWidth ? '25px' : '0px')};
   padding: ${({ $fullWidth }) => ($fullWidth ? '40px' : '20px')};
-  gap: ${({ $gap, $fullWidth }) => ($gap ? $gap : $fullWidth ? '25px' : '0px')};
 
   @media only screen and (max-width: ${({ theme }) => theme.sizes.breakpoint}) {
     padding: 20px;
@@ -49,15 +46,21 @@ const Main = styled.div<{
 // #endregion
 
 const Card = (props: CardProps) => {
-  const { children, title, $isLoading } = props;
+  const { $fullWidth, $isLoading, $round, children, isNoData, title, ...rest } =
+    props;
   return (
-    <Container {...props}>
+    <Container
+      {...rest}
+      $fullWidth={$fullWidth}
+      $isLoading={$isLoading}
+      $round={$round}
+    >
       {$isLoading ? (
         <Spin />
       ) : (
-        <Main {...props}>
+        <Main $fullWidth={$fullWidth}>
           {title && <Title>{title}</Title>}
-          {children}
+          {isNoData ? <NoData /> : children}
         </Main>
       )}
     </Container>
