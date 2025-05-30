@@ -34,7 +34,7 @@ export interface Coin {
   name: string;
   symbol: string;
   decimals: number;
-  address?: Address;
+  address: Address | null;
   coingecko_api_id: string;
 }
 
@@ -77,8 +77,8 @@ export interface NetWorthByCurrency {
 
 export interface RecordStats {
   primary_currency: number;
-  currencyUnassigned: number;
-  assignedSum: number;
+  currency_unassigned: number;
+  assigned_sum: number;
   rows: {
     currency_id: number;
     amount: number;
@@ -97,9 +97,9 @@ export const createAccount = (
 ) =>
   api.post('/accounts', {
     name,
-    currencyId,
+    currency_id: currencyId,
     balance,
-    isPrimaryPaymentMethod,
+    is_primary_payment_method: isPrimaryPaymentMethod,
   });
 
 export const getAccounts = (): Promise<Account[]> =>
@@ -121,7 +121,7 @@ export const createRecord = (
   api.post('/records', {
     date,
     description,
-    accountId,
+    account_id: accountId,
     amount,
   });
 
@@ -178,10 +178,10 @@ export const deleteUserAccount = () => api.delete('/settings/user');
 // --- Statistics ---
 
 export const getNetWorth = () =>
-  api.get('/statistics/netWorth').then((x) => x.data);
+  api.get('/statistics/net_worth').then((x) => x.data);
 
 export const getNetWorthByCurrency = () =>
-  api.get('/statistics/netWorthByCurrency').then((x) => x.data);
+  api.get('/statistics/net_worth_by_currency').then((x) => x.data);
 
 export const getRecordStats = (
   from: string | null | undefined,
@@ -189,7 +189,7 @@ export const getRecordStats = (
 ): Promise<RecordStats> =>
   api
     .get(
-      `/statistics/recordStats
+      `/statistics/record_stats
 			${from || to ? '?' : ''}
 			${from ? 'from=' + from : ''}
 			${from && to ? '&' : ''}

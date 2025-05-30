@@ -96,17 +96,17 @@ const RecordStatsCard = ({ range }: RecordsStatsProps) => {
                 <Total>TOTAL: </Total>
                 <AmountContainer>
                   {getCode(data.primary_currency)}
-                  <Amount $negative={data.assignedSum < 0}>
+                  <Amount $negative={data.assigned_sum < 0}>
                     {getSymbol(data.primary_currency)}{' '}
-                    {formatNumber(data.assignedSum)}
+                    {formatNumber(data.assigned_sum)}
                   </Amount>
                 </AmountContainer>
               </div>
             )}
-            {data.currencyUnassigned !== 0 && (
+            {data.currency_unassigned !== 0 && (
               <Unassigned>
                 Unassinged Amount
-                <div>{formatNumber(data.currencyUnassigned)}</div>
+                <div>{formatNumber(data.currency_unassigned)}</div>
               </Unassigned>
             )}
           </List>

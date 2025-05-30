@@ -51,7 +51,7 @@ const CryptoCard = () => {
                 <AmountContainer>
                   {coin.symbol}
                   <Amount $negative={amountInPC.toNumber() < 0}>
-                    {data.primaryCurrency.symbol} {amount.toFixed()}
+                    {amount.toFixed()}
                   </Amount>
                 </AmountContainer>
                 <Conversion>

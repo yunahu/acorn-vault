@@ -5,17 +5,19 @@ import { Coin, getCoinPrices, getCoins } from 'src/services/api';
 import { getCoinsWithBalance } from 'src/services/viem';
 import useSettingsQueryMutations from './useSettingsQueryMutations';
 
+interface Row {
+  coin: Coin;
+  amount: BigNumber;
+  amountInPC: BigNumber;
+  percentage: BigNumber;
+}
+
 export interface CoinStats {
   primaryCurrency: {
     symbol: string;
     code: string;
   };
-  rows: {
-    coin: Coin;
-    amount: BigNumber;
-    amountInPC: BigNumber;
-    percentage: BigNumber;
-  }[];
+  rows: Row[];
   sum: BigNumber;
 }
 
@@ -50,7 +52,7 @@ const useCrypto = () => {
 
       let sum = new BigNumber(0);
 
-      const rows: CoinStats['rows'] = [];
+      const rows: Row[] = [];
       coinsWithBalance?.forEach(({ coin, amount }) => {
         const amountInPC = amount.multipliedBy(prices[coin.coingecko_api_id]);
         sum = sum.plus(amountInPC);
