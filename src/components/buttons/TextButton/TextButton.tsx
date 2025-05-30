@@ -1,7 +1,6 @@
-import { ComponentProps } from 'react';
 import styled from 'styled-components';
 
-const StyledButton = styled.button`
+const TextButton = styled.button`
   border: none;
   background-color: inherit;
   color: ${({ theme }) => theme.colors.blue};
@@ -11,9 +10,5 @@ const StyledButton = styled.button`
     outline-offset: 2px;
   }
 `;
-
-const TextButton = (props: ComponentProps<'button'>) => (
-  <StyledButton {...props}>{props.children}</StyledButton>
-);
 
 export default TextButton;

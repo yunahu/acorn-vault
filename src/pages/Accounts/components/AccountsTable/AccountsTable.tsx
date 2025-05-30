@@ -1,5 +1,5 @@
 import type { TableProps } from 'antd';
-import StyledTable from 'src/components/Table/Table';
+import Table from 'src/components/Table/Table';
 import TextButton from 'src/components/buttons/TextButton/TextButton';
 import EditableInput from 'src/components/editables/EditableInput/EditableInput';
 import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
@@ -94,7 +94,7 @@ const AccountsTable = () => {
   ];
 
   return (
-    <StyledTable
+    <Table
       loading={accountQuery.isLoading}
       dataSource={accountQuery.data}
       columns={columns}

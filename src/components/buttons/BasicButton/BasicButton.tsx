@@ -1,7 +1,6 @@
-import { ComponentProps } from 'react';
 import styled from 'styled-components';
 
-const StyledButton = styled.button`
+const BasicButton = styled.button`
   padding: 10px;
   background-color: white;
   border-radius: 8px;
@@ -21,9 +20,5 @@ const StyledButton = styled.button`
     box-shadow: 0 0 8px #2c4c3b99;
   }
 `;
-
-const BasicButton = (props: ComponentProps<'button'>) => (
-  <StyledButton {...props}>{props.children}</StyledButton>
-);
 
 export default BasicButton;
