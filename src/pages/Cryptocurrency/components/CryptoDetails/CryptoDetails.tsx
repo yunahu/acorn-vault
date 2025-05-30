@@ -14,19 +14,14 @@ const Container = styled.div`
   flex: 1;
 `;
 
-const TotalContainer = styled.div`
+const Footer = styled.div`
   display: flex;
   gap: 10px;
   justify-content: space-between;
 `;
 
-const Total = styled.span`
+const FooterTitle = styled.span`
   font-weight: bold;
-`;
-
-const Section = styled.div`
-  display: flex;
-  justify-content: space-between;
 `;
 
 // #endregion
@@ -39,14 +34,14 @@ const CryptoDetails = () => {
       title: 'Asset',
       dataIndex: ['coin', 'id'],
       key: 'coin',
-      render: (_, { coin }) => <div>{`${coin.name} (${coin?.symbol})`}</div>,
+      render: (_, { coin }) => `${coin.name} (${coin?.symbol})`,
     },
     {
       title: 'Amount',
       dataIndex: 'amount',
       key: 'amount',
       align: 'right',
-      render: (_, { coin, amount }) => <div>{`${amount} ${coin?.symbol}`}</div>,
+      render: (_, { coin, amount }) => `${amount} ${coin?.symbol}`,
     },
     {
       title: 'Value',
@@ -56,12 +51,7 @@ const CryptoDetails = () => {
       render: (_, { amountInPC }) => {
         if (!statsQuery.data) return '';
         const { primaryCurrency } = statsQuery.data;
-
-        return (
-          <div>
-            {`${primaryCurrency.code} ${primaryCurrency.symbol} ${formatNumber(amountInPC.toFixed())}`}
-          </div>
-        );
+        return `${primaryCurrency.code} ${primaryCurrency.symbol} ${formatNumber(amountInPC.toFixed())}`;
       },
     },
   ];
@@ -72,10 +62,10 @@ const CryptoDetails = () => {
         loading={statsQuery.isLoading}
         dataSource={statsQuery.data?.rows}
         columns={columns}
-        rowKey={(coin) => coin.id}
+        rowKey={(row) => row.coin.id}
         footer={() => (
-          <TotalContainer>
-            <Total>TOTAL:{'  '}</Total>
+          <Footer>
+            <FooterTitle>TOTAL:</FooterTitle>
             {statsQuery.data?.sum
               ? statsQuery.data?.primaryCurrency.code +
                 ' ' +
@@ -83,12 +73,10 @@ const CryptoDetails = () => {
                 ' ' +
                 formatNumber(statsQuery.data?.sum.toFixed())
               : ''}
-          </TotalContainer>
+          </Footer>
         )}
       />
-      <Section>
-        <CryptoCard />
-      </Section>
+      <CryptoCard />
     </Container>
   );
 };

@@ -19,7 +19,7 @@ const Main = styled.div<{ $image: string }>`
 
   @media only screen and (max-width: ${({ theme }) => theme.sizes.breakpoint}) {
     background-image: url(${({ $image }) => $image});
-    background-size: contain;
+    background-size: cover;
     padding: 25px 15px;
   }
 
