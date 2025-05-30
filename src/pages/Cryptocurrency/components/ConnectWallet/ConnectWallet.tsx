@@ -1,10 +1,10 @@
+import { faWallet } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { useConnect } from 'wagmi';
-import { faWallet } from '@fortawesome/free-solid-svg-icons';
-import AuthPageLayout from 'src/components/layouts/auth/AuthPageLayout/AuthPageLayout';
-import RoundButton from 'src/components/buttons/RoundButton/RoundButton';
 import metamask from 'src/assets/icons/metamask.svg';
 import coastline from 'src/assets/images/coastline.webp';
+import RoundButton from 'src/components/buttons/RoundButton/RoundButton';
+import AuthPageLayout from 'src/components/layouts/auth/AuthPageLayout/AuthPageLayout';
 
 // #region Styles
 

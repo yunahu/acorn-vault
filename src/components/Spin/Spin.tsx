@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { Spin as AntSpin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
+import { Spin as AntSpin } from 'antd';
+import styled from 'styled-components';
 
 // #region Styles
 

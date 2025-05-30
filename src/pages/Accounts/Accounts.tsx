@@ -1,7 +1,7 @@
-import PageWrapper from 'src/components/layouts/PageWrapper/PageWrapper';
-import NetWorthCard from 'src/components/cards/NetWorthCard/NetWorthCard';
-import AccountsTable from './components/AccountsTable/AccountsTable';
 import NetWorthByCurrencyCard from 'src/components/cards/NetWorthByCurrencyCard/NetWorthByCurrencyCard';
+import NetWorthCard from 'src/components/cards/NetWorthCard/NetWorthCard';
+import PageWrapper from 'src/components/layouts/PageWrapper/PageWrapper';
+import AccountsTable from './components/AccountsTable/AccountsTable';
 
 const Accounts = () => {
   return (

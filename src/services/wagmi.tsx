@@ -1,6 +1,6 @@
 import {
-  http,
   createConfig,
+  http,
   WagmiProvider as OriginalWagmiProvider,
 } from 'wagmi';
 import { mainnet } from 'wagmi/chains';

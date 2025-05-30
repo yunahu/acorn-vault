@@ -1,5 +1,5 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DatePicker, DatePickerProps } from 'antd';
 import { Dayjs } from 'dayjs';
 import styled from 'styled-components';

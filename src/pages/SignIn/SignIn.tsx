@@ -1,10 +1,12 @@
-import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from 'src/services/firebase';
-import AuthPageLayout from 'src/components/layouts/auth/AuthPageLayout/AuthPageLayout';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import forrest from 'src/assets/images/forrest.jpg';
+import AnonymousSignInButton from 'src/components/buttons/AnonymousSignInButton/AnonymousSignInButton';
+import GoogleSignInButton from 'src/components/buttons/GoogleSignInButton/GoogleSignInButton';
+import RoundButton from 'src/components/buttons/RoundButton/RoundButton';
 import {
   Footer,
   ForgotPasswordLink,
@@ -16,11 +18,9 @@ import {
   StyledInput,
   StyledLabel,
 } from 'src/components/layouts/auth/AuthCardLayouts/AuthCardLayouts';
+import AuthPageLayout from 'src/components/layouts/auth/AuthPageLayout/AuthPageLayout';
 import useAuth from 'src/hooks/useAuth';
-import forrest from 'src/assets/images/forrest.jpg';
-import RoundButton from 'src/components/buttons/RoundButton/RoundButton';
-import GoogleSignInButton from 'src/components/buttons/GoogleSignInButton/GoogleSignInButton';
-import AnonymousSignInButton from 'src/components/buttons/AnonymousSignInButton/AnonymousSignInButton';
+import { auth } from 'src/services/firebase';
 
 const SignIn = () => {
   const [isHidden, setIsHidden] = useState(true);

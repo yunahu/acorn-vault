@@ -1,11 +1,11 @@
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { faChevronDown, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signOut } from 'firebase/auth';
 import { useEffect, useRef, useState } from 'react';
-import { auth } from 'src/services/firebase';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import useAuth from 'src/hooks/useAuth';
+import { auth } from 'src/services/firebase';
 
 // #region Styles
 

@@ -1,6 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import BigNumber from 'bignumber.js';
 import { useAccount } from 'wagmi';
-import { useQuery } from '@tanstack/react-query';
 import { Coin, getCoinPrices, getCoins } from 'src/services/api';
 import { getCoinsWithBalance } from 'src/services/viem';
 import useSettingsQueryMutations from './useSettingsQueryMutations';

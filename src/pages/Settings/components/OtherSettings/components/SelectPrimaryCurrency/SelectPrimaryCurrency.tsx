@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react';
 import { Select } from 'antd';
-import { useCurrencies } from 'src/hooks/useCurrencies';
-import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
+import { useMemo, useState } from 'react';
 import {
   ItemContainer,
   ItemLabel,
 } from 'src/components/layouts/TabLayouts/TabLayouts';
 import Spin from 'src/components/Spin/Spin';
+import { useCurrencies } from 'src/hooks/useCurrencies';
+import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
 
 const SelectPrimaryCurrency = () => {
   const [loading, setLoading] = useState(false);

@@ -1,24 +1,24 @@
-import { useQuery } from '@tanstack/react-query';
 import { ResponsivePie } from '@nivo/pie';
+import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import Card from 'src/components/cards/Card/Card';
 import {
   Amount,
   AmountContainer,
   Body,
-  Conversion,
-  RowContainer,
-  List,
   ChartContainer,
-  Unassigned,
+  Conversion,
+  List,
+  RowContainer,
   Total,
+  Unassigned,
 } from 'src/components/cards/StatsCardLayouts/StatsCardLayouts';
-import { getRecordStats, RecordStats } from 'src/services/api';
 import { useCurrencies } from 'src/hooks/useCurrencies';
-import Card from 'src/components/cards/Card/Card';
-import { formatNumber } from 'src/utils/helpers';
-import { Range } from 'src/pages/Records/Records';
 import useRecordQueryMutations from 'src/hooks/useRecordQueryMutations';
 import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
+import { Range } from 'src/pages/Records/Records';
+import { getRecordStats, RecordStats } from 'src/services/api';
+import { formatNumber } from 'src/utils/helpers';
 
 interface RecordsStatsProps {
   range?: Range;

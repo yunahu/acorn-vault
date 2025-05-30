@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
 import { InputHTMLAttributes, useState } from 'react';
+import styled, { css } from 'styled-components';
 import { formatNumber } from 'src/utils/helpers';
 
 // #region Styles

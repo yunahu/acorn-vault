@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import { ComponentProps } from 'react';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ComponentProps } from 'react';
+import styled from 'styled-components';
 
 // #region Styles
 

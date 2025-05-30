@@ -1,8 +1,8 @@
-import { signInAnonymously, updateProfile } from 'firebase/auth';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
-import { auth } from 'src/services/firebase';
-import useAuth, { mapUser } from 'src/hooks/useAuth';
+import { signInAnonymously, updateProfile } from 'firebase/auth';
 import RoundButton from 'src/components/buttons/RoundButton/RoundButton';
+import useAuth, { mapUser } from 'src/hooks/useAuth';
+import { auth } from 'src/services/firebase';
 
 const AnonymousSignInButton = () => {
   const { setUser } = useAuth();

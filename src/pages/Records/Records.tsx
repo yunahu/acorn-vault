@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
+import { useState } from 'react';
+import RecordStatsCard from 'src/components/cards/RecordStatsCard/RecordStatsCard';
 import PageWrapper from 'src/components/layouts/PageWrapper/PageWrapper';
 import RangePicker from './components/RangePicker/RangePicker';
 import RecordsTable from './components/RecordsTable/RecordsTable';
-import RecordStatsCard from 'src/components/cards/RecordStatsCard/RecordStatsCard';
 
 export interface Range {
   start: Dayjs | null;

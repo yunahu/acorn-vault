@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { PropsWithChildren } from 'react';
+import styled from 'styled-components';
 import Spin from 'src/components/Spin/Spin';
 
 // #region Styles

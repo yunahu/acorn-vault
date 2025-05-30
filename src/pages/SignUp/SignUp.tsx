@@ -1,10 +1,12 @@
-import { useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { auth } from 'src/services/firebase';
-import AuthPageLayout from 'src/components/layouts/auth/AuthPageLayout/AuthPageLayout';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import dog from 'src/assets/images/dog.webp';
+import AnonymousSignInButton from 'src/components/buttons/AnonymousSignInButton/AnonymousSignInButton';
+import GoogleSignInButton from 'src/components/buttons/GoogleSignInButton/GoogleSignInButton';
+import RoundButton from 'src/components/buttons/RoundButton/RoundButton';
 import {
   ErrorMessage,
   Footer,
@@ -16,11 +18,9 @@ import {
   StyledInput,
   StyledLabel,
 } from 'src/components/layouts/auth/AuthCardLayouts/AuthCardLayouts';
+import AuthPageLayout from 'src/components/layouts/auth/AuthPageLayout/AuthPageLayout';
 import useAuth, { mapUser } from 'src/hooks/useAuth';
-import dog from 'src/assets/images/dog.webp';
-import RoundButton from 'src/components/buttons/RoundButton/RoundButton';
-import GoogleSignInButton from 'src/components/buttons/GoogleSignInButton/GoogleSignInButton';
-import AnonymousSignInButton from 'src/components/buttons/AnonymousSignInButton/AnonymousSignInButton';
+import { auth } from 'src/services/firebase';
 
 const SignUp = () => {
   const [isHidden, setIsHidden] = useState(true);

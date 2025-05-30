@@ -1,10 +1,10 @@
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Account,
   createAccount,
+  deleteAccount,
   getAccounts,
   updateAccount,
-  deleteAccount,
 } from 'src/services/api';
 
 interface UpdateParams {

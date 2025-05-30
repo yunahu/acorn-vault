@@ -1,16 +1,15 @@
-import { Input } from 'antd';
-import { Spin as AntSpin } from 'antd';
+import { Spin as AntSpin, Input } from 'antd';
 import { deleteUser, getAuth, updateProfile } from 'firebase/auth';
 import { KeyboardEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuth from 'src/hooks/useAuth';
 import BasicButton from 'src/components/buttons/BasicButton/BasicButton';
-import { deleteUserAccount } from 'src/services/api';
 import {
-  TabContainer,
   ItemContainer,
   ItemLabel,
+  TabContainer,
 } from 'src/components/layouts/TabLayouts/TabLayouts';
+import useAuth from 'src/hooks/useAuth';
+import { deleteUserAccount } from 'src/services/api';
 
 const Profile = () => {
   const [loading, setLoading] = useState(false);

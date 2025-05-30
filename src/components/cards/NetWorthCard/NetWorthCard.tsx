@@ -1,11 +1,11 @@
-import styled from 'styled-components';
 import { useQuery } from '@tanstack/react-query';
-import { useCurrencies } from 'src/hooks/useCurrencies';
-import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
-import { getNetWorth, NetWorth } from 'src/services/api';
+import styled from 'styled-components';
 import Card from 'src/components/cards/Card/Card';
-import { formatNumber } from 'src/utils/helpers';
+import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
+import { useCurrencies } from 'src/hooks/useCurrencies';
 import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
+import { getNetWorth, NetWorth } from 'src/services/api';
+import { formatNumber } from 'src/utils/helpers';
 
 // #region Styles
 

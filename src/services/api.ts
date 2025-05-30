@@ -1,6 +1,6 @@
-import { Address } from 'viem';
 import axios from 'axios';
 import dayjs, { Dayjs } from 'dayjs';
+import { Address } from 'viem';
 import { auth } from 'src/services/firebase';
 
 const api = axios.create({

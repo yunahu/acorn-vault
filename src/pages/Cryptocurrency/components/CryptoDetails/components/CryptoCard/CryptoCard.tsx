@@ -1,17 +1,17 @@
 import { ResponsivePie } from '@nivo/pie';
 import { useMemo } from 'react';
-import { formatNumber } from 'src/utils/helpers';
-import useCrypto, { CoinStats } from 'src/hooks/useCrypto';
 import Card from 'src/components/cards/Card/Card';
 import {
   Amount,
   AmountContainer,
   Body,
-  Conversion,
-  RowContainer,
-  List,
   ChartContainer,
+  Conversion,
+  List,
+  RowContainer,
 } from 'src/components/cards/StatsCardLayouts/StatsCardLayouts';
+import useCrypto, { CoinStats } from 'src/hooks/useCrypto';
+import { formatNumber } from 'src/utils/helpers';
 
 const processData = (data: CoinStats) => {
   const nonZeroRows = data.rows.filter((x) => x.amountInPC.toNumber() > 0);

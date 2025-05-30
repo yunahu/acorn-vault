@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
+import { Address, createPublicClient, erc20Abi, getContract, http } from 'viem';
 import { mainnet } from 'viem/chains';
-import { getContract, createPublicClient, http, erc20Abi, Address } from 'viem';
 import { Coin } from 'src/services/api';
 
 const RPC = 'https://eth.llamarpc.com';

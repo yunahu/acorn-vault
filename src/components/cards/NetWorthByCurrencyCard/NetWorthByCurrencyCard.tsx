@@ -1,6 +1,7 @@
 import { ResponsivePie } from '@nivo/pie';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import Card from 'src/components/cards/Card/Card';
 import {
   Amount,
   AmountContainer,
@@ -10,12 +11,11 @@ import {
   List,
   RowContainer,
 } from 'src/components/cards/StatsCardLayouts/StatsCardLayouts';
-import Card from 'src/components/cards/Card/Card';
-import { formatNumber } from 'src/utils/helpers';
-import { getNetWorthByCurrency, NetWorthByCurrency } from 'src/services/api';
-import { useCurrencies } from 'src/hooks/useCurrencies';
 import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
+import { useCurrencies } from 'src/hooks/useCurrencies';
 import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
+import { getNetWorthByCurrency, NetWorthByCurrency } from 'src/services/api';
+import { formatNumber } from 'src/utils/helpers';
 
 const processData = (
   data: NetWorthByCurrency,

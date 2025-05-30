@@ -1,9 +1,9 @@
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import useAuth from 'src/hooks/useAuth';
 import Accounts from 'src/pages/Accounts/Accounts';
+import Cryptocurrency from 'src/pages/Cryptocurrency/Cryptocurrency';
 import Dashboard from 'src/pages/Dashboard/Dashboard';
 import Records from 'src/pages/Records/Records';
-import Cryptocurrency from 'src/pages/Cryptocurrency/Cryptocurrency';
 import Settings from 'src/pages/Settings/Settings';
 import SignIn from 'src/pages/SignIn/SignIn';
 import SignUp from 'src/pages/SignUp/SignUp';

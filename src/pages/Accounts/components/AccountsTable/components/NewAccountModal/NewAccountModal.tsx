@@ -1,9 +1,9 @@
-import styled from 'styled-components';
-import { useState } from 'react';
 import { Button, Modal } from 'antd';
-import { useCurrencies } from 'src/hooks/useCurrencies';
-import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
+import { useState } from 'react';
+import styled from 'styled-components';
 import BasicButton from 'src/components/buttons/BasicButton/BasicButton';
+import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
+import { useCurrencies } from 'src/hooks/useCurrencies';
 
 // #region Styles
 

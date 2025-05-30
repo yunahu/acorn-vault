@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { Table as AntTable } from 'antd';
 import type { TableProps as AntTableProps } from 'antd';
+import { Table as AntTable } from 'antd';
+import styled from 'styled-components';
 
 interface TableProps extends AntTableProps {
   loading?: boolean;

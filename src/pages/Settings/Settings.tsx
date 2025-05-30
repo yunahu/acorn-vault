@@ -1,8 +1,8 @@
-import styled from 'styled-components';
 import { Tabs, TabsProps } from 'antd';
-import Profile from './components/Profile/Profile';
-import OtherSettings from './components/OtherSettings/OtherSettings';
+import styled from 'styled-components';
 import PageWrapper from 'src/components/layouts/PageWrapper/PageWrapper';
+import OtherSettings from './components/OtherSettings/OtherSettings';
+import Profile from './components/Profile/Profile';
 
 // #region Styles
 

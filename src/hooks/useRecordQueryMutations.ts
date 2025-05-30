@@ -1,13 +1,13 @@
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import { Range } from 'src/pages/Records/Records';
 import {
   Record,
   createRecord,
+  deleteRecord,
   getRecords,
   updateRecord,
-  deleteRecord,
 } from 'src/services/api';
-import { Range } from 'src/pages/Records/Records';
 
 interface UpdateParams {
   id: number;

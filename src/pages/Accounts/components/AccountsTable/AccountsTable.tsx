@@ -1,10 +1,10 @@
 import type { TableProps } from 'antd';
-import { useCurrencies } from 'src/hooks/useCurrencies';
-import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
-import EditableInput from 'src/components/editables/EditableInput/EditableInput';
-import NewAccountModal from './components/NewAccountModal/NewAccountModal';
 import StyledTable from 'src/components/Table/Table';
 import TextButton from 'src/components/buttons/TextButton/TextButton';
+import EditableInput from 'src/components/editables/EditableInput/EditableInput';
+import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
+import { useCurrencies } from 'src/hooks/useCurrencies';
+import NewAccountModal from './components/NewAccountModal/NewAccountModal';
 
 const AccountsTable = () => {
   const { getCode, getSymbol } = useCurrencies();
