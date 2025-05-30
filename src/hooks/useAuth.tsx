@@ -1,11 +1,18 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { User as FirebaseUser, onAuthStateChanged } from 'firebase/auth';
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { auth } from 'src/services/firebase';
 
 interface Auth {
   user?: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  setUser: Dispatch<SetStateAction<User | null>>;
 }
 
 interface User {

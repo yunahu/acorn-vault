@@ -2,6 +2,11 @@ import { ComponentProps } from 'react';
 import styled from 'styled-components';
 import Card from 'src/components/cards/Card/Card';
 
+interface AuthCardLayoutProps extends ComponentProps<'div'> {
+  image: string;
+  title?: string;
+}
+
 // #region Styles
 
 const Container = styled.div`
@@ -48,11 +53,6 @@ const SidePhoto = styled.div<{ $image: string }>`
 `;
 
 // #endregion
-
-interface AuthCardLayoutProps extends ComponentProps<'div'> {
-  image: string;
-  title?: string;
-}
 
 const AuthPageLayout = ({ image, title, children }: AuthCardLayoutProps) => {
   return (

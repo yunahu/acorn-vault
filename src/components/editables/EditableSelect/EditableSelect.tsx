@@ -2,13 +2,13 @@ import { Select, SelectProps } from 'antd';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-const StyledSelect = styled(Select)`
-  width: 100%;
-`;
-
 interface EditableSelectProps extends SelectProps {
   text: string;
 }
+
+const StyledSelect = styled(Select)`
+  width: 100%;
+`;
 
 const EditableSelect = (props: EditableSelectProps) => {
   const [active, setActive] = useState<boolean>(false);

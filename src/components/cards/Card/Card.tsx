@@ -2,6 +2,15 @@ import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 import Spin from 'src/components/Spin/Spin';
 
+export interface CardProps extends PropsWithChildren {
+  title?: string;
+  $isLoading?: boolean;
+  $gap?: string;
+  $round?: boolean;
+  $fullWidth?: boolean;
+  $fullHeight?: boolean;
+}
+
 // #region Styles
 
 const Container = styled.div<CardProps>`
@@ -38,15 +47,6 @@ const Main = styled.div<{
 `;
 
 // #endregion
-
-export interface CardProps extends PropsWithChildren {
-  title?: string;
-  $isLoading?: boolean;
-  $gap?: string;
-  $round?: boolean;
-  $fullWidth?: boolean;
-  $fullHeight?: boolean;
-}
 
 const Card = (props: CardProps) => {
   const { children, title, $isLoading } = props;

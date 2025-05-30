@@ -2,6 +2,14 @@ import { InputHTMLAttributes, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { formatNumber } from 'src/utils/helpers';
 
+interface EditableInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  type: 'text' | 'number';
+  isColorCoded?: boolean;
+  initialValue: string;
+  onOk: (value: string) => void;
+  prefix?: string;
+}
+
 // #region Styles
 
 const StyledInput = styled.input`
@@ -33,14 +41,6 @@ const StyledDiv = styled.div<{ $contrast?: boolean }>`
 `;
 
 // #endregion
-
-interface EditableInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  type: 'text' | 'number';
-  isColorCoded?: boolean;
-  initialValue: string;
-  onOk: (value: string) => void;
-  prefix?: string;
-}
 
 const EditableInput = (props: EditableInputProps) => {
   const [active, setActive] = useState<boolean>(false);

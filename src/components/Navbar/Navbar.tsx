@@ -5,6 +5,14 @@ import styled from 'styled-components';
 import IconButton from 'src/components/buttons/IconButton/IconButton';
 import UserDropdown from './components/UserDropdown/UserDropdown';
 
+interface Title {
+  [key: string]: string;
+}
+
+interface NavbarProps {
+  setIsSidebarOpen: Dispatch<SetStateAction<boolean>>;
+}
+
 // #region Styles
 
 const Container = styled.div`
@@ -40,10 +48,6 @@ const Title = styled.div`
 
 // #endregion
 
-interface Title {
-  [key: string]: string;
-}
-
 const title: Title = {
   '/': 'Overview',
   '/accounts': 'Assets & Liabilities',
@@ -53,10 +57,6 @@ const title: Title = {
   '/signin': 'Sign in',
   '/signup': 'Sign up',
 };
-
-interface NavbarProps {
-  setIsSidebarOpen: Dispatch<SetStateAction<boolean>>;
-}
 
 const Navbar = ({ setIsSidebarOpen }: NavbarProps) => {
   const { pathname } = useLocation();

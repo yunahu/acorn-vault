@@ -14,6 +14,18 @@ import styled from 'styled-components';
 import logo from 'src/assets/icons/logo.png';
 import IconButton from 'src/components/buttons/IconButton/IconButton';
 
+interface Row {
+  id: number;
+  path: string;
+  name: string;
+  icon: IconDefinition;
+}
+
+interface SidebarProps {
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+
 // #region Styles
 
 const Container = styled.div<{ $open: boolean }>`
@@ -108,13 +120,6 @@ const Icon = styled.div`
 
 // #endregion
 
-interface Row {
-  id: number;
-  path: string;
-  name: string;
-  icon: IconDefinition;
-}
-
 const rows: Row[] = [
   {
     id: 1,
@@ -147,11 +152,6 @@ const rows: Row[] = [
     icon: faGear,
   },
 ];
-
-interface SidebarProps {
-  isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-}
 
 const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const { pathname } = useLocation();

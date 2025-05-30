@@ -3,6 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ComponentProps } from 'react';
 import styled from 'styled-components';
 
+interface Props extends ComponentProps<'button'> {
+  icon: IconDefinition;
+  $iconSize?: number;
+  $containerSize?: number;
+  $color?: string;
+}
+
 // #region Styles
 
 const Container = styled.button<{ $containerSize?: number; $color?: string }>`
@@ -27,13 +34,6 @@ const Icon = styled(FontAwesomeIcon)<{ $iconSize?: number }>`
 `;
 
 // #endregion
-
-interface Props extends ComponentProps<'button'> {
-  icon: IconDefinition;
-  $iconSize?: number;
-  $containerSize?: number;
-  $color?: string;
-}
 
 const IconButton = ({ icon, $iconSize, ...rest }: Props) => {
   return (

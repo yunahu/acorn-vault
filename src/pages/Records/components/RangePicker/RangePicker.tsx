@@ -2,8 +2,14 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DatePicker, DatePickerProps } from 'antd';
 import { Dayjs } from 'dayjs';
+import { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { Range } from 'src/pages/Records/Records';
+
+interface RangePickerProps {
+  range: Range;
+  setRange: Dispatch<SetStateAction<Range>>;
+}
 
 // #region Styles
 
@@ -19,11 +25,6 @@ const StyledDash = styled(FontAwesomeIcon)`
 `;
 
 // #endregion
-
-interface RangePickerProps {
-  range: Range;
-  setRange: React.Dispatch<React.SetStateAction<Range>>;
-}
 
 const RangePicker = ({ range, setRange }: RangePickerProps) => {
   const setStart: DatePickerProps['onChange'] = (date: Dayjs | null) => {

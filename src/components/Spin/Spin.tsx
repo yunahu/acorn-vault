@@ -2,6 +2,10 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Spin as AntSpin } from 'antd';
 import styled from 'styled-components';
 
+interface SpinProps {
+  $left?: boolean;
+}
+
 // #region Styles
 
 const SpinContainer = styled.div<{ $left?: boolean }>`
@@ -13,10 +17,6 @@ const SpinContainer = styled.div<{ $left?: boolean }>`
 `;
 
 // #endregion
-
-interface SpinProps {
-  $left?: boolean;
-}
 
 const Spin = (props: SpinProps) => (
   <SpinContainer {...props}>

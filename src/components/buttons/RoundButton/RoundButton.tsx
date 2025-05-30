@@ -3,6 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ComponentProps } from 'react';
 import styled from 'styled-components';
 
+interface RoundButtonProps extends ComponentProps<'button'> {
+  iconSrc?: string;
+  FWicon?: IconDefinition;
+  $bg?: string;
+  $color?: string;
+  $small?: boolean;
+}
+
 // #region Styles
 
 const StyledButton = styled.button<RoundButtonProps>`
@@ -31,14 +39,6 @@ const StyledFrontAwesomeIcon = styled(FontAwesomeIcon)`
 `;
 
 // #endregion
-
-interface RoundButtonProps extends ComponentProps<'button'> {
-  iconSrc?: string;
-  FWicon?: IconDefinition;
-  $bg?: string;
-  $color?: string;
-  $small?: boolean;
-}
 
 const RoundButton = ({
   children,

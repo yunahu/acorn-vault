@@ -3,6 +3,10 @@ import type { TableProps as AntTableProps } from 'antd';
 import { Table as AntTable } from 'antd';
 import styled from 'styled-components';
 
+interface TableProps extends AntTableProps {
+  loading?: boolean;
+}
+
 // #region Styles
 
 const StyledAntTable = styled(AntTable<any>)`
@@ -28,10 +32,6 @@ const StyledAntTable = styled(AntTable<any>)`
 `;
 
 // #endregion
-
-interface TableProps extends AntTableProps {
-  loading?: boolean;
-}
 
 const Table = ({ loading, ...rest }: TableProps) => {
   return (
