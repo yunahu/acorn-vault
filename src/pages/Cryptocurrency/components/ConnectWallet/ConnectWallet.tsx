@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useConnect } from 'wagmi';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
-import AuthCardLayout from 'src/components/layouts/AuthCardLayout/AuthCardLayout';
+import AuthPageLayout from 'src/components/layouts/auth/AuthPageLayout/AuthPageLayout';
 import RoundButton from 'src/components/buttons/RoundButton/RoundButton';
 import metamask from 'src/assets/icons/metamask.svg';
 import coastline from 'src/assets/images/coastline.webp';
@@ -21,7 +21,7 @@ const ConnectWallet = () => {
   const { connectors, connect } = useConnect();
 
   return (
-    <AuthCardLayout image={coastline} title="Connect a wallet">
+    <AuthPageLayout image={coastline} title="Connect a wallet">
       <Options>
         {connectors.map((connector) => {
           const imageProp =
@@ -39,7 +39,7 @@ const ConnectWallet = () => {
           );
         })}
       </Options>
-    </AuthCardLayout>
+    </AuthPageLayout>
   );
 };
 

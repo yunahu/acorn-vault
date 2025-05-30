@@ -31,7 +31,7 @@ const Main = styled.div<{
   padding: ${({ $fullWidth }) => ($fullWidth ? '40px' : '20px')};
   gap: ${({ $gap, $fullWidth }) => ($gap ? $gap : $fullWidth ? '25px' : '0px')};
 
-  @media only screen and (max-width: 900px) {
+  @media only screen and (max-width: ${({ theme }) => theme.sizes.breakpoint}) {
     padding: 20px;
     gap: 15px;
   }

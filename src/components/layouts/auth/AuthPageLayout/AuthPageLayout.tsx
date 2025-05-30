@@ -10,22 +10,41 @@ const Container = styled.div`
   flex: 1;
 `;
 
-const Main = styled.div`
+const Main = styled.div<{ $image: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 1;
+  padding: 30px;
+
+  @media only screen and (max-width: ${({ theme }) => theme.sizes.breakpoint}) {
+    background-image: url(${({ $image }) => $image});
+    background-size: contain;
+    padding: 25px 15px;
+  }
+
+  @media only screen and (max-width: 650px) {
+    background-image: none;
+  }
 `;
 
 const Title = styled.div`
   text-align: center;
   font-size: 40px;
+
+  @media only screen and (max-width: ${({ theme }) => theme.sizes.breakpoint}) {
+    font-size: 35px;
+  }
 `;
 
 const SidePhoto = styled.div<{ $image: string }>`
   background-image: url(${(props) => props.$image});
   background-size: cover;
   width: 40%;
+
+  @media only screen and (max-width: ${({ theme }) => theme.sizes.breakpoint}) {
+    display: none;
+  }
 `;
 
 // #endregion
@@ -35,10 +54,10 @@ interface AuthCardLayoutProps extends ComponentProps<'div'> {
   title?: string;
 }
 
-const AuthCardLayout = ({ image, title, children }: AuthCardLayoutProps) => {
+const AuthPageLayout = ({ image, title, children }: AuthCardLayoutProps) => {
   return (
     <Container>
-      <Main>
+      <Main $image={image}>
         <Card $fullWidth $round>
           <Title>{title}</Title>
           {children}
@@ -49,4 +68,4 @@ const AuthCardLayout = ({ image, title, children }: AuthCardLayoutProps) => {
   );
 };
 
-export default AuthCardLayout;
+export default AuthPageLayout;

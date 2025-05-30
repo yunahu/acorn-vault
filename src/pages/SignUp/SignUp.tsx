@@ -1,82 +1,26 @@
-import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { auth } from 'src/services/firebase';
+import AuthPageLayout from 'src/components/layouts/auth/AuthPageLayout/AuthPageLayout';
+import {
+  ErrorMessage,
+  Footer,
+  InputContainer,
+  InputHeader,
+  PasswordToggle,
+  SignUpLink,
+  StyledForm,
+  StyledInput,
+  StyledLabel,
+} from 'src/components/layouts/auth/AuthCardLayouts/AuthCardLayouts';
 import useAuth, { mapUser } from 'src/hooks/useAuth';
-import AuthCardLayout from 'src/components/layouts/AuthCardLayout/AuthCardLayout';
 import dog from 'src/assets/images/dog.webp';
 import RoundButton from 'src/components/buttons/RoundButton/RoundButton';
 import GoogleSignInButton from 'src/components/buttons/GoogleSignInButton/GoogleSignInButton';
 import AnonymousSignInButton from 'src/components/buttons/AnonymousSignInButton/AnonymousSignInButton';
-
-// #region Styles
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-`;
-
-const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  color: ${({ theme }) => theme.colors.darkGray};
-`;
-
-const InputHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const StyledLabel = styled.label`
-  height: 27px;
-`;
-
-const StyledInput = styled.input`
-  width: 480px;
-  height: 56px;
-  border-radius: 12px;
-  padding: 0px 15px;
-  font-size: 17px;
-
-  &::placeholder {
-    color: #b1b2b0;
-  }
-`;
-
-const ErrorMessage = styled.div`
-  color: red;
-  text-align: center;
-  margin: 5px 0px;
-`;
-
-const PasswordToggle = styled.div`
-  width: 70px;
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  cursor: pointer;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.primary};
-  }
-`;
-
-const Footer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-`;
-
-const SignUpLink = styled(Link)`
-  text-decoration: underline;
-`;
-
-// #endregion
 
 const SignUp = () => {
   const [isHidden, setIsHidden] = useState(true);
@@ -113,7 +57,7 @@ const SignUp = () => {
   };
 
   return (
-    <AuthCardLayout title="Sign up" image={dog}>
+    <AuthPageLayout title="Sign up" image={dog}>
       <StyledForm onSubmit={handleSubmit}>
         <InputContainer>
           <StyledLabel htmlFor="email">Email address</StyledLabel>
@@ -203,7 +147,7 @@ const SignUp = () => {
         Already have an account?
         <SignUpLink to="/signin">Sign in</SignUpLink>
       </Footer>
-    </AuthCardLayout>
+    </AuthPageLayout>
   );
 };
 
