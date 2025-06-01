@@ -1,14 +1,14 @@
 import { LoadingOutlined } from '@ant-design/icons';
-import { Spin as AntSpin } from 'antd';
+import { Spin } from 'antd';
 import styled from 'styled-components';
 
-interface SpinProps {
+interface SpinnerProps {
   $left?: boolean;
 }
 
 // #region Styles
 
-const SpinContainer = styled.div<{ $left?: boolean }>`
+const SpinnerContainer = styled.div<SpinnerProps>`
   display: flex;
   align-items: center;
   padding: 15px;
@@ -18,10 +18,10 @@ const SpinContainer = styled.div<{ $left?: boolean }>`
 
 // #endregion
 
-const Spin = (props: SpinProps) => (
-  <SpinContainer {...props}>
-    <AntSpin indicator={<LoadingOutlined spin />} />
-  </SpinContainer>
+const Spinner = (props: SpinnerProps) => (
+  <SpinnerContainer {...props}>
+    <Spin indicator={<LoadingOutlined spin />} />
+  </SpinnerContainer>
 );
 
-export default Spin;
+export default Spinner;

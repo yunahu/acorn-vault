@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
-import Spin from 'src/components/Spin/Spin';
+import Spinner from 'src/components/spinners/Spinner/Spinners';
 import NoData from './components/NoData/NoData';
 
 export interface CardProps extends PropsWithChildren {
@@ -56,7 +56,7 @@ const Card = (props: CardProps) => {
       $round={$round}
     >
       {$isLoading ? (
-        <Spin />
+        <Spinner />
       ) : (
         <Main $fullWidth={$fullWidth}>
           {title && <Title>{title}</Title>}

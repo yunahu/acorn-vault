@@ -11,11 +11,11 @@ import {
 import { auth } from 'src/services/firebase';
 
 interface Auth {
-  user?: User | null;
+  user: User | null;
   setUser: Dispatch<SetStateAction<User | null>>;
 }
 
-interface User {
+export interface User {
   name: string | null;
   email: string | null;
   isAnonymous: boolean;

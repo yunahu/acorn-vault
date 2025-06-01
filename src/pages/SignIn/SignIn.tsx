@@ -2,7 +2,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import forrest from 'src/assets/images/forrest.jpg';
 import AnonymousSignInButton from 'src/components/buttons/AnonymousSignInButton/AnonymousSignInButton';
 import GoogleSignInButton from 'src/components/buttons/GoogleSignInButton/GoogleSignInButton';
@@ -28,9 +28,10 @@ const SignIn = () => {
   const [password, setPassword] = useState('');
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   useEffect(() => {
-    if (user) navigate('/', { replace: true });
+    if (user) navigate(state ?? '/', { replace: true });
   }, [user, navigate]);
 
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {

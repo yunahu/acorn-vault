@@ -4,7 +4,7 @@ import {
   ItemContainer,
   ItemLabel,
 } from 'src/components/layouts/TabLayouts/TabLayouts';
-import Spin from 'src/components/Spin/Spin';
+import Spinner from 'src/components/spinners/Spinner/Spinners';
 import { useCurrencies } from 'src/hooks/useCurrencies';
 import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
 
@@ -26,7 +26,7 @@ const SelectPrimaryCurrency = () => {
     <ItemContainer>
       <ItemLabel htmlFor="primary_currency">Primary Currency </ItemLabel>
       {settingsQuery.isLoading ? (
-        <Spin $left />
+        <Spinner $left />
       ) : (
         <Select
           disabled={settingsQuery.isLoading || loading}
