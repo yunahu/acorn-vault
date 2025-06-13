@@ -1,12 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import api from 'src/services/api';
-
-interface Currency {
-  id: number;
-  name: string;
-  code: string;
-  symbol: string;
-}
+import api, { Currency } from 'src/services/api';
 
 interface CurrenciesContextType {
   currencies: Currency[];

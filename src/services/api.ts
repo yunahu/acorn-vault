@@ -38,11 +38,15 @@ export interface Coin {
   coingecko_api_id: string;
 }
 
+export interface Currency {
+  id: number;
+  name: string;
+  code: string;
+  symbol: string;
+}
+
 export interface CoinPrices {
-  currency: {
-    code: string;
-    symbol: string;
-  };
+  currency: Currency;
   prices: {
     [coingecko_api_id: string]: number;
   };
@@ -166,14 +170,16 @@ export const getCoins = (): Promise<Coin[]> =>
 export const getCoinPrices = (): Promise<CoinPrices> =>
   api.get('/crypto/prices').then((x) => x.data);
 
-// --- Settings ---
+// --- User ---
 
-export const getSettings = () => api.get(`/settings`).then((x) => x.data);
+export const createUser = () => api.post('/user');
 
-export const updateSettings = (body: Partial<Settings>) =>
-  api.patch('/settings', body);
+export const getUserSettings = () => api.get(`/user`).then((x) => x.data);
 
-export const deleteUserAccount = () => api.delete('/settings/user');
+export const updateUserSettings = (body: Partial<Settings>) =>
+  api.patch('/user', body);
+
+export const deleteUser = () => api.delete('/user');
 
 // --- Statistics ---
 

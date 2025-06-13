@@ -1,5 +1,9 @@
 import { Spin as AntSpin, Input } from 'antd';
-import { deleteUser, getAuth, updateProfile } from 'firebase/auth';
+import {
+  deleteUser as deleteUserFirebase,
+  getAuth,
+  updateProfile,
+} from 'firebase/auth';
 import { KeyboardEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BasicButton from 'src/components/buttons/BasicButton/BasicButton';
@@ -9,7 +13,7 @@ import {
   TabContainer,
 } from 'src/components/layouts/TabLayouts/TabLayouts';
 import useAuth from 'src/hooks/useAuth';
-import { deleteUserAccount } from 'src/services/api';
+import { deleteUser } from 'src/services/api';
 
 const Profile = () => {
   const [loading, setLoading] = useState(false);
@@ -49,8 +53,8 @@ const Profile = () => {
     setLoading(true);
     if (auth.currentUser) {
       try {
-        await deleteUserAccount();
-        await deleteUser(auth.currentUser);
+        await deleteUser();
+        await deleteUserFirebase(auth.currentUser);
       } catch (err) {
         console.error(err);
       }

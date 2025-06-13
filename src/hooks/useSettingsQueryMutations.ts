@@ -1,17 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Settings, getSettings, updateSettings } from 'src/services/api';
+import {
+  Settings,
+  getUserSettings,
+  updateUserSettings,
+} from 'src/services/api';
 
 export const useSettingsQueryMutations = () => {
   const queryClient = useQueryClient();
 
   const settingsQuery = useQuery<Settings>({
     queryKey: ['settings'],
-    queryFn: getSettings,
+    queryFn: getUserSettings,
     staleTime: Infinity,
   });
 
   const updateSettingsMutation = useMutation({
-    mutationFn: (body: Partial<Settings>) => updateSettings(body),
+    mutationFn: (body: Partial<Settings>) => updateUserSettings(body),
     onMutate: async (body: Partial<Settings>) => {
       await queryClient.cancelQueries({ queryKey: ['settings'] });
       const previousSettings = queryClient.getQueryData(['settings']);

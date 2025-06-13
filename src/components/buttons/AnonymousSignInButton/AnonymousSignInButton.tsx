@@ -2,6 +2,7 @@ import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { signInAnonymously, updateProfile } from 'firebase/auth';
 import RoundButton from 'src/components/buttons/RoundButton/RoundButton';
 import useAuth, { mapUser } from 'src/hooks/useAuth';
+import { createUser } from 'src/services/api';
 import { auth } from 'src/services/firebase';
 
 const AnonymousSignInButton = () => {
@@ -10,6 +11,7 @@ const AnonymousSignInButton = () => {
   const handleSignInAnonymously = async () => {
     try {
       await signInAnonymously(auth);
+      createUser();
 
       if (auth.currentUser) {
         await updateProfile(auth.currentUser, {

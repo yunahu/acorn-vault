@@ -1,8 +1,8 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import dog from 'src/assets/images/dog.webp';
 import AnonymousSignInButton from 'src/components/buttons/AnonymousSignInButton/AnonymousSignInButton';
 import GoogleSignInButton from 'src/components/buttons/GoogleSignInButton/GoogleSignInButton';
@@ -20,6 +20,7 @@ import {
 } from 'src/components/layouts/auth/AuthCardLayouts/AuthCardLayouts';
 import AuthPageLayout from 'src/components/layouts/auth/AuthPageLayout/AuthPageLayout';
 import useAuth, { mapUser } from 'src/hooks/useAuth';
+import { createUser } from 'src/services/api';
 import { auth } from 'src/services/firebase';
 
 const SignUp = () => {
@@ -29,8 +30,13 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const { setUser } = useAuth();
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
+  const { state } = useLocation();
+
+  useEffect(() => {
+    if (user) navigate(state ?? '/', { replace: true });
+  }, [user]);
 
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -49,7 +55,7 @@ const SignUp = () => {
         });
 
         setUser(mapUser(auth.currentUser));
-        navigate('/', { replace: true });
+        createUser();
       }
     } catch (err) {
       console.error(err);
@@ -145,7 +151,9 @@ const SignUp = () => {
       <AnonymousSignInButton />
       <Footer>
         Already have an account?
-        <SignUpLink to="/signin">Sign in</SignUpLink>
+        <SignUpLink to="/signin" state={state} replace>
+          Sign in
+        </SignUpLink>
       </Footer>
     </AuthPageLayout>
   );

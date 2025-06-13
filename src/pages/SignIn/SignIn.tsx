@@ -32,7 +32,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (user) navigate(state ?? '/', { replace: true });
-  }, [user, navigate]);
+  }, [user]);
 
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -90,7 +90,9 @@ const SignIn = () => {
       <AnonymousSignInButton />
       <Footer>
         Don't have an account?
-        <SignUpLink to="/signup">Sign up</SignUpLink>
+        <SignUpLink to="/signup" state={state} replace>
+          Sign up
+        </SignUpLink>
       </Footer>
     </AuthPageLayout>
   );
