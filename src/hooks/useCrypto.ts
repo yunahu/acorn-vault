@@ -39,7 +39,7 @@ const useCrypto = () => {
 
   const statsQuery = useQuery({
     queryKey: ['cryptoStats', coinQuery.data, priceQuery.data],
-    staleTime: 60000,
+    enabled: !(coinQuery.isFetching || priceQuery.isFetching),
     queryFn: async () => {
       if (!coinQuery.data || !priceQuery.data) return;
 
@@ -77,7 +77,7 @@ const useCrypto = () => {
 
       return result;
     },
-    enabled: !!coinQuery.data && !!priceQuery.data,
+    staleTime: 60000,
   });
 
   return {

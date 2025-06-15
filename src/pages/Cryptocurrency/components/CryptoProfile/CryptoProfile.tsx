@@ -56,13 +56,13 @@ const StyledImg = styled.img`
 
 const CryptoProfile = () => {
   const { address } = useAccount();
-  const { data, error, status } = useEnsName({ address });
+  const { data, error, isLoading, isError } = useEnsName({ address });
   const { disconnect } = useDisconnect();
 
-  if (status === 'error') console.error(error.message);
+  if (isError) console.error(error.message);
 
   return (
-    <StyledCard $isLoading={status === 'pending'}>
+    <StyledCard $isLoading={isLoading}>
       <StyledImg src={cryptoWallet} />
       <Container>
         <List>
