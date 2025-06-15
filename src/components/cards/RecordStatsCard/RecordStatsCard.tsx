@@ -20,7 +20,7 @@ import { Range } from 'src/pages/Records/Records';
 import { getRecordStats, RecordStats } from 'src/services/api';
 import { formatNumber } from 'src/utils/helpers';
 
-interface RecordsStatsProps {
+interface RecordStatsProps {
   range?: Range;
 }
 
@@ -34,7 +34,7 @@ const processData = (
     value: formatNumber(row.percentage),
   })) ?? [];
 
-const RecordStatsCard = ({ range }: RecordsStatsProps) => {
+const RecordStatsCard = ({ range }: RecordStatsProps) => {
   const { getCode, getSymbol } = useCurrencies();
   const { recordQuery } = useRecordQueryMutations(
     range ?? {
@@ -62,7 +62,7 @@ const RecordStatsCard = ({ range }: RecordsStatsProps) => {
     <Card
       title="Records"
       $isLoading={isLoading}
-      isNoData={data?.rows.length === 0}
+      showNoDataMessage={!data?.rows.length}
     >
       {data && (
         <Body>

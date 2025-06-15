@@ -33,21 +33,26 @@ const NetWorthCard = () => {
   const { getSymbol, getCode } = useCurrencies();
   const { accountQuery } = useAccountQueryMutations();
   const { settingsQuery } = useSettingsQueryMutations();
-  const query = useQuery<NetWorth>({
+  const { data, isLoading } = useQuery<NetWorth>({
     queryKey: ['netWorth', accountQuery.data, settingsQuery.data],
     queryFn: getNetWorth,
     staleTime: Infinity,
   });
 
   return (
-    <Card title="Total Net Worth" $isLoading={query.isLoading}>
-      <Body>
-        <Currency>{query.data && getCode(query.data.currency_id)}</Currency>
-        <Amount $negative={query.data && query.data?.amount < 0}>
-          {query.data && getSymbol(query.data.currency_id)}{' '}
-          {query.data && formatNumber(query.data.amount)}
-        </Amount>
-      </Body>
+    <Card
+      title="Total Net Worth"
+      $isLoading={isLoading}
+      showNoDataMessage={!data}
+    >
+      {data && (
+        <Body>
+          <Currency>{getCode(data.currency_id)}</Currency>
+          <Amount $negative={data.amount < 0}>
+            {getSymbol(data.currency_id)} {formatNumber(data.amount)}
+          </Amount>
+        </Body>
+      )}
     </Card>
   );
 };

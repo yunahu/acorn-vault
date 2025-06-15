@@ -1,14 +1,14 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 import Spinner from 'src/components/spinners/Spinner/Spinners';
-import NoData from './components/NoData/NoData';
+import NoDataMessage from './components/NoData/NoData';
 
 export interface CardProps extends PropsWithChildren {
   $fullWidth?: boolean;
   $gap?: string;
   $isLoading?: boolean;
   $round?: boolean;
-  isNoData?: boolean;
+  showNoDataMessage?: boolean;
   title?: string;
 }
 
@@ -45,9 +45,15 @@ const Main = styled.div<{ $fullWidth?: boolean }>`
 
 // #endregion
 
-const Card = (props: CardProps) => {
-  const { $fullWidth, $isLoading, $round, children, isNoData, title, ...rest } =
-    props;
+const Card = ({
+  $fullWidth,
+  $isLoading,
+  $round,
+  children,
+  showNoDataMessage,
+  title,
+  ...rest
+}: CardProps) => {
   return (
     <Container
       {...rest}
@@ -60,7 +66,7 @@ const Card = (props: CardProps) => {
       ) : (
         <Main $fullWidth={$fullWidth}>
           {title && <Title>{title}</Title>}
-          {isNoData ? <NoData /> : children}
+          {showNoDataMessage ? <NoDataMessage /> : children}
         </Main>
       )}
     </Container>

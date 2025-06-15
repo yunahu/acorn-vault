@@ -16,11 +16,11 @@ const StyledIcon = styled(FontAwesomeIcon)`
   height: 18px;
 `;
 
-const NoData = () => (
+const NoDataMessage = () => (
   <Container>
     <StyledIcon icon={faChartColumn} />
     No Data
   </Container>
 );
 
-export default NoData;
+export default NoDataMessage;

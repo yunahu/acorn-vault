@@ -28,8 +28,8 @@ const processData = (
   })) ?? [];
 
 const NetWorthByCurrencyCard = () => {
-  const { accountQuery } = useAccountQueryMutations();
   const { getCode, getSymbol } = useCurrencies();
+  const { accountQuery } = useAccountQueryMutations();
   const { settingsQuery } = useSettingsQueryMutations();
   const { data, isLoading } = useQuery<NetWorthByCurrency>({
     queryKey: ['netWorthByCurrency', accountQuery.data, settingsQuery.data],
@@ -46,7 +46,7 @@ const NetWorthByCurrencyCard = () => {
     <Card
       title="Net Worth By Currency"
       $isLoading={isLoading}
-      isNoData={data?.rows.length === 0}
+      showNoDataMessage={!data?.rows.length}
     >
       {data && (
         <Body>
