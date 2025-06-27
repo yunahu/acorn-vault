@@ -1,15 +1,20 @@
 import type { TableProps } from 'antd';
-import Table from 'src/components/Table/Table';
 import TextButton from 'src/components/buttons/TextButton/TextButton';
 import EditableInput from 'src/components/editables/EditableInput/EditableInput';
-import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
+import Table from 'src/components/Table/Table';
+import {
+  useAccountsQuery,
+  useDeleteAccount,
+  useUpdateAccount,
+} from 'src/hooks/accounts';
 import { useCurrencies } from 'src/hooks/useCurrencies';
 import NewAccountModal from './components/NewAccountModal/NewAccountModal';
 
 const AccountsTable = () => {
   const { getCode, getSymbol } = useCurrencies();
-  const { accountQuery, updateAccountMutation, deleteAccountMutation } =
-    useAccountQueryMutations();
+  const accountQuery = useAccountsQuery();
+  const updateAccount = useUpdateAccount();
+  const deleteAccount = useDeleteAccount();
 
   const columns: TableProps['columns'] = [
     {
@@ -23,7 +28,7 @@ const AccountsTable = () => {
           initialValue={account.name}
           onOk={(newName: string) => {
             if (newName !== account.name) {
-              updateAccountMutation.mutate({
+              updateAccount.mutate({
                 id: account.id,
                 body: { name: newName },
               });
@@ -53,7 +58,7 @@ const AccountsTable = () => {
           initialValue={account.balance.toString()}
           onOk={(newBalance) => {
             if (parseFloat(newBalance) !== account.balance) {
-              updateAccountMutation.mutate({
+              updateAccount.mutate({
                 id: account.id,
                 body: { balance: parseFloat(newBalance) },
               });
@@ -69,7 +74,7 @@ const AccountsTable = () => {
       render: (_, account) => (
         <TextButton
           onClick={() =>
-            updateAccountMutation.mutate({
+            updateAccount.mutate({
               id: account.id,
               body: {
                 is_primary_payment_method: !account.is_primary_payment_method,
@@ -86,7 +91,7 @@ const AccountsTable = () => {
       dataIndex: 'action',
       key: 'action',
       render: (_, account) => (
-        <TextButton onClick={() => deleteAccountMutation.mutate(account.id)}>
+        <TextButton onClick={() => deleteAccount.mutate(account.id)}>
           Delete
         </TextButton>
       ),

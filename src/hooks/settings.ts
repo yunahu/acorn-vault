@@ -5,16 +5,16 @@ import {
   updateUserSettings,
 } from 'src/services/api';
 
-export const useSettingsQueryMutations = () => {
-  const queryClient = useQueryClient();
-
-  const settingsQuery = useQuery<Settings>({
+export const useSettingsQuery = () =>
+  useQuery({
     queryKey: ['settings'],
     queryFn: getUserSettings,
     staleTime: Infinity,
   });
 
-  const updateSettingsMutation = useMutation({
+export const useUpdateSettings = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationFn: (body: Partial<Settings>) => updateUserSettings(body),
     onMutate: async (body: Partial<Settings>) => {
       await queryClient.cancelQueries({ queryKey: ['settings'] });
@@ -31,14 +31,11 @@ export const useSettingsQueryMutations = () => {
       console.error('Error: ', err);
       queryClient.setQueryData(['settings'], context?.previousSettings);
     },
-    onSettled: async () =>
-      queryClient.invalidateQueries({ queryKey: ['settings'] }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ['settings'] });
+      queryClient.invalidateQueries({ queryKey: ['prices'] });
+      queryClient.invalidateQueries({ queryKey: ['accountStats'] });
+      queryClient.invalidateQueries({ queryKey: ['recordStats'] });
+    },
   });
-
-  return {
-    settingsQuery,
-    updateSettingsMutation,
-  };
 };
-
-export default useSettingsQueryMutations;

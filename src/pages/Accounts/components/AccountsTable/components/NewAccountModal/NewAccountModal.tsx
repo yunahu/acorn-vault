@@ -2,7 +2,7 @@ import { Button, Modal } from 'antd';
 import { useState } from 'react';
 import styled from 'styled-components';
 import BasicButton from 'src/components/buttons/BasicButton/BasicButton';
-import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
+import { useCreateAccount } from 'src/hooks/accounts';
 import { useCurrencies } from 'src/hooks/useCurrencies';
 
 // #region Styles
@@ -36,7 +36,7 @@ const NewAccountModal = () => {
   const [isPrimaryPaymentMethod, setIsPrimaryPaymentMethod] =
     useState<boolean>(true);
   const { currencies } = useCurrencies();
-  const { createAccountMutation } = useAccountQueryMutations();
+  const createAccount = useCreateAccount();
 
   const resetForm = () => {
     setName('New account');
@@ -51,7 +51,7 @@ const NewAccountModal = () => {
   };
 
   const handleOk = () => {
-    createAccountMutation.mutate(
+    createAccount.mutate(
       {
         name,
         currencyId,
@@ -81,7 +81,7 @@ const NewAccountModal = () => {
           <Button
             key="submit"
             type="primary"
-            loading={createAccountMutation.isPending}
+            loading={createAccount.isPending}
             onClick={handleOk}
           >
             Create

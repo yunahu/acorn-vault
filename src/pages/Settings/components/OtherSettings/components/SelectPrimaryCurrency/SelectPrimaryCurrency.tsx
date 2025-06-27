@@ -1,17 +1,17 @@
 import { Select } from 'antd';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
   ItemContainer,
   ItemLabel,
 } from 'src/components/layouts/TabLayouts/TabLayouts';
 import Spinner from 'src/components/spinners/Spinner/Spinners';
+import { useSettingsQuery, useUpdateSettings } from 'src/hooks/settings';
 import { useCurrencies } from 'src/hooks/useCurrencies';
-import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
 
 const SelectPrimaryCurrency = () => {
-  const [loading, setLoading] = useState(false);
   const { currencies } = useCurrencies();
-  const { settingsQuery, updateSettingsMutation } = useSettingsQueryMutations();
+  const settingsQuery = useSettingsQuery();
+  const updateSettings = useUpdateSettings();
 
   const currenciesOptions = useMemo(
     () =>
@@ -29,25 +29,17 @@ const SelectPrimaryCurrency = () => {
         <Spinner $left />
       ) : (
         <Select
-          disabled={settingsQuery.isLoading || loading}
-          loading={settingsQuery.isLoading || loading}
+          disabled={settingsQuery.isLoading || updateSettings.isPending}
+          loading={settingsQuery.isLoading || updateSettings.isPending}
           id="primary_currency"
           placeholder="Select primary currency"
           options={currenciesOptions}
           defaultValue={settingsQuery.data?.primary_currency}
           onChange={(newCurrencyId) => {
-            setLoading(true);
             if (newCurrencyId !== settingsQuery.data?.primary_currency)
-              updateSettingsMutation.mutate(
-                {
-                  primary_currency: newCurrencyId,
-                },
-                {
-                  onSettled: () => {
-                    setLoading(false);
-                  },
-                }
-              );
+              updateSettings.mutate({
+                primary_currency: newCurrencyId,
+              });
           }}
         />
       )}

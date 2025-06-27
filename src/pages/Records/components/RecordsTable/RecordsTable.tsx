@@ -7,9 +7,14 @@ import EditableDate from 'src/components/editables/EditableDate/EditableDate';
 import EditableInput from 'src/components/editables/EditableInput/EditableInput';
 import EditableSelect from 'src/components/editables/EditableSelect/EditableSelect';
 import Table from 'src/components/Table/Table';
-import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
+import { useAccountsQuery } from 'src/hooks/accounts';
 import { useCurrencies } from 'src/hooks/useCurrencies';
-import useRecordQueryMutations from 'src/hooks/useRecordQueryMutations';
+import {
+  useCreateRecord,
+  useDeleteRecord,
+  useRecordsQuery,
+  useUpdateRecord,
+} from 'src/hooks/records';
 import { Range } from 'src/pages/Records/Records';
 
 interface RecordsTableProps {
@@ -18,13 +23,11 @@ interface RecordsTableProps {
 
 const RecordsTable = ({ range }: RecordsTableProps) => {
   const { getCode, getSymbol } = useCurrencies();
-  const {
-    createRecordMutation,
-    recordQuery,
-    updateRecordMutation,
-    deleteRecordMutation,
-  } = useRecordQueryMutations(range);
-  const { accountQuery } = useAccountQueryMutations();
+  const createRecord = useCreateRecord(range);
+  const recordsQuery = useRecordsQuery(range);
+  const updateRecord = useUpdateRecord(range);
+  const deleteRecord = useDeleteRecord(range);
+  const accountQuery = useAccountsQuery();
 
   const primaryPaymentOptions = useMemo(() => {
     const primaryPaymentMethods = accountQuery.data?.filter(
@@ -49,7 +52,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
           defaultValue={record.date}
           onChange={(newDate) => {
             const day = newDate.format('YYYY-MM-DD');
-            updateRecordMutation.mutate({
+            updateRecord.mutate({
               id: record.id,
               body: { date: dayjs.utc(day) },
             });
@@ -68,7 +71,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
           initialValue={record.description}
           onOk={(newDescription: string) => {
             if (newDescription !== record.description)
-              updateRecordMutation.mutate({
+              updateRecord.mutate({
                 id: record.id,
                 body: { description: newDescription },
               });
@@ -101,7 +104,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
             defaultValue={defaultValue}
             onChange={(newAccountId) => {
               if (newAccountId !== record.account_id)
-                updateRecordMutation.mutate({
+                updateRecord.mutate({
                   id: record.id,
                   body: { account_id: newAccountId ?? null },
                 });
@@ -153,7 +156,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
             initialValue={record.amount.toString()}
             onOk={(newAmount) => {
               if (parseFloat(newAmount) !== record.amount)
-                updateRecordMutation.mutate({
+                updateRecord.mutate({
                   id: record.id,
                   body: { amount: parseFloat(newAmount) },
                 });
@@ -167,7 +170,7 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
       dataIndex: 'action',
       key: 'action',
       render: (_, record) => (
-        <TextButton onClick={() => deleteRecordMutation.mutate(record.id)}>
+        <TextButton onClick={() => deleteRecord.mutate(record.id)}>
           Delete
         </TextButton>
       ),
@@ -176,12 +179,12 @@ const RecordsTable = ({ range }: RecordsTableProps) => {
 
   return (
     <Table
-      loading={recordQuery.isLoading}
-      dataSource={recordQuery.data}
+      loading={recordsQuery.isLoading}
+      dataSource={recordsQuery.data}
       columns={columns}
       rowKey="id"
       footer={() => (
-        <BasicButton onClick={() => createRecordMutation.mutate({})}>
+        <BasicButton onClick={() => createRecord.mutate({})}>
           + New record
         </BasicButton>
       )}

@@ -1,9 +1,28 @@
 import { TableProps } from 'antd';
+import BigNumber from 'bignumber.js';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useAccount } from 'wagmi';
 import Table from 'src/components/Table/Table';
-import useCrypto from 'src/hooks/useCrypto';
+import { useCoinQuery, usePriceQuery } from 'src/hooks/crypto';
+import { Row } from 'src/services/api';
+import { getCoinsWithBalance } from 'src/services/viem';
 import { formatNumber } from 'src/utils/helpers';
 import CryptoCard from './components/CryptoCard/CryptoCard';
+
+export interface CoinStats {
+  primaryCurrency: {
+    symbol: string;
+    code: string;
+  };
+  rows: Row[];
+  sum: BigNumber;
+}
+
+export interface ProcessingResult<T> {
+  isLoading: boolean;
+  data: T | undefined;
+}
 
 // #region Styles
 
@@ -27,7 +46,57 @@ const FooterTitle = styled.span`
 // #endregion
 
 const CryptoDetails = () => {
-  const { statsQuery } = useCrypto();
+  const coinQuery = useCoinQuery();
+  const priceQuery = usePriceQuery();
+  const { address } = useAccount();
+  const [coinStats, setCoinStats] = useState<ProcessingResult<CoinStats>>({
+    isLoading: true,
+    data: undefined,
+  });
+
+  useEffect(() => {
+    const run = async () => {
+      if (!coinQuery.data || !priceQuery.data) return;
+
+      setCoinStats({ isLoading: true, data: undefined });
+
+      const coinsWithBalance = await getCoinsWithBalance(
+        coinQuery.data,
+        address
+      );
+
+      const { currency, prices } = priceQuery.data;
+
+      let sum = new BigNumber(0);
+
+      const rows: Row[] = [];
+      coinsWithBalance?.forEach(({ coin, amount }) => {
+        const amountInPC = amount.multipliedBy(prices[coin.coingecko_api_id]);
+        sum = sum.plus(amountInPC);
+        rows.push({
+          coin,
+          amount,
+          amountInPC,
+          percentage: new BigNumber(0),
+        });
+      });
+
+      rows.forEach((coin) => {
+        if (!coin.amountInPC.isEqualTo(0))
+          coin['percentage'] = coin.amountInPC.dividedBy(sum).multipliedBy(100);
+      });
+
+      const result: CoinStats = {
+        primaryCurrency: currency,
+        rows,
+        sum,
+      };
+
+      setCoinStats({ isLoading: false, data: result });
+    };
+
+    run();
+  }, [coinQuery.data, priceQuery.data]);
 
   const columns: TableProps['columns'] = [
     {
@@ -49,8 +118,8 @@ const CryptoDetails = () => {
       key: 'value',
       align: 'right',
       render: (_, { amountInPC }) => {
-        if (!statsQuery.data) return '';
-        const { primaryCurrency } = statsQuery.data;
+        if (!coinStats.data) return '';
+        const { primaryCurrency } = coinStats.data;
         return `${primaryCurrency.code} ${primaryCurrency.symbol} ${formatNumber(amountInPC.toFixed())}`;
       },
     },
@@ -59,24 +128,24 @@ const CryptoDetails = () => {
   return (
     <Container>
       <Table
-        loading={statsQuery.isLoading}
-        dataSource={statsQuery.data?.rows}
+        loading={coinStats.isLoading}
+        dataSource={coinStats.data?.rows}
         columns={columns}
         rowKey={(row) => row.coin.id}
         footer={() => (
           <Footer>
             <FooterTitle>TOTAL:</FooterTitle>
-            {statsQuery.data?.sum
-              ? statsQuery.data?.primaryCurrency.code +
+            {coinStats.data?.sum
+              ? coinStats.data?.primaryCurrency.code +
                 ' ' +
-                statsQuery.data?.primaryCurrency.symbol +
+                coinStats.data?.primaryCurrency.symbol +
                 ' ' +
-                formatNumber(statsQuery.data?.sum.toFixed())
+                formatNumber(coinStats.data?.sum.toFixed())
               : ''}
           </Footer>
         )}
       />
-      <CryptoCard />
+      <CryptoCard coinStats={coinStats} />
     </Container>
   );
 };

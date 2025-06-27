@@ -12,10 +12,9 @@ interface UpdateParams {
   body: Partial<Account>;
 }
 
-const useAccountQueryMutations = () => {
+export const useCreateAccount = () => {
   const queryClient = useQueryClient();
-
-  const createAccountMutation = useMutation({
+  return useMutation({
     mutationFn: (variables: {
       name: string;
       currencyId: number;
@@ -47,16 +46,23 @@ const useAccountQueryMutations = () => {
       console.error('Error: ', err);
       queryClient.setQueryData(['accounts'], context?.previousAccounts);
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['accounts'] }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['accountStats'] });
+    },
   });
+};
 
-  const accountQuery = useQuery({
+export const useAccountsQuery = () =>
+  useQuery({
     queryKey: ['accounts'],
     queryFn: getAccounts,
     staleTime: Infinity,
   });
 
-  const updateAccountMutation = useMutation({
+export const useUpdateAccount = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationFn: ({ id, body }: UpdateParams) => updateAccount(id, body),
     onMutate: async ({ id, body }: UpdateParams) => {
       await queryClient.cancelQueries({ queryKey: ['accounts'] });
@@ -77,11 +83,16 @@ const useAccountQueryMutations = () => {
       console.error('Error: ', err);
       queryClient.setQueryData(['accounts'], context?.previousAccounts);
     },
-    onSettled: async () =>
-      queryClient.invalidateQueries({ queryKey: ['accounts'] }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['accountStats'] });
+    },
   });
+};
 
-  const deleteAccountMutation = useMutation({
+export const useDeleteAccount = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationFn: deleteAccount,
     onMutate: async (accountId) => {
       await queryClient.cancelQueries({ queryKey: ['accounts'] });
@@ -95,15 +106,9 @@ const useAccountQueryMutations = () => {
       console.error('Error: ', err);
       queryClient.setQueryData(['accounts'], context?.previousAccounts);
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['accounts'] }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['accountStats'] });
+    },
   });
-
-  return {
-    createAccountMutation,
-    accountQuery,
-    updateAccountMutation,
-    deleteAccountMutation,
-  };
 };
-
-export default useAccountQueryMutations;

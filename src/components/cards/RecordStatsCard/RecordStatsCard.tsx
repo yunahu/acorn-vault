@@ -1,5 +1,4 @@
 import { ResponsivePie } from '@nivo/pie';
-import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import Card from 'src/components/cards/Card/Card';
 import {
@@ -13,11 +12,10 @@ import {
   Total,
   Unassigned,
 } from 'src/components/cards/StatsCardLayouts/StatsCardLayouts';
+import { useRecordStatsQuery } from 'src/hooks/stats';
 import { useCurrencies } from 'src/hooks/useCurrencies';
-import useRecordQueryMutations from 'src/hooks/useRecordQueryMutations';
-import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
 import { Range } from 'src/pages/Records/Records';
-import { getRecordStats, RecordStats } from 'src/services/api';
+import { RecordStats } from 'src/services/api';
 import { formatNumber } from 'src/utils/helpers';
 
 interface RecordStatsProps {
@@ -36,22 +34,12 @@ const processData = (
 
 const RecordStatsCard = ({ range }: RecordStatsProps) => {
   const { getCode, getSymbol } = useCurrencies();
-  const { recordQuery } = useRecordQueryMutations(
+  const { data, isLoading } = useRecordStatsQuery(
     range ?? {
       start: null,
       end: null,
     }
   );
-  const { settingsQuery } = useSettingsQueryMutations();
-  const { data, isLoading } = useQuery<RecordStats>({
-    queryKey: ['recordStats', recordQuery.data, settingsQuery.data],
-    queryFn: async () => {
-      const from = range?.start?.format('YYYY-MM-DD');
-      const to = range?.end?.format('YYYY-MM-DD');
-      return getRecordStats(from, to);
-    },
-    staleTime: Infinity,
-  });
 
   const chartData = useMemo(
     () => (data ? processData(data, getCode) : []),

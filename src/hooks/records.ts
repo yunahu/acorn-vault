@@ -14,10 +14,9 @@ interface UpdateParams {
   body: Partial<Record>;
 }
 
-const useRecordQueryMutations = (range: Range) => {
+export const useCreateRecord = (range: Range) => {
   const queryClient = useQueryClient();
-
-  const createRecordMutation = useMutation({
+  return useMutation({
     mutationFn: ({
       date = dayjs.utc(dayjs().format('YYYY-MM-DD')),
       description = 'New record',
@@ -55,11 +54,15 @@ const useRecordQueryMutations = (range: Range) => {
       console.error('Error: ', err);
       queryClient.setQueryData(['records', range], context?.previousRecords);
     },
-    onSettled: () =>
-      queryClient.invalidateQueries({ queryKey: ['records', range] }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ['records'] });
+      queryClient.invalidateQueries({ queryKey: ['recordStats'] });
+    },
   });
+};
 
-  const recordQuery = useQuery({
+export const useRecordsQuery = (range: Range) =>
+  useQuery({
     queryKey: ['records', range],
     queryFn: async () => {
       const from = range?.start?.format('YYYY-MM-DD');
@@ -69,7 +72,9 @@ const useRecordQueryMutations = (range: Range) => {
     staleTime: Infinity,
   });
 
-  const updateRecordMutation = useMutation({
+export const useUpdateRecord = (range: Range) => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationFn: ({ id, body }: UpdateParams) => updateRecord(id, body),
     onMutate: async ({ id, body }: UpdateParams) => {
       await queryClient.cancelQueries({ queryKey: ['records', range] });
@@ -93,11 +98,16 @@ const useRecordQueryMutations = (range: Range) => {
       console.error('Error: ', err);
       queryClient.setQueryData(['records', range], context?.previousRecords);
     },
-    onSettled: async () =>
-      queryClient.invalidateQueries({ queryKey: ['records', range] }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ['records'] });
+      queryClient.invalidateQueries({ queryKey: ['recordStats'] });
+    },
   });
+};
 
-  const deleteRecordMutation = useMutation({
+export const useDeleteRecord = (range: Range) => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationFn: deleteRecord,
     onMutate: async (id: number) => {
       await queryClient.cancelQueries({ queryKey: ['records', range] });
@@ -111,16 +121,9 @@ const useRecordQueryMutations = (range: Range) => {
       console.error('Error: ', err);
       queryClient.setQueryData(['records', range], context?.previousRecords);
     },
-    onSettled: () =>
-      queryClient.invalidateQueries({ queryKey: ['records', range] }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ['records'] });
+      queryClient.invalidateQueries({ queryKey: ['recordStats'] });
+    },
   });
-
-  return {
-    createRecordMutation,
-    recordQuery,
-    updateRecordMutation,
-    deleteRecordMutation,
-  };
 };
-
-export default useRecordQueryMutations;

@@ -1,5 +1,4 @@
 import { ResponsivePie } from '@nivo/pie';
-import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import Card from 'src/components/cards/Card/Card';
 import {
@@ -11,14 +10,13 @@ import {
   List,
   RowContainer,
 } from 'src/components/cards/StatsCardLayouts/StatsCardLayouts';
-import useAccountQueryMutations from 'src/hooks/useAccountQueryMutations';
 import { useCurrencies } from 'src/hooks/useCurrencies';
-import useSettingsQueryMutations from 'src/hooks/useSettingsQueryMutations';
-import { getNetWorthByCurrency, NetWorthByCurrency } from 'src/services/api';
+import { useAccountStatsQuery } from 'src/hooks/stats';
+import { AccountStats } from 'src/services/api';
 import { formatNumber } from 'src/utils/helpers';
 
 const processData = (
-  data: NetWorthByCurrency,
+  data: AccountStats,
   getCode: (id: number) => string | undefined
 ) =>
   data.rows.map((row) => ({
@@ -29,13 +27,7 @@ const processData = (
 
 const NetWorthByCurrencyCard = () => {
   const { getCode, getSymbol } = useCurrencies();
-  const { accountQuery } = useAccountQueryMutations();
-  const { settingsQuery } = useSettingsQueryMutations();
-  const { data, isLoading } = useQuery<NetWorthByCurrency>({
-    queryKey: ['netWorthByCurrency', accountQuery.data, settingsQuery.data],
-    queryFn: getNetWorthByCurrency,
-    staleTime: Infinity,
-  });
+  const { data, isLoading } = useAccountStatsQuery();
 
   const chartData = useMemo(
     () => (data ? processData(data, getCode) : []),

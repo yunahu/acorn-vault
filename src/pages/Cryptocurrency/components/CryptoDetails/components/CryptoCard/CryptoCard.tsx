@@ -10,8 +10,12 @@ import {
   List,
   RowContainer,
 } from 'src/components/cards/StatsCardLayouts/StatsCardLayouts';
-import useCrypto, { CoinStats } from 'src/hooks/useCrypto';
 import { formatNumber } from 'src/utils/helpers';
+import { CoinStats, ProcessingResult } from '../../CryptoDetails';
+
+interface CryptoCardProps {
+  coinStats: ProcessingResult<CoinStats>;
+}
 
 const processData = (data: CoinStats) => {
   const nonZeroRows = data.rows.filter((x) => x.amountInPC.toNumber() > 0);
@@ -24,10 +28,8 @@ const processData = (data: CoinStats) => {
   );
 };
 
-const CryptoCard = () => {
-  const {
-    statsQuery: { data, isLoading },
-  } = useCrypto();
+const CryptoCard = ({ coinStats }: CryptoCardProps) => {
+  const { data, isLoading } = coinStats;
 
   const chartData = useMemo(() => (data ? processData(data) : []), [data]);
 

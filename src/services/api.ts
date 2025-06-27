@@ -29,6 +29,17 @@ export interface Account {
   is_primary_payment_method: boolean;
 }
 
+export interface AccountStats {
+  primary_currency: number;
+  net_worth: number;
+  rows: {
+    currency_id: number;
+    amount: number;
+    amount_in_PC: number;
+    percentage: number;
+  }[];
+}
+
 export interface Coin {
   id: number;
   name: string;
@@ -38,18 +49,18 @@ export interface Coin {
   coingecko_api_id: string;
 }
 
-export interface Currency {
-  id: number;
-  name: string;
-  code: string;
-  symbol: string;
-}
-
 export interface CoinPrices {
   currency: Currency;
   prices: {
     [coingecko_api_id: string]: number;
   };
+}
+
+export interface Currency {
+  id: number;
+  name: string;
+  code: string;
+  symbol: string;
 }
 
 export interface Record {
@@ -58,25 +69,6 @@ export interface Record {
   description: string;
   account_id: number | null;
   amount: number;
-}
-
-export interface Settings {
-  primary_currency: number;
-}
-
-export interface NetWorth {
-  currency_id: number;
-  amount: number;
-}
-
-export interface NetWorthByCurrency {
-  primary_currency: number;
-  rows: {
-    currency_id: number;
-    amount: number;
-    amount_in_PC: number;
-    percentage: number;
-  }[];
 }
 
 export interface RecordStats {
@@ -89,6 +81,17 @@ export interface RecordStats {
     amount_in_PC: number;
     percentage: number;
   }[];
+}
+
+export interface Row {
+  coin: Coin;
+  amount: BigNumber;
+  amountInPC: BigNumber;
+  percentage: BigNumber;
+}
+
+export interface Settings {
+  primary_currency: number;
 }
 
 // --- Accounts ---
@@ -110,7 +113,7 @@ export const getAccounts = (): Promise<Account[]> =>
   api.get('/accounts').then((x) => x.data);
 
 export const updateAccount = (id: number, body: Partial<Account>) =>
-  api.patch(`accounts/${id}`, body);
+  api.patch(`/accounts/${id}`, body);
 
 export const deleteAccount = (id: number) => api.delete(`/accounts/${id}`);
 
@@ -158,7 +161,7 @@ export const getRecords = async (
 };
 
 export const updateRecord = (id: number, body: Partial<Record>) =>
-  api.patch(`records/${id}`, body);
+  api.patch(`/records/${id}`, body);
 
 export const deleteRecord = (id: number) => api.delete(`/records/${id}`);
 
@@ -183,11 +186,8 @@ export const deleteUser = () => api.delete('/user');
 
 // --- Statistics ---
 
-export const getNetWorth = () =>
-  api.get('/statistics/net_worth').then((x) => x.data);
-
-export const getNetWorthByCurrency = () =>
-  api.get('/statistics/net_worth_by_currency').then((x) => x.data);
+export const getAccountStats = (): Promise<AccountStats> =>
+  api.get('/statistics/account_stats').then((x) => x.data);
 
 export const getRecordStats = (
   from: string | null | undefined,
