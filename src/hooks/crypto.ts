@@ -12,5 +12,5 @@ export const usePriceQuery = () =>
   useQuery({
     queryKey: ['prices'],
     queryFn: getCoinPrices,
-    staleTime: 60000,
+    refetchInterval: 180000,
   });
