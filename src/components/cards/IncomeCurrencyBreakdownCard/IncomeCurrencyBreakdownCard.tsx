@@ -26,13 +26,13 @@ const processData = (
   data: RecordStats,
   getCode: (id: number) => string | undefined
 ) =>
-  data.rows.map((row) => ({
+  data.income_items.currency_breakdown.map((row) => ({
     id: getCode(row.currency_id),
     label: getCode(row.currency_id),
     value: formatNumber(row.percentage),
   })) ?? [];
 
-const RecordStatsCard = ({ range }: RecordStatsProps) => {
+const IncomeCurrencyBreakdownCard = ({ range }: RecordStatsProps) => {
   const { getCode, getSymbol } = useCurrencies();
   const { data, isLoading } = useRecordStatsQuery(
     range ?? {
@@ -48,9 +48,9 @@ const RecordStatsCard = ({ range }: RecordStatsProps) => {
 
   return (
     <Card
-      title="Records"
+      title="Income By Currency"
       $isLoading={isLoading}
-      showNoDataMessage={!data?.rows.length}
+      showNoDataMessage={!data?.income_items.currency_breakdown.length}
     >
       {data && (
         <Body>
@@ -65,7 +65,7 @@ const RecordStatsCard = ({ range }: RecordStatsProps) => {
             </ChartContainer>
           )}
           <List>
-            {data.rows.map(
+            {data.income_items.currency_breakdown.map(
               ({ currency_id, amount, amount_in_PC, percentage }) => (
                 <RowContainer key={currency_id}>
                   <AmountContainer>
@@ -83,14 +83,13 @@ const RecordStatsCard = ({ range }: RecordStatsProps) => {
                 </RowContainer>
               )
             )}
-            {data.rows.length > 0 && (
+            {data.income_items.currency_breakdown.length > 0 && (
               <div>
                 <Total>TOTAL: </Total>
                 <AmountContainer>
                   {getCode(data.primary_currency)}
-                  <Amount $negative={data.assigned_sum < 0}>
-                    {getSymbol(data.primary_currency)}{' '}
-                    {formatNumber(data.assigned_sum)}
+                  <Amount $negative={data.sum < 0}>
+                    {getSymbol(data.primary_currency)} {formatNumber(data.sum)}
                   </Amount>
                 </AmountContainer>
               </div>
@@ -108,4 +107,4 @@ const RecordStatsCard = ({ range }: RecordStatsProps) => {
   );
 };
 
-export default RecordStatsCard;
+export default IncomeCurrencyBreakdownCard;

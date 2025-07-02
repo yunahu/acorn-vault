@@ -29,15 +29,26 @@ export interface Account {
   is_primary_payment_method: boolean;
 }
 
+export interface BreakdownItem {
+  amount: number;
+  amount_in_PC: number; // amount in user's primary currency
+  percentage: number;
+}
+
+export interface CurrencyBreakdownItem extends BreakdownItem {
+  currency_id: number;
+}
+
+export interface StatItem {
+  sum: number;
+  currency_breakdown: CurrencyBreakdownItem[];
+}
+
 export interface AccountStats {
   primary_currency: number;
   net_worth: number;
-  rows: {
-    currency_id: number;
-    amount: number;
-    amount_in_PC: number;
-    percentage: number;
-  }[];
+  assets: StatItem;
+  liabilities: StatItem;
 }
 
 export interface Coin {
@@ -49,18 +60,18 @@ export interface Coin {
   coingecko_api_id: string;
 }
 
-export interface CoinPrices {
-  currency: Currency;
-  prices: {
-    [coingecko_api_id: string]: number;
-  };
-}
-
 export interface Currency {
   id: number;
   name: string;
   code: string;
   symbol: string;
+}
+
+export interface CoinPrices {
+  currency: Currency;
+  prices: {
+    [coingecko_api_id: string]: number;
+  };
 }
 
 export interface Record {
@@ -73,14 +84,10 @@ export interface Record {
 
 export interface RecordStats {
   primary_currency: number;
+  sum: number;
   currency_unassigned: number;
-  assigned_sum: number;
-  rows: {
-    currency_id: number;
-    amount: number;
-    amount_in_PC: number;
-    percentage: number;
-  }[];
+  income_items: StatItem;
+  expense_items: StatItem;
 }
 
 export interface Row {
