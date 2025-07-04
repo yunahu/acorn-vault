@@ -41,6 +41,7 @@ export interface CurrencyBreakdownItem extends BreakdownItem {
 
 export interface StatItem {
   sum: number;
+  currency_unassigned_sum?: number;
   currency_breakdown: CurrencyBreakdownItem[];
 }
 
@@ -85,7 +86,6 @@ export interface Record {
 export interface RecordStats {
   primary_currency: number;
   sum: number;
-  currency_unassigned: number;
   income_items: StatItem;
   expense_items: StatItem;
 }

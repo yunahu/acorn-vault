@@ -9,7 +9,7 @@ import {
   List,
   RowContainer,
   Total,
-  Unassigned,
+  CurrencyUnassignedSum,
 } from 'src/components/cards/StatsCardLayouts/StatsCardLayouts';
 import { useCurrencies } from 'src/hooks/useCurrencies';
 import { formatNumber } from 'src/utils/helpers';
@@ -24,11 +24,11 @@ export interface FormattedRow {
 }
 
 export interface Data {
-  graphData: GraphDatum[];
-  primaryCurrencyID: number;
-  rows: FormattedRow[];
+  primaryCurrencyId: number;
   sum: number;
-  unassignedSum?: number;
+  currencyUnassignedSum?: number;
+  rows: FormattedRow[];
+  graphData: GraphDatum[];
 }
 
 export type GraphDatum = {
@@ -76,8 +76,8 @@ const StatsCard = ({ data, ...rest }: StatsCardProps) => {
                   </AmountContainer>
                   <Conversion>
                     ({formatNumber(percentage)}% -{' '}
-                    {getCode(data.primaryCurrencyID)}{' '}
-                    {getSymbol(data.primaryCurrencyID)}{' '}
+                    {getCode(data.primaryCurrencyId)}{' '}
+                    {getSymbol(data.primaryCurrencyId)}{' '}
                     {formatNumber(amountInPC)})
                   </Conversion>
                 </RowContainer>
@@ -87,18 +87,18 @@ const StatsCard = ({ data, ...rest }: StatsCardProps) => {
               <div>
                 <Total>TOTAL: </Total>
                 <AmountContainer>
-                  {getCode(data.primaryCurrencyID)}
+                  {getCode(data.primaryCurrencyId)}
                   <Amount $negative={data.sum < 0}>
-                    {getSymbol(data.primaryCurrencyID)} {formatNumber(data.sum)}
+                    {getSymbol(data.primaryCurrencyId)} {formatNumber(data.sum)}
                   </Amount>
                 </AmountContainer>
               </div>
             )}
-            {data.unassignedSum && (
-              <Unassigned>
+            {data.currencyUnassignedSum && (
+              <CurrencyUnassignedSum>
                 Unassinged Amount
-                <div>{formatNumber(data.unassignedSum)}</div>
-              </Unassigned>
+                <div>{formatNumber(data.currencyUnassignedSum)}</div>
+              </CurrencyUnassignedSum>
             )}
           </List>
         </Body>

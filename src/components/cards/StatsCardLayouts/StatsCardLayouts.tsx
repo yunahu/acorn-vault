@@ -33,7 +33,7 @@ export const AmountContainer = styled.div`
   gap: 15px;
 `;
 
-export const Unassigned = styled.div`
+export const CurrencyUnassignedSum = styled.div`
   color: ${({ theme }) => theme.colors.gray};
   font-size: 14px;
   display: flex;

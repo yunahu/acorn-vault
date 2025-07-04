@@ -8,7 +8,7 @@ const AssetsCurrencyBreakdownCard = () => {
     <CurrencyBreakdownCard
       title="Assets By Currency"
       statItem={data?.assets}
-      primaryCurrencyID={data?.primary_currency}
+      primaryCurrencyId={data?.primary_currency}
       $isLoading={isLoading}
     />
   );

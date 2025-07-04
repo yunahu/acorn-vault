@@ -11,13 +11,13 @@ import { formatNumber } from 'src/utils/helpers';
 interface CurrencyBreakdownCardProps {
   title: string;
   statItem: StatItem | undefined;
-  primaryCurrencyID: number | undefined;
+  primaryCurrencyId: number | undefined;
   $isLoading: boolean;
 }
 
 const CurrencyBreakdownCard = ({
   statItem,
-  primaryCurrencyID,
+  primaryCurrencyId,
   ...rest
 }: CurrencyBreakdownCardProps) => {
   const { getCode, getSymbol } = useCurrencies();
@@ -42,16 +42,18 @@ const CurrencyBreakdownCard = ({
     );
 
   const processData = (): Data | undefined => {
-    if (!statItem || !primaryCurrencyID) return;
-    const graphData = processGraphData();
+    if (!statItem || !primaryCurrencyId) return;
+    const currencyUnassignedSum = statItem.currency_unassigned_sum;
     const rows = processCurrencyBreakdown();
+    const graphData = processGraphData();
     if (!graphData || !rows) return;
 
     return {
-      graphData,
-      primaryCurrencyID,
+      primaryCurrencyId,
       sum: statItem.sum,
+      ...(currencyUnassignedSum && { currencyUnassignedSum }),
       rows,
+      graphData,
     };
   };
 
