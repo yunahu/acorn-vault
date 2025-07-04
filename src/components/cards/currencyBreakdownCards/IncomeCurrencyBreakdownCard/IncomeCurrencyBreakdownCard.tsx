@@ -20,7 +20,7 @@ const IncomeCurrencyBreakdownCard = ({
     <CurrencyBreakdownCard
       title="Income By Currency"
       statItem={data?.income_items}
-      primaryCurrencyId={data?.primary_currency}
+      primaryCurrencyId={data?.primary_currency_id}
       $isLoading={isLoading}
     />
   );

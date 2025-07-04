@@ -20,7 +20,7 @@ const ExpenseCurrencyBreakdownCard = ({
     <CurrencyBreakdownCard
       title="Expense By Currency"
       statItem={data?.expense_items}
-      primaryCurrencyId={data?.primary_currency}
+      primaryCurrencyId={data?.primary_currency_id}
       $isLoading={isLoading}
     />
   );

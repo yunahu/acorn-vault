@@ -46,7 +46,7 @@ export interface StatItem {
 }
 
 export interface AccountStats {
-  primary_currency: number;
+  primary_currency_id: number;
   net_worth: number;
   assets: StatItem;
   liabilities: StatItem;
@@ -69,7 +69,7 @@ export interface Currency {
 }
 
 export interface CoinPrices {
-  currency: Currency;
+  primary_currency_id: number;
   prices: {
     [coingecko_api_id: string]: number;
   };
@@ -84,7 +84,7 @@ export interface Record {
 }
 
 export interface RecordStats {
-  primary_currency: number;
+  primary_currency_id: number;
   sum: number;
   income_items: StatItem;
   expense_items: StatItem;
@@ -98,7 +98,7 @@ export interface Row {
 }
 
 export interface Settings {
-  primary_currency: number;
+  primary_currency_id: number;
 }
 
 // --- Accounts ---

@@ -5,23 +5,21 @@ import styled from 'styled-components';
 import { useAccount } from 'wagmi';
 import Table from 'src/components/Table/Table';
 import { useCoinQuery, usePriceQuery } from 'src/hooks/crypto';
-import { Row } from 'src/services/api';
+import { Currency, Row } from 'src/services/api';
 import { getCoinsWithBalance } from 'src/services/viem';
 import { formatNumber } from 'src/utils/helpers';
 import CryptoCard from './components/CryptoCard/CryptoCard';
+import { useCurrencies } from 'src/hooks/useCurrencies';
 
 export interface CoinStats {
-  primaryCurrency: {
-    symbol: string;
-    code: string;
-  };
+  primaryCurrency: Partial<Currency>;
   rows: Row[];
   sum: BigNumber;
 }
 
 export interface ProcessingResult<T> {
   isLoading: boolean;
-  data: T | undefined;
+  data: T | undefined | null;
 }
 
 // #region Styles
@@ -53,19 +51,20 @@ const CryptoDetails = () => {
     isLoading: true,
     data: undefined,
   });
+  const { getCode, getSymbol } = useCurrencies();
 
   useEffect(() => {
     const run = async () => {
       if (!coinQuery.data || !priceQuery.data) return;
 
-      setCoinStats({ isLoading: true, data: undefined });
+      setCoinStats({ isLoading: true, data: null });
 
       const coinsWithBalance = await getCoinsWithBalance(
         coinQuery.data,
         address
       );
 
-      const { currency, prices } = priceQuery.data;
+      const { primary_currency_id, prices } = priceQuery.data;
 
       let sum = new BigNumber(0);
 
@@ -86,8 +85,13 @@ const CryptoDetails = () => {
           coin['percentage'] = coin.amountInPC.dividedBy(sum).multipliedBy(100);
       });
 
+      const primaryCurrency = {
+        symbol: getSymbol(primary_currency_id),
+        code: getCode(primary_currency_id),
+      };
+
       const result: CoinStats = {
-        primaryCurrency: currency,
+        primaryCurrency,
         rows,
         sum,
       };

@@ -38,9 +38,9 @@ const NetWorthCard = () => {
     >
       {data && (
         <Body>
-          <Currency>{getCode(data.primary_currency)}</Currency>
+          <Currency>{getCode(data.primary_currency_id)}</Currency>
           <Amount $negative={data.net_worth < 0}>
-            {getSymbol(data.primary_currency)} {formatNumber(data.net_worth)}
+            {getSymbol(data.primary_currency_id)} {formatNumber(data.net_worth)}
           </Amount>
         </Body>
       )}

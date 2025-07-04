@@ -31,14 +31,14 @@ const SelectPrimaryCurrency = () => {
         <Select
           disabled={settingsQuery.isLoading || updateSettings.isPending}
           loading={settingsQuery.isLoading || updateSettings.isPending}
-          id="primary_currency"
+          id="primary_currency_id"
           placeholder="Select primary currency"
           options={currenciesOptions}
-          defaultValue={settingsQuery.data?.primary_currency}
+          defaultValue={settingsQuery.data?.primary_currency_id}
           onChange={(newCurrencyId) => {
-            if (newCurrencyId !== settingsQuery.data?.primary_currency)
+            if (newCurrencyId !== settingsQuery.data?.primary_currency_id)
               updateSettings.mutate({
-                primary_currency: newCurrencyId,
+                primary_currency_id: newCurrencyId,
               });
           }}
         />
