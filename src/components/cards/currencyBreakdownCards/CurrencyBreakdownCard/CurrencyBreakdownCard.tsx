@@ -46,7 +46,7 @@ const CurrencyBreakdownCard = ({
     const currencyUnassignedSum = statItem.currency_unassigned_sum;
     const rows = processCurrencyBreakdown();
     const graphData = processGraphData();
-    if (!graphData || !rows) return;
+    if (!rows || !graphData) return;
 
     return {
       primaryCurrencyId,

@@ -90,13 +90,6 @@ export interface RecordStats {
   expense_items: StatItem;
 }
 
-export interface Row {
-  coin: Coin;
-  amount: BigNumber;
-  amountInPC: BigNumber;
-  percentage: BigNumber;
-}
-
 export interface Settings {
   primary_currency_id: number;
 }
@@ -179,6 +172,11 @@ export const getCoins = (): Promise<Coin[]> =>
 
 export const getCoinPrices = (): Promise<CoinPrices> =>
   api.get('/crypto/prices').then((x) => x.data);
+
+// --- Currencies
+
+export const getPrimaryCurrencyPrice = () =>
+  api.get('/currencies/primary_currency_price').then((x) => x.data);
 
 // --- User ---
 

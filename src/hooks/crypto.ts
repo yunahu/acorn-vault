@@ -8,7 +8,7 @@ export const useCoinQuery = () =>
     staleTime: Infinity,
   });
 
-export const usePriceQuery = () =>
+export const useCoinPriceQuery = () =>
   useQuery({
     queryKey: ['prices'],
     queryFn: getCoinPrices,

@@ -36,6 +36,7 @@ export const useUpdateSettings = () => {
       queryClient.invalidateQueries({ queryKey: ['prices'] });
       queryClient.invalidateQueries({ queryKey: ['accountStats'] });
       queryClient.invalidateQueries({ queryKey: ['recordStats'] });
+      queryClient.invalidateQueries({ queryKey: ['primaryCurrencyPrice'] });
     },
   });
 };
