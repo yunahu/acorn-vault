@@ -1,16 +1,6 @@
 import { DatumId, ResponsivePie } from '@nivo/pie';
+import styled from 'styled-components';
 import Card, { CardProps } from 'src/components/cards/Card/Card';
-import {
-  Amount,
-  AmountContainer,
-  Body,
-  ChartContainer,
-  Conversion,
-  List,
-  RowContainer,
-  Total,
-  CurrencyUnassignedSum,
-} from 'src/components/cards/StatsCardLayouts/StatsCardLayouts';
 import { useCurrencies } from 'src/hooks/useCurrencies';
 import { formatNumber } from 'src/utils/helpers';
 
@@ -41,6 +31,69 @@ interface StatsCardProps extends CardProps {
   data: Data | undefined;
   $isLoading: boolean;
 }
+
+// #region Styles
+
+const Body = styled.div`
+  display: flex;
+  gap: 25px;
+
+  @media only screen and (max-width: 555px) {
+    flex-direction: column;
+  }
+`;
+
+const ChartContainer = styled.div`
+  width: 200px;
+  height: 200px;
+`;
+
+const List = styled.div`
+  display: flex;
+  gap: 25px;
+  flex-direction: column;
+`;
+
+const RowContainer = styled.div`
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+`;
+
+const AmountContainer = styled.div`
+  font-size: 20px;
+  display: flex;
+  align-items: end;
+  gap: 15px;
+`;
+
+const CurrencyUnassignedSum = styled.div`
+  color: ${({ theme }) => theme.colors.gray};
+  font-size: 14px;
+  display: flex;
+  align-items: end;
+  gap: 18px;
+`;
+
+const Amount = styled.div<{ $negative?: boolean }>`
+  min-width: fit-content;
+  color: ${({ theme, $negative }) =>
+    $negative ? theme.colors.negative : theme.colors.positive};
+`;
+
+const Conversion = styled.div`
+  color: #615d5d;
+  display: flex;
+  font-size: 14px;
+`;
+
+const Total = styled.div`
+  font-size: 16px;
+  margin: 15px 0px 10px 0px;
+  color: ${({ theme }) => theme.colors.secondary};
+`;
+
+// #endregion
 
 const StatsCard = ({ data, ...rest }: StatsCardProps) => {
   const { getCode, getSymbol } = useCurrencies();
