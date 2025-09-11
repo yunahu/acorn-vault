@@ -49,8 +49,9 @@ export const PasswordToggle = styled.div`
   }
 `;
 
-export const ForgotPasswordLink = styled(Link)`
+export const ForgotPasswordLink = styled.div`
   text-decoration: underline;
+  cursor: pointer;
 `;
 
 export const Footer = styled.div`

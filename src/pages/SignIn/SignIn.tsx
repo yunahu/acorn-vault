@@ -1,7 +1,7 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import forrest from 'src/assets/images/forrest.jpg';
 import AnonymousSignInButton from 'src/components/buttons/AnonymousSignInButton/AnonymousSignInButton';
@@ -19,8 +19,10 @@ import {
   StyledLabel,
 } from 'src/components/layouts/auth/AuthCardLayouts/AuthCardLayouts';
 import AuthPageLayout from 'src/components/layouts/auth/AuthPageLayout/AuthPageLayout';
+import { NOT_IMPLEMENTED } from 'src/constants/messages';
 import useAuth from 'src/hooks/useAuth';
 import { auth } from 'src/services/firebase';
+import { NotificationContext } from 'src/services/notify';
 
 const SignIn = () => {
   const [isHidden, setIsHidden] = useState(true);
@@ -29,6 +31,7 @@ const SignIn = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { state } = useLocation();
+  const notify = useContext(NotificationContext);
 
   useEffect(() => {
     if (user) navigate(state ?? '/', { replace: true });
@@ -75,7 +78,7 @@ const SignIn = () => {
             required
           />
         </InputContainer>
-        <ForgotPasswordLink to="/reset-password">
+        <ForgotPasswordLink onClick={() => notify(NOT_IMPLEMENTED)}>
           Forgot password?
         </ForgotPasswordLink>
         <RoundButton
