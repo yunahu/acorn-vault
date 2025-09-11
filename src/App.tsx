@@ -10,6 +10,7 @@ import Sidebar from 'src/components/Sidebar/Sidebar';
 import { AuthProvider } from 'src/hooks/useAuth';
 import { CurrenciesProvider } from 'src/hooks/useCurrencies';
 import Router from 'src/Router/Router';
+import { NotificationProvider } from 'src/services/notify';
 import { WagmiProvider } from 'src/services/wagmi';
 import antTheme from 'src/theme/antTheme';
 import GlobalStyle from 'src/theme/globalStyle';
@@ -36,15 +37,17 @@ const App = () => {
             <ThemeProvider theme={theme}>
               <ConfigProvider theme={antTheme}>
                 <WagmiProvider>
-                  <GlobalStyle />
-                  <Sidebar
-                    isOpen={isSidebarOpen}
-                    setIsOpen={setIsSidebarOpen}
-                  />
-                  <Container>
-                    <Navbar setIsSidebarOpen={setIsSidebarOpen} />
-                    <Router />
-                  </Container>
+                  <NotificationProvider>
+                    <GlobalStyle />
+                    <Sidebar
+                      isOpen={isSidebarOpen}
+                      setIsOpen={setIsSidebarOpen}
+                    />
+                    <Container>
+                      <Navbar setIsSidebarOpen={setIsSidebarOpen} />
+                      <Router />
+                    </Container>
+                  </NotificationProvider>
                 </WagmiProvider>
               </ConfigProvider>
             </ThemeProvider>
