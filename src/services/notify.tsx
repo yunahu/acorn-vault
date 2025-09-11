@@ -1,7 +1,12 @@
 import { notification, NotificationArgsProps } from 'antd';
 import { ComponentProps, createContext } from 'react';
 
-type NotificationContextType = (args: NotificationArgsProps) => void;
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
+
+type NotificationContextType = (
+  props: NotificationArgsProps,
+  type?: NotificationType
+) => void;
 
 export const NotificationContext = createContext<NotificationContextType>(
   () => undefined
@@ -10,7 +15,10 @@ export const NotificationContext = createContext<NotificationContextType>(
 export const NotificationProvider = ({ children }: ComponentProps<'div'>) => {
   const [api, contextHolder] = notification.useNotification();
 
-  const notify = (props: NotificationArgsProps) => api.open(props);
+  const notify: NotificationContextType = (props, notificationType) => {
+    if (notificationType) api[notificationType](props);
+    else api.open(props);
+  };
 
   return (
     <NotificationContext.Provider value={notify}>
