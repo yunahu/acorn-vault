@@ -1,7 +1,7 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import forrest from 'src/assets/images/forrest.jpg';
 import AnonymousSignInButton from 'src/components/buttons/AnonymousSignInButton/AnonymousSignInButton';
@@ -21,8 +21,8 @@ import {
 import AuthPageLayout from 'src/components/layouts/auth/AuthPageLayout/AuthPageLayout';
 import { NOT_IMPLEMENTED } from 'src/constants/messages';
 import useAuth from 'src/hooks/useAuth';
+import useNotify from 'src/hooks/useNotify';
 import { auth } from 'src/services/firebase';
-import { NotificationContext } from 'src/services/notify';
 
 const SignIn = () => {
   const [isHidden, setIsHidden] = useState(true);
@@ -31,7 +31,7 @@ const SignIn = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { state } = useLocation();
-  const notify = useContext(NotificationContext);
+  const { notify, notifyError } = useNotify();
 
   useEffect(() => {
     if (user) navigate(state ?? '/', { replace: true });
@@ -40,9 +40,9 @@ const SignIn = () => {
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     try {
-      signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (err) {
-      console.error(err);
+      notifyError(err);
     }
   };
 

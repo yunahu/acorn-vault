@@ -1,9 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { PRIMARY_CURRENCY_UPDATED } from 'src/constants/messages';
 import {
   Settings,
   getUserSettings,
   updateUserSettings,
 } from 'src/services/api';
+import useNotify from 'src/hooks/useNotify';
 
 export const useSettingsQuery = () =>
   useQuery({
@@ -14,6 +16,7 @@ export const useSettingsQuery = () =>
 
 export const useUpdateSettings = () => {
   const queryClient = useQueryClient();
+  const { notify, notifyError } = useNotify();
   return useMutation({
     mutationFn: (body: Partial<Settings>) => updateUserSettings(body),
     onMutate: async (body: Partial<Settings>) => {
@@ -28,10 +31,11 @@ export const useUpdateSettings = () => {
       return { previousSettings };
     },
     onError: (err, _, context) => {
-      console.error('Error: ', err);
+      notifyError(err);
       queryClient.setQueryData(['settings'], context?.previousSettings);
     },
     onSuccess: async () => {
+      notify(PRIMARY_CURRENCY_UPDATED);
       queryClient.invalidateQueries({ queryKey: ['settings'] });
       queryClient.invalidateQueries({ queryKey: ['prices'] });
       queryClient.invalidateQueries({ queryKey: ['accountStats'] });

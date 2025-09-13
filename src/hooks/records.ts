@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import useNotify from 'src/hooks/useNotify';
 import { Range } from 'src/pages/Records/Records';
 import {
   Record,
@@ -15,6 +16,7 @@ interface UpdateParams {
 }
 
 export const useCreateRecord = (range: Range) => {
+  const { notifyError } = useNotify();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
@@ -51,7 +53,7 @@ export const useCreateRecord = (range: Range) => {
       return { previousRecords };
     },
     onError: (err, _, context) => {
-      console.error('Error: ', err);
+      notifyError(err);
       queryClient.setQueryData(['records', range], context?.previousRecords);
     },
     onSuccess: async () => {
@@ -74,6 +76,7 @@ export const useRecordsQuery = (range: Range) =>
 
 export const useUpdateRecord = (range: Range) => {
   const queryClient = useQueryClient();
+  const { notifyError } = useNotify();
   return useMutation({
     mutationFn: ({ id, body }: UpdateParams) => updateRecord(id, body),
     onMutate: async ({ id, body }: UpdateParams) => {
@@ -95,7 +98,7 @@ export const useUpdateRecord = (range: Range) => {
       return { previousRecords };
     },
     onError: (err, _, context) => {
-      console.error('Error: ', err);
+      notifyError(err);
       queryClient.setQueryData(['records', range], context?.previousRecords);
     },
     onSuccess: async () => {
@@ -107,6 +110,7 @@ export const useUpdateRecord = (range: Range) => {
 
 export const useDeleteRecord = (range: Range) => {
   const queryClient = useQueryClient();
+  const { notifyError } = useNotify();
   return useMutation({
     mutationFn: deleteRecord,
     onMutate: async (id: number) => {
@@ -118,7 +122,7 @@ export const useDeleteRecord = (range: Range) => {
       return { previousRecords };
     },
     onError: (err, _, context) => {
-      console.error('Error: ', err);
+      notifyError(err);
       queryClient.setQueryData(['records', range], context?.previousRecords);
     },
     onSuccess: async () => {

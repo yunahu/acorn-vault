@@ -20,6 +20,7 @@ import {
 } from 'src/components/layouts/auth/AuthCardLayouts/AuthCardLayouts';
 import AuthPageLayout from 'src/components/layouts/auth/AuthPageLayout/AuthPageLayout';
 import useAuth, { mapUser } from 'src/hooks/useAuth';
+import useNotify from 'src/hooks/useNotify';
 import { createUser } from 'src/services/api';
 import { auth } from 'src/services/firebase';
 
@@ -33,6 +34,7 @@ const SignUp = () => {
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const { state } = useLocation();
+  const { notifyError } = useNotify();
 
   useEffect(() => {
     if (user) navigate(state ?? '/', { replace: true });
@@ -58,7 +60,7 @@ const SignUp = () => {
         createUser();
       }
     } catch (err) {
-      console.error(err);
+      notifyError(err);
     }
   };
 

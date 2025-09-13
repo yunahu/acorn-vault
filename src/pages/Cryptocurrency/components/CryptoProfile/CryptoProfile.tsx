@@ -59,8 +59,6 @@ const CryptoProfile = () => {
   const { data, error, isLoading, isError } = useEnsName({ address });
   const { disconnect } = useDisconnect();
 
-  if (isError) console.error(error.message);
-
   return (
     <StyledCard $isLoading={isLoading}>
       <StyledImg src={cryptoWallet} />
@@ -69,7 +67,7 @@ const CryptoProfile = () => {
           {Boolean(data) && (
             <ItemContainer>
               <Label>ENS NAME:</Label>
-              <div>{data}</div>
+              <div>{isError ? `ENS Name Error: ${error.message}` : data}</div>
             </ItemContainer>
           )}
           <ItemContainer>

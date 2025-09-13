@@ -12,7 +12,9 @@ import {
   ItemLabel,
   TabContainer,
 } from 'src/components/layouts/TabLayouts/TabLayouts';
+import { NAME_UPDATED, USER_DELETED } from 'src/constants/messages';
 import useAuth from 'src/hooks/useAuth';
+import useNotify from 'src/hooks/useNotify';
 import { deleteUser } from 'src/services/api';
 
 const Profile = () => {
@@ -20,6 +22,7 @@ const Profile = () => {
   const { user, setUser } = useAuth();
   const auth = getAuth();
   const navigate = useNavigate();
+  const { notify, notifyError } = useNotify();
 
   const handleUpdate = async (evt: KeyboardEvent<HTMLInputElement>) => {
     setLoading(true);
@@ -41,8 +44,9 @@ const Profile = () => {
       await updateProfile(auth.currentUser, {
         displayName: newName,
       });
+      notify(NAME_UPDATED);
     } catch (err) {
-      console.error(err);
+      notifyError(err);
       setUser(clone ?? null);
     } finally {
       setLoading(false);
@@ -55,8 +59,9 @@ const Profile = () => {
       try {
         await deleteUser();
         await deleteUserFirebase(auth.currentUser);
+        notify(USER_DELETED);
       } catch (err) {
-        console.error(err);
+        notifyError(err);
       }
     }
     navigate('/signin');

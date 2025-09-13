@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import useNotify from 'src/hooks/useNotify';
 import {
   Account,
   createAccount,
@@ -14,6 +15,7 @@ interface UpdateParams {
 
 export const useCreateAccount = () => {
   const queryClient = useQueryClient();
+  const { notifyError } = useNotify();
   return useMutation({
     mutationFn: (variables: {
       name: string;
@@ -43,7 +45,7 @@ export const useCreateAccount = () => {
       return { previousAccounts };
     },
     onError: (err, _, context) => {
-      console.error('Error: ', err);
+      notifyError(err);
       queryClient.setQueryData(['accounts'], context?.previousAccounts);
     },
     onSuccess: async () => {
@@ -62,6 +64,7 @@ export const useAccountsQuery = () =>
 
 export const useUpdateAccount = () => {
   const queryClient = useQueryClient();
+  const { notifyError } = useNotify();
   return useMutation({
     mutationFn: ({ id, body }: UpdateParams) => updateAccount(id, body),
     onMutate: async ({ id, body }: UpdateParams) => {
@@ -80,7 +83,7 @@ export const useUpdateAccount = () => {
       return { previousAccounts };
     },
     onError: (err, _, context) => {
-      console.error('Error: ', err);
+      notifyError(err);
       queryClient.setQueryData(['accounts'], context?.previousAccounts);
     },
     onSuccess: async () => {
@@ -92,6 +95,7 @@ export const useUpdateAccount = () => {
 
 export const useDeleteAccount = () => {
   const queryClient = useQueryClient();
+  const { notifyError } = useNotify();
   return useMutation({
     mutationFn: deleteAccount,
     onMutate: async (accountId) => {
@@ -103,7 +107,7 @@ export const useDeleteAccount = () => {
       return { previousAccounts };
     },
     onError: (err, _, context) => {
-      console.error('Error: ', err);
+      notifyError(err);
       queryClient.setQueryData(['accounts'], context?.previousAccounts);
     },
     onSuccess: async () => {
